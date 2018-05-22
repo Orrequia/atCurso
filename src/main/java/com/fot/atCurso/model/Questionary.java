@@ -52,7 +52,4 @@ public class Questionary {
       joinColumns=@JoinColumn(name=FIELD_IDQUESTIONARY, referencedColumnName=FIELD_IDQUESTIONARY),
       inverseJoinColumns=@JoinColumn(name=FIELD_IDTAG, referencedColumnName=FIELD_IDTAG))
 	private List<Tag> tag;
-	
-	/*@OneToMany(fetch = FetchType.LAZY, mappedBy = Result.FIELD_QUESTIONARY)
-	private List<Result> result;*/
 }
