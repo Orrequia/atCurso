@@ -22,7 +22,6 @@ import lombok.Setter;
 @Entity
 public class Result {
 
-	public static final String FIELD_USER = "user";
 	public static final String FIELD_IDQUESTIONARY = "idQuestionary";
 	
 	@Id
@@ -31,10 +30,6 @@ public class Result {
 	
 	@Temporal(TemporalType.TIMESTAMP)
 	private Date date;
-	
-	@JoinColumn(name = FIELD_USER)
-	@ManyToOne(fetch = FetchType.LAZY)
-	private User user;
 	
 	@JoinColumn(name = FIELD_IDQUESTIONARY)
 	@ManyToOne(fetch = FetchType.LAZY)
