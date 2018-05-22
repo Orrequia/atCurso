@@ -23,8 +23,4 @@ public class Answer {
 	private String name;
 	
 	private Boolean correct;
-	
-	/*@JoinColumn(name = FIELD_QUESTION)
-	@ManyToOne(fetch = FetchType.LAZY)
-	private Question question;*/
 }
