@@ -1,5 +1,8 @@
 package com.fot.atCurso.service.tag;
 
-public interface TagService {
+import com.fot.atCurso.model.Tag;
+import com.fot.atCurso.service.AbstractService;
+
+public interface TagService  extends AbstractService<Tag, Integer> {
 
 }
