@@ -21,7 +21,4 @@ public class Difficulty {
 	
 	@Column(nullable = false, unique = true)
 	private String name;
-	
-	/*@OneToMany(fetch = FetchType.LAZY, mappedBy = Question.FIELD_DIFFICULTY)
-	private List<Difficulty> difficulty;*/
 }
