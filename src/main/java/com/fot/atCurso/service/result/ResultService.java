@@ -1,5 +1,8 @@
 package com.fot.atCurso.service.result;
 
-public interface ResultService {
+import com.fot.atCurso.model.Result;
+import com.fot.atCurso.service.AbstractService;
+
+public interface ResultService  extends AbstractService<Result, Integer> {
 
 }
