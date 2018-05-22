@@ -44,11 +44,4 @@ public class Question {
 	@OneToMany(fetch = FetchType.LAZY)
 	@JoinColumn(name=FIELD_IDQUESTION, referencedColumnName=FIELD_IDQUESTION)
 	private List<Answer> answer;
-	
-	/*@ManyToMany(fetch = FetchType.LAZY)
-	@JoinTable(
-      name="questionary_question",
-      joinColumns=@JoinColumn(name=FIELD_IDQUESTION),
-      inverseJoinColumns=@JoinColumn(name=Questionary.FIELD_IDQUESTIONARY))
-	private List<Questionary> questionary;*/
 }
