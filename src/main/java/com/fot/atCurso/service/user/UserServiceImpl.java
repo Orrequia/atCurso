@@ -1,38 +1,47 @@
 package com.fot.atCurso.service.user;
 
 import java.util.Optional;
-import java.util.function.Consumer;
+import java.util.Set;
+import java.util.logging.Logger;
+import java.util.stream.Collectors;
 
 import org.springframework.beans.factory.InitializingBean;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.data.domain.PageRequest;
+import org.springframework.data.domain.Pageable;
 import org.springframework.stereotype.Service;
-import org.springframework.util.SocketUtils;
 
 import com.fot.atCurso.dao.UserDAO;
 import com.fot.atCurso.model.User;
 
 @Service
-public class UserServiceImpl implements UserService, InitializingBean {
+public class UserServiceImpl implements UserService {
 
 	@Autowired
 	UserDAO userDAO;
 
 	@Override
-	public void test() {
-		final User u = new User();
-		u.setEmail("asd@g.com");
-		u.setName("Pepe 1");
-		u.setPassword("pepe123");
-		userDAO.save(u);
-		final Optional<User> user = userDAO.findOneByNameOrderByIdUserDesc("Pepe 1");
-		System.out.println("_________________");
-		System.out.println(user.isPresent() ? user.get().getName() : "no encontrado");
-		System.out.println("_________________");
+	public User create(User t) {
+		return userDAO.save(t);
 	}
 
 	@Override
-	public void afterPropertiesSet() throws Exception {
-		test();
+	public void update(User t) {
+		userDAO.save(t);
 	}
 
+	@Override
+	public Optional<User> findById(Integer id) {
+		return userDAO.findById(id);
+	}
+
+	@Override
+	public Set<User> findAll(Pageable p) {
+		return userDAO.findAll(PageRequest.of(p.getPageNumber(), p.getPageSize())).stream().collect(Collectors.toSet());
+	}
+
+	@Override
+	public void delete(User t) {
+		userDAO.delete(t);
+	}
 }
