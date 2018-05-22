@@ -46,7 +46,4 @@ public class Course {
 	joinColumns=@JoinColumn(name=FIELD_IDCOURSE, referencedColumnName=FIELD_IDCOURSE),
 	inverseJoinColumns=@JoinColumn(name=User.FIELD_IDUSER, referencedColumnName=User.FIELD_IDUSER))
 	private List<User> user;
-	
-	@OneToMany(fetch = FetchType.LAZY, mappedBy = Questionary.FIELD_COURSE)
-	private List<Questionary> questionary;
 }
