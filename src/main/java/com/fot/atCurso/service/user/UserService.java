@@ -1,7 +1,8 @@
 package com.fot.atCurso.service.user;
 
-public interface UserService {
+import com.fot.atCurso.model.User;
+import com.fot.atCurso.service.AbstractService;
 
-	void test();
-
+public interface UserService extends AbstractService<User, Integer> {
+	
 }
