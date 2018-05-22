@@ -24,7 +24,6 @@ import lombok.Setter;
 public class User {
 
 	public static final String FIELD_IDUSER = "idUser";
-	public static final String FIELD_IDRESULT = "idResult";
 	
 	@Id
 	@GeneratedValue
@@ -39,7 +38,7 @@ public class User {
 	private String password;
 	
 	@OneToMany(fetch = FetchType.LAZY)
-	@JoinColumn(name=FIELD_IDRESULT, referencedColumnName=FIELD_IDRESULT)
+	@JoinColumn(name=FIELD_IDUSER, referencedColumnName=FIELD_IDUSER)
 	private List<Result> result;
 }
 
