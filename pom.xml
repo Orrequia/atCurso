@@ -6,7 +6,7 @@
 	<groupId>com.fot</groupId>
 	<artifactId>atCurso</artifactId>
 	<version>0.0.1-SNAPSHOT</version>
-	<packaging>jar</packaging>
+	<packaging>war</packaging>
 
 	<name>atCurso</name>
 	<description>Demo project for Spring Boot</description>
@@ -48,6 +48,11 @@
 			<groupId>org.springframework.boot</groupId>
 			<artifactId>spring-boot-starter-test</artifactId>
 			<scope>test</scope>
+		</dependency>
+		<dependency>
+			<groupId>net.sf.dozer</groupId>
+			<artifactId>dozer</artifactId>
+			<version>5.5.1</version>
 		</dependency>
 	</dependencies>
 
