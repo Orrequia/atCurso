@@ -9,7 +9,7 @@ import com.fot.atCurso.service.AbstractServiceImpl;
 
 @Service
 public class UserServiceImpl extends AbstractServiceImpl<User, UserDAO> implements UserService {
-
+	
 	@Autowired
-	UserDAO userDAO;	
+	UserDAO userDAO;
 }
