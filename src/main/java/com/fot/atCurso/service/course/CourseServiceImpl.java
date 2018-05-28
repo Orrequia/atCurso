@@ -32,6 +32,7 @@ public class CourseServiceImpl extends AbstractServiceImpl<Course, CourseDAO> im
 	@Autowired
 	UserService userService;
 	
+	@Override
 	public Set<User> findCourseUsers(Pageable p, Integer idCourse) throws NotFoundException {
 		Optional<Course> course = courseDAO.findById(idCourse);
 		course.orElseThrow(() -> new NotFoundException("El curso no existe."));
@@ -39,6 +40,7 @@ public class CourseServiceImpl extends AbstractServiceImpl<Course, CourseDAO> im
 		return new PageImpl<User>(users, PageRequest.of(p.getPageNumber(), p.getPageSize()), users.size()).stream().collect(Collectors.toSet());
 	}
 	
+	@Override
 	public Set<Questionary> findCourseQuestionaries(Pageable p, Integer idCourse) throws NotFoundException {
 		Optional<Course> course = courseDAO.findById(idCourse);
 		course.orElseThrow(() -> new NotFoundException("El curso no existe."));
