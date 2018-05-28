@@ -3,6 +3,7 @@ package com.fot.atCurso.model;
 import javax.persistence.Entity;
 import javax.persistence.FetchType;
 import javax.persistence.GeneratedValue;
+import javax.persistence.GenerationType;
 import javax.persistence.Id;
 import javax.persistence.JoinColumn;
 import javax.persistence.ManyToOne;
@@ -23,7 +24,7 @@ public class Selection {
 	public static final String FIELD_IDQUESTION = "idQuestion";
 
 	@Id
-	@GeneratedValue
+	@GeneratedValue(strategy=GenerationType.IDENTITY)
 	private Integer idSelection;
 	
 	@JoinColumn(name = FIELD_IDUSER)
