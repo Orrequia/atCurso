@@ -23,7 +23,7 @@ public class UserServiceImpl extends AbstractServiceImpl<User, UserDAO> implemen
 	}
 	
 	@Override
-	public void setValues(User to, User from) throws UniqueValueViolationException {
+	public void setValues(User to, User from) {
 		if(from.getName() != null) to.setName(from.getName());
 		if(from.getEmail() != null) to.setEmail(from.getEmail());
 		if(from.getPassword() != null) to.setPassword(from.getPassword());
