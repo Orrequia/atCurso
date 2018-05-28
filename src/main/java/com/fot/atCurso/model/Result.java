@@ -6,6 +6,7 @@ import javax.persistence.Id;
 import javax.persistence.JoinColumn;
 import javax.persistence.ManyToOne;
 import javax.persistence.GeneratedValue;
+import javax.persistence.GenerationType;
 
 import java.util.Date;
 
@@ -25,7 +26,7 @@ public class Result {
 	public static final String FIELD_IDQUESTIONARY = "idQuestionary";
 	
 	@Id
-	@GeneratedValue
+	@GeneratedValue(strategy=GenerationType.IDENTITY)
 	private Integer idResult;
 	
 	@Temporal(TemporalType.TIMESTAMP)
