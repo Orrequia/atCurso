@@ -8,6 +8,7 @@ import javax.persistence.JoinColumn;
 import javax.persistence.ManyToMany;
 import javax.persistence.OneToMany;
 import javax.persistence.GeneratedValue;
+import javax.persistence.GenerationType;
 
 import java.util.List;
 
@@ -26,7 +27,7 @@ public class User {
 	public static final String FIELD_IDUSER = "idUser";
 	
 	@Id
-	@GeneratedValue
+	@GeneratedValue(strategy=GenerationType.IDENTITY)
 	private Integer idUser;
 	
 	@Column(nullable = false)
