@@ -1,11 +1,14 @@
 package com.fot.atCurso.component.mapper;
 
+import java.util.HashSet;
 import java.util.Set;
 import java.util.stream.Collectors;
 
 import org.dozer.DozerBeanMapper;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Component;
+
+import com.fot.atCurso.exceptions.NotFoundException;
 
 @Component
 public abstract class AbstractMapper<M, D> implements Mapper<M, D> {
@@ -14,7 +17,7 @@ public abstract class AbstractMapper<M, D> implements Mapper<M, D> {
 	public DozerBeanMapper dozer;
 	
 	@Override
-	public M dtoToModel(D dto) {
+	public M dtoToModel(D dto) throws NotFoundException {
 		return dozer.map(dto, modelClazz());
 	}
 
@@ -24,8 +27,11 @@ public abstract class AbstractMapper<M, D> implements Mapper<M, D> {
 	}
 
 	@Override
-	public Set<M> dtoToModel(Set<D> dtos) {
-		return dtos.stream().map(d -> dtoToModel(d)).collect(Collectors.toSet());
+	public Set<M> dtoToModel(Set<D> dtos) throws NotFoundException {
+		Set<M> models = new HashSet<M>();
+		for(D dto : dtos)
+			models.add(dtoToModel(dto));
+		return models;
 	}
 
 	@Override
