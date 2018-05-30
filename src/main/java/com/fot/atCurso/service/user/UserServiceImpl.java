@@ -1,12 +1,14 @@
 package com.fot.atCurso.service.user;
 
+import java.util.ArrayList;
+import java.util.List;
 import java.util.Optional;
 
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
 import com.fot.atCurso.dao.UserDAO;
-import com.fot.atCurso.exceptions.UniqueValueViolationException;
+import com.fot.atCurso.model.Result;
 import com.fot.atCurso.model.User;
 import com.fot.atCurso.service.AbstractServiceImpl;
 
@@ -32,5 +34,11 @@ public class UserServiceImpl extends AbstractServiceImpl<User, UserDAO> implemen
 	@Override
 	public Optional<User> findByEmail(String email) {
 		return userDAO.findOneByEmail(email);
+	}
+	
+	@Override
+	public List<Result> findResults(User user) {
+		//return userDAO.
+		return new ArrayList<Result>();
 	}
 }
