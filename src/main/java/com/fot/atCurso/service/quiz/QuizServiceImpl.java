@@ -27,11 +27,18 @@ public class QuizServiceImpl extends AbstractServiceImpl<Quiz, QuizDAO> implemen
 	TagService tagService;
 	
 	@Override
-	public void setTags(Quiz quiz, List<Integer> idTags) throws NotFoundException {
-		List<Optional<Tag>> tags = idTags.stream().map(t -> tagService.findById(t)).collect(Collectors.toList());
-		for(Optional<Tag> t : tags)
-			t.orElseThrow(() -> new NotFoundException("Algunos o todos los tags no existen"));
-		//tags.forEach(t -> t.orElseThrow(() -> new NotFoundException("Algunos o todos los tags no existen")));
-		quiz.setTag(tags.stream().filter(Optional::isPresent).map(Optional::get).collect(Collectors.toList()));
+	public boolean isEqual(Quiz q1, Quiz q2) {
+		return q1.getName().equals(q2.getName()) &&
+				q1.getModality().equals(q2.getModality()) &&
+				q1.getQuestion().equals(q2.getQuestion()) &&
+				q1.getTag().equals(q2.getTag());
+	}
+	
+	@Override
+	public void setValues(Quiz to, Quiz from) {
+		to.setName(from.getName());
+		to.setModality(from.getModality());
+		to.setQuestion(from.getQuestion());
+		to.setTag(from.getTag());
 	}
 }

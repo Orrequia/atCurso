@@ -8,6 +8,7 @@ import com.fot.atCurso.service.AbstractService;
 
 public interface QuizService  extends AbstractService<Quiz, Integer> {
 	
-	public void setTags(Quiz quiz, List<Integer> idTags)  throws NotFoundException;
+	boolean isEqual(Quiz q1, Quiz q2);
+	void setValues(Quiz to, Quiz from);
 }
 
