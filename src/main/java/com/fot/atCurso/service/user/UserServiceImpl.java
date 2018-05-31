@@ -41,21 +41,12 @@ public class UserServiceImpl extends AbstractServiceImpl<User, UserDAO> implemen
 	}
 	
 	@Override
-	public Result addResult(User user, Result result) {
-		final Result createResult = resultService.create(result);
-		user.getResult().add(createResult);
-		return createResult;
+	public void addResult(User user, Result result) {
+		user.getResult().add(result);
 	}
 	
 	@Override
 	public Optional<Result> searchResult(User user, Integer idResult) {
 		return user.getResult().stream().filter(r -> r.getIdResult() == idResult).findFirst();
-	}
-	
-	@Override
-	public void setValuesOfResult(Result to, Result from) {
-		to.setDate(from.getDate());
-		to.setScore(from.getScore());
-		to.setQuiz(from.getQuiz());
 	}
 }
