@@ -20,7 +20,6 @@ import lombok.Setter;
 
 @Getter
 @Setter
-@NoArgsConstructor
 @Entity
 public class User {
 
@@ -40,6 +39,6 @@ public class User {
 	
 	@OneToMany(fetch = FetchType.LAZY)
 	@JoinColumn(name=FIELD_IDUSER, referencedColumnName=FIELD_IDUSER)
-	private List<Result> result;
+	private List<Result> result;	
 }
 
