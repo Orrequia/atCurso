@@ -23,7 +23,6 @@ import lombok.Setter;
 
 @Getter
 @Setter
-@NoArgsConstructor
 @Entity
 public class Course {
 	
@@ -37,10 +36,10 @@ public class Course {
 	@Column(nullable = false)
 	private String name;
 	
-	@Temporal(TemporalType.TIMESTAMP)
+	@Temporal(TemporalType.DATE)
 	private Date fecha_inicio;
 	
-	@Temporal(TemporalType.TIMESTAMP)
+	@Temporal(TemporalType.DATE)
 	private Date fecha_fin;
 	
 	@ManyToMany(fetch=FetchType.LAZY)
@@ -51,5 +50,5 @@ public class Course {
 	
 	@OneToMany(fetch = FetchType.LAZY)
 	@JoinColumn(name=FIELD_IDCOURSE, referencedColumnName=FIELD_IDCOURSE)
-	private List<Questionary> questionary;
+	private List<Quiz> quiz;
 }
