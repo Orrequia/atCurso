@@ -55,4 +55,9 @@ public class CourseServiceImpl extends AbstractServiceImpl<Course, CourseDAO> im
 	public Optional<User> searchUser(Course course, Integer idUser) {
 		return course.getUser().stream().filter(u -> u.getIdUser() == idUser).findFirst();
 	}
+	
+	@Override
+	public Optional<Quiz> searchQuiz(Course course, Integer idQuiz) {
+		return course.getQuiz().stream().filter(q -> q.getIdQuiz() == idQuiz).findFirst();
+	}
 }
