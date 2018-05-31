@@ -14,5 +14,5 @@ public interface UserService extends AbstractService<User, Integer> {
 	
 	Optional<User> findByEmail(String email);
 	
-	public void addResult(User user, Result result);
+	public Result addResult(User user, Result result);
 }
