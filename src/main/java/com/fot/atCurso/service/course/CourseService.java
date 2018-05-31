@@ -1,5 +1,6 @@
 package com.fot.atCurso.service.course;
 
+import java.util.Optional;
 import java.util.Set;
 
 import org.springframework.data.domain.PageRequest;
@@ -14,8 +15,6 @@ import com.fot.atCurso.service.AbstractService;
 public interface CourseService  extends AbstractService<Course, Integer> {
 
 	boolean isEqual(Course u1, Course u2);
-	void setValues(Course to, Course from);
-	
-	Set<User> findCourseUsers(Pageable p, Integer idCourse) throws NotFoundException;
-	Set<Quiz> findCourseQuestionaries(Pageable p, Integer idCourse) throws NotFoundException;
+	void setValues(Course to, Course from);	
+	Optional<User> searchUser(Course course, Integer idUser);
 }
