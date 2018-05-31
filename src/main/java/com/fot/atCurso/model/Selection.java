@@ -18,7 +18,7 @@ import lombok.Setter;
 public class Selection {
 	
 	public static final String FIELD_IDUSER = "idUser";
-	public static final String FIELD_IDQUESTIONARY = "idQuiz";
+	public static final String FIELD_IDQUIZ = "idQuiz";
 	public static final String FIELD_IDANSWER = "idAnswer";
 	public static final String FIELD_IDQUESTION = "idQuestion";
 
@@ -30,7 +30,7 @@ public class Selection {
 	@ManyToOne(fetch = FetchType.LAZY)
 	private User user;
 	
-	@JoinColumn(name = FIELD_IDQUESTIONARY)
+	@JoinColumn(name = FIELD_IDQUIZ)
 	@ManyToOne(fetch = FetchType.LAZY)
 	private Quiz quiz;
 	
