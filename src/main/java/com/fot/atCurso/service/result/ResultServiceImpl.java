@@ -13,4 +13,11 @@ public class ResultServiceImpl extends AbstractServiceImpl<Result, ResultDAO> im
 
 	@Autowired
 	ResultDAO resultDAO;
+	
+	@Override
+	public void setValues(Result to, Result from) {
+		to.setDate(from.getDate());
+		to.setScore(from.getScore());
+		to.setQuiz(from.getQuiz());
+	}
 }
