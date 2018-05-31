@@ -5,6 +5,7 @@ import org.springframework.stereotype.Service;
 
 import com.fot.atCurso.dao.TagDAO;
 import com.fot.atCurso.model.Tag;
+import com.fot.atCurso.model.User;
 import com.fot.atCurso.service.AbstractServiceImpl;
 
 @Service
@@ -12,4 +13,9 @@ public class TagServiceImpl extends AbstractServiceImpl<Tag, TagDAO> implements 
 
 	@Autowired
 	TagDAO tagDAO;
+	
+	@Override
+	public boolean isEqual(Tag t1, Tag t2) {
+		return t1.getName().equals(t2.getName());
+	}
 }
