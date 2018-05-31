@@ -11,6 +11,7 @@ import org.springframework.data.domain.PageRequest;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.PostMapping;
+import org.springframework.web.bind.annotation.PutMapping;
 import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestParam;
@@ -18,6 +19,7 @@ import org.springframework.web.bind.annotation.RestController;
 
 import com.fot.atCurso.component.mapper.result.ResultMapper;
 import com.fot.atCurso.dto.result.ResultDTO;
+import com.fot.atCurso.dto.user.UserPostDTO;
 import com.fot.atCurso.exceptions.IdValueCannotBeReceivedException;
 import com.fot.atCurso.exceptions.NotFoundException;
 import com.fot.atCurso.exceptions.ParametersNotAllowedException;
@@ -67,5 +69,19 @@ public class UserResultController {
 		user.orElseThrow(() -> new NotFoundException("El usuario no existe"));
 		Result createResult = userService.addResult(user.get(), resultMapper.dtoToModel(dto));
 		return resultMapper.modelToDto(createResult);
+	}
+	
+	@PutMapping("/{idResult}")
+	public void update(@PathVariable("idUser") Integer idUser,
+			@PathVariable("idResult") Integer idResult, 
+		    @RequestBody UserPostDTO dto) throws IdValueCannotBeReceivedException, NotFoundException {
+		if(dto.getIdResult() != null) 
+			throw new IdValueCannotBeReceivedException("El idResult no se puede recibir");
+		final Optional<User> user = userService.findById(idUser);
+		user.orElseThrow(() -> new NotFoundException("El usuario no existe"));
+		final Optional<Res> user = userService.findById(id);
+		user.orElseThrow(() -> new NotFoundException("El usuario no existe"));
+		userService.setValues(user.get(), userMapper.dtoToModel(dto));
+		userService.update(user.get());
 	}
 }
