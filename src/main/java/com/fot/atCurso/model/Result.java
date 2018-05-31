@@ -31,6 +31,8 @@ public class Result {
 	@Temporal(TemporalType.TIMESTAMP)
 	private Date date;
 	
+	private Float score;
+	
 	@JoinColumn(name = FIELD_IDQUIZ)
 	@ManyToOne(fetch = FetchType.LAZY)
 	private Quiz quiz;
