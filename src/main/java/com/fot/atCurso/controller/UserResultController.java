@@ -18,8 +18,6 @@ import org.springframework.web.bind.annotation.RestController;
 
 import com.fot.atCurso.component.mapper.result.ResultMapper;
 import com.fot.atCurso.dto.result.ResultDTO;
-import com.fot.atCurso.dto.user.UserDTO;
-import com.fot.atCurso.dto.user.UserPostDTO;
 import com.fot.atCurso.exceptions.IdValueCannotBeReceivedException;
 import com.fot.atCurso.exceptions.NotFoundException;
 import com.fot.atCurso.exceptions.ParametersNotAllowedException;
@@ -58,5 +56,16 @@ public class UserResultController {
 		final Optional<Result> result = user.get().getResult().stream().filter(r -> r.getIdResult() == idResult).findFirst();
 		user.orElseThrow(() -> new NotFoundException("El resultado no existe"));
 		return resultMapper.modelToDto(result.get());
+	}
+	
+	@PostMapping
+	public ResultDTO create(@RequestBody ResultDTO dto,
+			@PathVariable("idUser") Integer idUser) throws IdValueCannotBeReceivedException, ConstraintViolationException, NotFoundException {
+		if(dto.getIdResult() != null) 
+			throw new IdValueCannotBeReceivedException("El idResult no se puede recibir");
+		final Optional<User> user = userService.findById(idUser);
+		user.orElseThrow(() -> new NotFoundException("El usuario no existe"));
+		Result createResult = userService.addResult(user.get(), resultMapper.dtoToModel(dto));
+		return resultMapper.modelToDto(createResult);
 	}
 }
