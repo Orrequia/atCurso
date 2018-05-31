@@ -41,8 +41,9 @@ public class UserServiceImpl extends AbstractServiceImpl<User, UserDAO> implemen
 	}
 	
 	@Override
-	public void addResult(User user, Result result) {
+	public Result addResult(User user, Result result) {
 		final Result createResult = resultService.create(result);
 		user.getResult().add(createResult);
+		return createResult;
 	}
 }
