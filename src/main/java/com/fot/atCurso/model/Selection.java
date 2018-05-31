@@ -14,12 +14,11 @@ import lombok.Setter;
 
 @Getter
 @Setter
-@NoArgsConstructor
 @Entity
 public class Selection {
 	
 	public static final String FIELD_IDUSER = "idUser";
-	public static final String FIELD_IDQUESTIONARY = "idQuestionary";
+	public static final String FIELD_IDQUESTIONARY = "idQuiz";
 	public static final String FIELD_IDANSWER = "idAnswer";
 	public static final String FIELD_IDQUESTION = "idQuestion";
 
@@ -33,7 +32,7 @@ public class Selection {
 	
 	@JoinColumn(name = FIELD_IDQUESTIONARY)
 	@ManyToOne(fetch = FetchType.LAZY)
-	private Questionary questionary;
+	private Quiz quiz;
 	
 	@JoinColumn(name = FIELD_IDQUESTION)
 	@ManyToOne(fetch = FetchType.LAZY)
