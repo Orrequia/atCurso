@@ -10,7 +10,6 @@ import org.springframework.stereotype.Component;
 
 import com.fot.atCurso.component.mapper.AbstractMapper;
 import com.fot.atCurso.dto.user.UserDTO;
-import com.fot.atCurso.dto.user.UserPostDTO;
 import com.fot.atCurso.exceptions.NotFoundException;
 import com.fot.atCurso.model.Result;
 import com.fot.atCurso.model.User;
@@ -42,14 +41,9 @@ public class UserMapperImpl extends AbstractMapper<User, UserDTO> implements Use
 		return map(dto, result);
 	}
 	
-	/*public User dtoToModel(UserPostDTO dto) throws NotFoundException {
-		List<Result> result = integerToResult(dto.getResults());
-		return map(dto, result);
-	}*/
-	
 	@Override
 	public UserDTO modelToDto(User model) {
-		List<Integer> results = resultToInteger(userService.getResults(model));
+		List<Integer> results = resultToInteger(model.getResult());
 		return map(model, results);
 	}
 	
@@ -63,8 +57,8 @@ public class UserMapperImpl extends AbstractMapper<User, UserDTO> implements Use
 		return new ArrayList<Result>();
 	}
 	
-	private List<Integer> resultToInteger(List<Result> results) {
-		return results.stream().map(r -> r.getIdResult()).collect(Collectors.toList());
+	private List<Integer> resultToInteger(List<Result> result) {
+		return result.stream().map(r -> r.getIdResult()).collect(Collectors.toList());
 	}
 	
 	private User map(UserDTO dto, List<Result> result) {
@@ -72,12 +66,6 @@ public class UserMapperImpl extends AbstractMapper<User, UserDTO> implements Use
 		user.setResult(result);
 		return user;
 	}
-	
-	/*private User map(UserPostDTO dto, List<Result> result) {
-		User user = dozer.map(dto, modelClazz());
-		user.setResult(result);
-		return user;
-	}*/
 	
 	private UserDTO map(User model, List<Integer> results) {
 		UserDTO dto = dozer.map(model, dtoClazz());
