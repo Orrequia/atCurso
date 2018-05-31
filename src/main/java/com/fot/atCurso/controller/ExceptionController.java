@@ -1,5 +1,6 @@
 package com.fot.atCurso.controller;
 
+import org.hibernate.exception.ConstraintViolationException;
 import org.springframework.http.HttpStatus;
 import org.springframework.web.bind.annotation.ControllerAdvice;
 import org.springframework.web.bind.annotation.ExceptionHandler;
@@ -11,7 +12,6 @@ import com.fot.atCurso.exceptions.IdValueCannotBeReceivedException;
 import com.fot.atCurso.exceptions.NotFoundException;
 import com.fot.atCurso.exceptions.ObjectsDoNotMatchException;
 import com.fot.atCurso.exceptions.ParametersNotAllowedException;
-import com.fot.atCurso.exceptions.UniqueValueViolationException;
 
 @ControllerAdvice(basePackages = { "com.fot.atCurso.controller"})
 public class ExceptionController {
@@ -24,9 +24,9 @@ public class ExceptionController {
 	}
 	
 	@ResponseBody
-	@ExceptionHandler(UniqueValueViolationException.class)
+	@ExceptionHandler(ConstraintViolationException.class)
 	@ResponseStatus(HttpStatus.BAD_REQUEST)
-	public ApiErrorDTO error(UniqueValueViolationException e) {
+	public ApiErrorDTO error(ConstraintViolationException e) {
 		return new ApiErrorDTO(400, e.getMessage());
 	}
 	
