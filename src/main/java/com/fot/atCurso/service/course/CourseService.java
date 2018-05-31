@@ -16,6 +16,8 @@ public interface CourseService  extends AbstractService<Course, Integer> {
 
 	boolean isEqual(Course u1, Course u2);
 	void setValues(Course to, Course from);	
+	void addQuiz(Course course, Quiz quiz);
+	void removeQuiz(Course course, Quiz quiz);
 	Optional<User> searchUser(Course course, Integer idUser);
 	Optional<Quiz> searchQuiz(Course course, Integer idQuiz);	
 }
