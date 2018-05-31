@@ -25,6 +25,7 @@ import com.fot.atCurso.exceptions.NotFoundException;
 import com.fot.atCurso.exceptions.ParametersNotAllowedException;
 import com.fot.atCurso.model.Result;
 import com.fot.atCurso.model.User;
+import com.fot.atCurso.service.result.ResultService;
 import com.fot.atCurso.service.user.UserService;
 
 @RestController
@@ -33,6 +34,9 @@ public class UserResultController {
 
 	@Autowired
 	UserService userService;
+	
+	@Autowired
+	ResultService resultService;
 	
 	@Autowired
 	ResultMapper resultMapper;
@@ -55,7 +59,7 @@ public class UserResultController {
 			 @PathVariable("idResult") Integer idResult) throws ParametersNotAllowedException, NotFoundException {
 		final Optional<User> user = userService.findById(idUser);
 		user.orElseThrow(() -> new NotFoundException("El usuario no existe"));
-		final Optional<Result> result = user.get().getResult().stream().filter(r -> r.getIdResult() == idResult).findFirst();
+		final Optional<Result> result = userService.searchResult(user.get(), idResult);
 		user.orElseThrow(() -> new NotFoundException("El resultado no existe"));
 		return resultMapper.modelToDto(result.get());
 	}
@@ -67,21 +71,22 @@ public class UserResultController {
 			throw new IdValueCannotBeReceivedException("El idResult no se puede recibir");
 		final Optional<User> user = userService.findById(idUser);
 		user.orElseThrow(() -> new NotFoundException("El usuario no existe"));
-		Result createResult = userService.addResult(user.get(), resultMapper.dtoToModel(dto));
+		Result createResult = resultService.create(resultMapper.dtoToModel(dto));
+		userService.addResult(user.get(), createResult);
 		return resultMapper.modelToDto(createResult);
 	}
 	
 	@PutMapping("/{idResult}")
 	public void update(@PathVariable("idUser") Integer idUser,
 			@PathVariable("idResult") Integer idResult, 
-		    @RequestBody UserPostDTO dto) throws IdValueCannotBeReceivedException, NotFoundException {
+		    @RequestBody ResultDTO dto) throws IdValueCannotBeReceivedException, NotFoundException {
 		if(dto.getIdResult() != null) 
 			throw new IdValueCannotBeReceivedException("El idResult no se puede recibir");
 		final Optional<User> user = userService.findById(idUser);
 		user.orElseThrow(() -> new NotFoundException("El usuario no existe"));
-		final Optional<Res> user = userService.findById(id);
-		user.orElseThrow(() -> new NotFoundException("El usuario no existe"));
-		userService.setValues(user.get(), userMapper.dtoToModel(dto));
-		userService.update(user.get());
+		final Optional<Result> result = userService.searchResult(user.get(), idResult);
+		result.orElseThrow(() -> new NotFoundException("Este resultado no existe para este usuario"));
+		resultService.setValues(result.get(), resultMapper.dtoToModel(dto));
+		resultService.update(result.get());
 	}
 }
