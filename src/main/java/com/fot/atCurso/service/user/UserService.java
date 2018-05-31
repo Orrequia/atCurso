@@ -16,5 +16,5 @@ public interface UserService extends AbstractService<User, Integer> {
 	
 	public Result addResult(User user, Result result);
 	
-	public Optional<Result> searchResult(User user);
+	public Optional<Result> searchResult(User user, Integer idResult);
 }
