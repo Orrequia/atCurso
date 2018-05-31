@@ -46,6 +46,11 @@ public class UserServiceImpl extends AbstractServiceImpl<User, UserDAO> implemen
 	}
 	
 	@Override
+	public void removeResult(User user, Result result) {
+		user.getResult().remove(result);
+	}
+	
+	@Override
 	public Optional<Result> searchResult(User user, Integer idResult) {
 		return user.getResult().stream().filter(r -> r.getIdResult() == idResult).findFirst();
 	}
