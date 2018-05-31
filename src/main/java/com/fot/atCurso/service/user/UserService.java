@@ -1,9 +1,7 @@
 package com.fot.atCurso.service.user;
 
-import java.util.List;
 import java.util.Optional;
 
-import com.fot.atCurso.model.Result;
 import com.fot.atCurso.model.User;
 import com.fot.atCurso.service.AbstractService;
 
@@ -14,6 +12,4 @@ public interface UserService extends AbstractService<User, Integer> {
 	void setValues(User to, User from);
 	
 	Optional<User> findByEmail(String email);
-	
-	List<Result> findResults(User user);
 }
