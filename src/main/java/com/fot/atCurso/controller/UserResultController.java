@@ -56,14 +56,12 @@ public class UserResultController {
 	}
 	
 	@GetMapping("/{idResult}")
-	public ResultDTO findById(@RequestParam(defaultValue = "0", required= false ) Integer page, 
-			 @RequestParam(defaultValue = "10", required= false ) Integer size,
-			 @PathVariable("idUser") Integer idUser,
-			 @PathVariable("idResult") Integer idResult) throws ParametersNotAllowedException, NotFoundException {
+	public ResultDTO findById(@PathVariable("idUser") Integer idUser,
+			 @PathVariable("idResult") Integer idResult) throws NotFoundException {
 		final Optional<User> user = userService.findById(idUser);
 		user.orElseThrow(() -> new NotFoundException("El usuario no existe"));
 		final Optional<Result> result = userService.searchResult(user.get(), idResult);
-		user.orElseThrow(() -> new NotFoundException("El resultado no existe"));
+		user.orElseThrow(() -> new NotFoundException("Este resultado no existe para este usuario"));
 		return resultMapper.modelToDto(result.get());
 	}
 	
