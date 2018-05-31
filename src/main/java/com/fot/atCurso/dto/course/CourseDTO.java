@@ -13,8 +13,8 @@ public class CourseDTO {
 
 	private Integer idCourse;
 	private String name;
-	private Date fecha_inicio;
-	private Date fecha_fin;
+	private Date start_date;
+	private Date ending_date;
 	private List<Integer> users;
 	private List<Integer> quizzes;
 }
