@@ -15,6 +15,7 @@ import com.fot.atCurso.dao.CourseDAO;
 import com.fot.atCurso.exceptions.NotFoundException;
 import com.fot.atCurso.model.Course;
 import com.fot.atCurso.model.Quiz;
+import com.fot.atCurso.model.Result;
 import com.fot.atCurso.model.User;
 import com.fot.atCurso.service.AbstractServiceImpl;
 import com.fot.atCurso.service.quiz.QuizService;
@@ -50,20 +51,8 @@ public class CourseServiceImpl extends AbstractServiceImpl<Course, CourseDAO> im
 		to.setQuiz(from.getQuiz());
 	}
 	
-	
 	@Override
-	public Set<User> findCourseUsers(Pageable p, Integer idCourse) throws NotFoundException {
-		Optional<Course> course = courseDAO.findById(idCourse);
-		course.orElseThrow(() -> new NotFoundException("El curso no existe."));
-		List<User> users = course.get().getUser();
-		return new PageImpl<User>(users, PageRequest.of(p.getPageNumber(), p.getPageSize()), users.size()).stream().collect(Collectors.toSet());
-	}
-	
-	@Override
-	public Set<Quiz> findCourseQuestionaries(Pageable p, Integer idCourse) throws NotFoundException {
-		Optional<Course> course = courseDAO.findById(idCourse);
-		course.orElseThrow(() -> new NotFoundException("El curso no existe."));
-		List<Quiz> questionaries = course.get().getQuiz();
-		return new PageImpl<Quiz>(questionaries, PageRequest.of(p.getPageNumber(), p.getPageSize()), questionaries.size()).stream().collect(Collectors.toSet());
+	public Optional<User> searchUser(Course course, Integer idUser) {
+		return course.getUser().stream().filter(u -> u.getIdUser() == idUser).findFirst();
 	}
 }
