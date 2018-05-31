@@ -8,6 +8,7 @@ import org.hibernate.exception.ConstraintViolationException;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.data.domain.PageImpl;
 import org.springframework.data.domain.PageRequest;
+import org.springframework.web.bind.annotation.DeleteMapping;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.PostMapping;
@@ -19,9 +20,11 @@ import org.springframework.web.bind.annotation.RestController;
 
 import com.fot.atCurso.component.mapper.result.ResultMapper;
 import com.fot.atCurso.dto.result.ResultDTO;
+import com.fot.atCurso.dto.user.UserDTO;
 import com.fot.atCurso.dto.user.UserPostDTO;
 import com.fot.atCurso.exceptions.IdValueCannotBeReceivedException;
 import com.fot.atCurso.exceptions.NotFoundException;
+import com.fot.atCurso.exceptions.ObjectsDoNotMatchException;
 import com.fot.atCurso.exceptions.ParametersNotAllowedException;
 import com.fot.atCurso.model.Result;
 import com.fot.atCurso.model.User;
@@ -88,5 +91,19 @@ public class UserResultController {
 		result.orElseThrow(() -> new NotFoundException("Este resultado no existe para este usuario"));
 		resultService.setValues(result.get(), resultMapper.dtoToModel(dto));
 		resultService.update(result.get());
+	}
+	
+	@DeleteMapping("/{idResult}")
+	public void delete(@PathVariable("idUser") Integer idUser,
+			@PathVariable("idResult") Integer idResult, 
+			@RequestBody ResultDTO dto) throws NotFoundException, ObjectsDoNotMatchException {
+		final Optional<User> user = userService.findById(idUser);
+		user.orElseThrow(() -> new NotFoundException("El usuario no existe"));
+		final Optional<Result> result = userService.searchResult(user.get(), idResult);
+		result.orElseThrow(() -> new NotFoundException("Este resultado no existe para este usuario"));
+		if(!resultService.isEqual(resultMapper.dtoToModel(dto), result.get())) 
+			throw new ObjectsDoNotMatchException("El resultado recibido no coincide con el almacenado");
+		userService.removeResult(user.get(), result.get());
+		resultService.delete(result.get());
 	}
 }
