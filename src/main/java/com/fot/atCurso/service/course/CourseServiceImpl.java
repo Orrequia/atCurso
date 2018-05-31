@@ -33,6 +33,25 @@ public class CourseServiceImpl extends AbstractServiceImpl<Course, CourseDAO> im
 	UserService userService;
 	
 	@Override
+	public boolean isEqual(Course c1, Course c2) {
+		return c1.getName().equals( c2.getName()) &&
+				c1.getStart_date().equals(c2.getStart_date()) &&
+				c1.getEnding_date().equals(c2.getEnding_date()) &&
+				c1.getUser().equals(c2.getUser()) &&
+				c1.getQuiz().equals(c2.getQuiz());		
+	}
+	
+	@Override
+	public void setValues(Course to, Course from) {
+		to.setName(from.getName());
+		to.setStart_date(from.getStart_date());
+		to.setEnding_date(from.getEnding_date());
+		to.setUser(from.getUser());
+		to.setQuiz(from.getQuiz());
+	}
+	
+	
+	@Override
 	public Set<User> findCourseUsers(Pageable p, Integer idCourse) throws NotFoundException {
 		Optional<Course> course = courseDAO.findById(idCourse);
 		course.orElseThrow(() -> new NotFoundException("El curso no existe."));
