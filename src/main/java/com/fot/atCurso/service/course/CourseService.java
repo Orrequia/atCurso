@@ -13,6 +13,9 @@ import com.fot.atCurso.service.AbstractService;
 
 public interface CourseService  extends AbstractService<Course, Integer> {
 
-	public Set<User> findCourseUsers(Pageable p, Integer idCourse) throws NotFoundException;
-	public Set<Quiz> findCourseQuestionaries(Pageable p, Integer idCourse) throws NotFoundException;
+	boolean isEqual(Course u1, Course u2);
+	void setValues(Course to, Course from);
+	
+	Set<User> findCourseUsers(Pageable p, Integer idCourse) throws NotFoundException;
+	Set<Quiz> findCourseQuestionaries(Pageable p, Integer idCourse) throws NotFoundException;
 }
