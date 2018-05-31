@@ -22,7 +22,7 @@ import lombok.Setter;
 @Entity
 public class Result {
 
-	public static final String FIELD_IDQUESTIONARY = "idQuiz";
+	public static final String FIELD_IDQUIZ = "idQuiz";
 	
 	@Id
 	@GeneratedValue(strategy=GenerationType.IDENTITY)
@@ -31,7 +31,7 @@ public class Result {
 	@Temporal(TemporalType.TIMESTAMP)
 	private Date date;
 	
-	@JoinColumn(name = FIELD_IDQUESTIONARY)
+	@JoinColumn(name = FIELD_IDQUIZ)
 	@ManyToOne(fetch = FetchType.LAZY)
 	private Quiz quiz;
 }
