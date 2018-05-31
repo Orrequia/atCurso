@@ -14,6 +14,12 @@ public class ResultServiceImpl extends AbstractServiceImpl<Result, ResultDAO> im
 	@Autowired
 	ResultDAO resultDAO;
 	
+	@Override 
+	public boolean isEqual(Result r1, Result r2) {
+		return r1.getDate().equals(r2.getDate()) &&
+				r1.getScore().equals(r2.getScore()) &&
+				r2.getQuiz().equals(r2.getQuiz());
+	}
 	@Override
 	public void setValues(Result to, Result from) {
 		to.setDate(from.getDate());
