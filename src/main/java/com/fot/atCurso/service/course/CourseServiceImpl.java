@@ -14,10 +14,10 @@ import org.springframework.stereotype.Service;
 import com.fot.atCurso.dao.CourseDAO;
 import com.fot.atCurso.exceptions.NotFoundException;
 import com.fot.atCurso.model.Course;
-import com.fot.atCurso.model.Questionary;
+import com.fot.atCurso.model.Quiz;
 import com.fot.atCurso.model.User;
 import com.fot.atCurso.service.AbstractServiceImpl;
-import com.fot.atCurso.service.questionary.QuestionaryService;
+import com.fot.atCurso.service.quiz.QuizService;
 import com.fot.atCurso.service.user.UserService;
 
 @Service
@@ -27,7 +27,7 @@ public class CourseServiceImpl extends AbstractServiceImpl<Course, CourseDAO> im
 	CourseDAO courseDAO;
 	
 	@Autowired
-	QuestionaryService questionaryService;
+	QuizService quizService;
 	
 	@Autowired
 	UserService userService;
@@ -41,10 +41,10 @@ public class CourseServiceImpl extends AbstractServiceImpl<Course, CourseDAO> im
 	}
 	
 	@Override
-	public Set<Questionary> findCourseQuestionaries(Pageable p, Integer idCourse) throws NotFoundException {
+	public Set<Quiz> findCourseQuestionaries(Pageable p, Integer idCourse) throws NotFoundException {
 		Optional<Course> course = courseDAO.findById(idCourse);
 		course.orElseThrow(() -> new NotFoundException("El curso no existe."));
-		List<Questionary> questionaries = course.get().getQuestionary();
-		return new PageImpl<Questionary>(questionaries, PageRequest.of(p.getPageNumber(), p.getPageSize()), questionaries.size()).stream().collect(Collectors.toSet());
+		List<Quiz> questionaries = course.get().getQuiz();
+		return new PageImpl<Quiz>(questionaries, PageRequest.of(p.getPageNumber(), p.getPageSize()), questionaries.size()).stream().collect(Collectors.toSet());
 	}
 }
