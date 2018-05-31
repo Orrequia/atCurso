@@ -14,18 +14,16 @@ import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.RestController;
 
 import com.fot.atCurso.component.mapper.course.CourseMapper;
-import com.fot.atCurso.component.mapper.questionary.QuestionaryMapper;
+import com.fot.atCurso.component.mapper.quiz.QuizMapper;
 import com.fot.atCurso.component.mapper.user.UserMapper;
 import com.fot.atCurso.dto.course.CourseDTO;
-import com.fot.atCurso.dto.course.CoursePostDTO;
-import com.fot.atCurso.dto.questionary.QuestionaryDTO;
+import com.fot.atCurso.dto.quiz.QuizDTO;
 import com.fot.atCurso.dto.user.UserDTO;
 import com.fot.atCurso.exceptions.IdValueCannotBeReceivedException;
 import com.fot.atCurso.exceptions.NotFoundException;
 import com.fot.atCurso.exceptions.ParametersNotAllowedException;
-import com.fot.atCurso.exceptions.UniqueValueViolationException;
 import com.fot.atCurso.model.Course;
-import com.fot.atCurso.model.Questionary;
+import com.fot.atCurso.model.Quiz;
 import com.fot.atCurso.model.User;
 import com.fot.atCurso.service.course.CourseService;
 
@@ -42,7 +40,7 @@ public class CourseController {
 	CourseMapper courseMapper;
 	
 	@Autowired
-	QuestionaryMapper questionaryMapper;
+	QuizMapper quizMapper;
 	
 	@Autowired
 	UserMapper userMapper;
@@ -57,7 +55,7 @@ public class CourseController {
 	}
 	
 	@PostMapping
-	public CourseDTO create(@RequestBody CoursePostDTO dto) throws IdValueCannotBeReceivedException, UniqueValueViolationException {
+	public CourseDTO create(@RequestBody CourseDTO dto) throws IdValueCannotBeReceivedException, NotFoundException {
 		if(dto.getIdCourse() != null) 
 			throw new IdValueCannotBeReceivedException("El idCourse no se puede recibir");
 		final Course course = courseMapper.dtoToModel(dto);
@@ -75,13 +73,13 @@ public class CourseController {
 		return userMapper.modelToDto(users);
 	}
 	
-	@GetMapping("/{idCourse}/questionary")
-	public Set<QuestionaryDTO> findCourseQuestionaries(@RequestParam(defaultValue = "0", required= false ) Integer page, 
+	@GetMapping("/{idCourse}/quiz")
+	public Set<QuizDTO> findCourseQuestionaries(@RequestParam(defaultValue = "0", required= false ) Integer page, 
 			 @RequestParam(defaultValue = "10", required = false) Integer size,
 			 @PathVariable("idCourse") Integer idCourse) throws ParametersNotAllowedException, NotFoundException {
 		if(page < 0 || size <= 0 || size > maxSize)
 			throw new ParametersNotAllowedException("Los parámetros introducidos contienen valores no permitidos, page mayor o igual a 0 y size entre 1 y " + maxSize + " incluídos");
-		final Set<Questionary> questionaries = courseService.findCourseQuestionaries(PageRequest.of(page, size), idCourse);
-		return questionaryMapper.modelToDto(questionaries);
+		final Set<Quiz> questionaries = courseService.findCourseQuestionaries(PageRequest.of(page, size), idCourse);
+		return quizMapper.modelToDto(questionaries);
 	}
 }
