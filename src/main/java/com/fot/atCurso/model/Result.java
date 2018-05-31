@@ -19,11 +19,10 @@ import lombok.Setter;
 
 @Getter
 @Setter
-@NoArgsConstructor
 @Entity
 public class Result {
 
-	public static final String FIELD_IDQUESTIONARY = "idQuestionary";
+	public static final String FIELD_IDQUESTIONARY = "idQuiz";
 	
 	@Id
 	@GeneratedValue(strategy=GenerationType.IDENTITY)
@@ -34,5 +33,5 @@ public class Result {
 	
 	@JoinColumn(name = FIELD_IDQUESTIONARY)
 	@ManyToOne(fetch = FetchType.LAZY)
-	private Questionary questionary;
+	private Quiz quiz;
 }
