@@ -37,10 +37,10 @@ public class Course {
 	private String name;
 	
 	@Temporal(TemporalType.DATE)
-	private Date fecha_inicio;
+	private Date start_date;
 	
 	@Temporal(TemporalType.DATE)
-	private Date fecha_fin;
+	private Date ending_date;
 	
 	@ManyToMany(fetch=FetchType.LAZY)
 	@JoinTable(name="user_course", 
