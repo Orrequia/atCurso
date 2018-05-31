@@ -46,4 +46,9 @@ public class UserServiceImpl extends AbstractServiceImpl<User, UserDAO> implemen
 		user.getResult().add(createResult);
 		return createResult;
 	}
+	
+	@Override
+	public Optional<Result> searchResult(User user, Integer idResult) {
+		return user.getResult().stream().filter(r -> r.getIdResult() == idResult).findFirst();
+	}
 }
