@@ -8,7 +8,6 @@ import org.springframework.data.jpa.repository.Query;
 import org.springframework.data.repository.query.Param;
 import org.springframework.stereotype.Repository;
 
-import com.fot.atCurso.model.Result;
 import com.fot.atCurso.model.User;
 
 @Repository
@@ -18,6 +17,6 @@ public interface UserDAO extends GenericDAO<User> {
 	
 	Optional<User> findOneByEmail(String email);
 	
-	@Query(value = "SELECT user from User user join Group group where group.idGroup = :idGroup ORDER BY u.name")
-	List<User> findByCourse(@Param("idGroup") Integer idGroup, Pageable p);
+	@Query(value = "SELECT u FROM User AS u JOIN Course AS c WHERE c.idCourse = :idCourse ORDER BY u.name")
+	List<User> findByCourse(@Param("idCourse") Integer idCourse, Pageable p);
 }
