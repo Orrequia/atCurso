@@ -1,11 +1,16 @@
 package com.fot.atCurso.service.result;
 
+import java.util.List;
+
+import org.springframework.data.domain.Pageable;
+
 import com.fot.atCurso.model.Result;
 import com.fot.atCurso.service.AbstractService;
 
 public interface ResultService  extends AbstractService<Result, Integer> {
 
-	boolean isEqual(Result r1, Result r2);
+	List<Result> findResultByUser(Integer idUser, Pageable p);
 	
+	boolean isEqual(Result r1, Result r2);
 	void setValues(Result to, Result from);
 }

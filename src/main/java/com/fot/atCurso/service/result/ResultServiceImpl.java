@@ -1,6 +1,10 @@
 package com.fot.atCurso.service.result;
 
+import java.util.List;
+
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.data.domain.Pageable;
+import org.springframework.data.domain.PageRequest;
 import org.springframework.stereotype.Service;
 
 import com.fot.atCurso.dao.ResultDAO;
@@ -25,5 +29,10 @@ public class ResultServiceImpl extends AbstractServiceImpl<Result, ResultDAO> im
 		to.setDate(from.getDate());
 		to.setScore(from.getScore());
 		to.setQuiz(from.getQuiz());
+	}
+	
+	@Override
+	public List<Result> findResultByUser(Integer idUser, Pageable p) {
+		return resultDAO.findByUser(idUser, p);
 	}
 }
