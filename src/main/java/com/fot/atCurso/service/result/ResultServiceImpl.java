@@ -33,6 +33,6 @@ public class ResultServiceImpl extends AbstractServiceImpl<Result, ResultDAO> im
 	
 	@Override
 	public List<Result> findResultByUser(Integer idUser, Pageable p) {
-		return resultDAO.findByUser(idUser, p);
+		return resultDAO.findByUser(idUser, PageRequest.of(p.getPageNumber(), p.getPageSize()));
 	}
 }
