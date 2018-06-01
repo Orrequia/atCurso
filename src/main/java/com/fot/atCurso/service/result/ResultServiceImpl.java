@@ -48,7 +48,7 @@ public class ResultServiceImpl extends AbstractServiceImpl<Result, ResultDAO> im
 	@Override
 	public Result findOneResultByUser(Integer idUser, Integer idResult) throws NotFoundException {
 		final User user = userService.getAndCheck(idUser);
-		final Result result = getAndCheck(user, idResult);
+		final Result result = getAndCheckBelongUser(user, idResult);
 		return result;
 	}
 	
@@ -63,7 +63,7 @@ public class ResultServiceImpl extends AbstractServiceImpl<Result, ResultDAO> im
 	@Override
 	public void updateToUser(Integer idUser, Integer idResult, Result newResult) throws NotFoundException {
 		final User user = userService.getAndCheck(idUser);
-		final Result result = getAndCheck(user, idResult);
+		final Result result = getAndCheckBelongUser(user, idResult);
 		setValues(result, newResult);
 		update(result);
 	}
@@ -71,7 +71,7 @@ public class ResultServiceImpl extends AbstractServiceImpl<Result, ResultDAO> im
 	@Override
 	public void deleteToUser(Integer idUser, Integer idResult, Result bodyResult) throws NotFoundException, ObjectsDoNotMatchException {
 		final User user = userService.getAndCheck(idUser);
-		final Result result = getAndCheck(user, idResult);
+		final Result result = getAndCheckBelongUser(user, idResult);
 		if(!isEqual(bodyResult, result))
 			throw new ObjectsDoNotMatchException("El resultado recibido no coincide con el almacenado");
 		userService.removeResult(user, result);
@@ -79,7 +79,7 @@ public class ResultServiceImpl extends AbstractServiceImpl<Result, ResultDAO> im
 	}
 	
 	@Override
-	public Result getAndCheck(User user, Integer idResult) throws NotFoundException {
+	public Result getAndCheckBelongUser(User user, Integer idResult) throws NotFoundException {
 		final Optional<Result> result = user.getResult().stream().filter(r -> r.getIdResult() == idResult).findFirst();
 		result.orElseThrow(() -> new NotFoundException("Este resultado no existe para este usuario"));
 		return result.get();
