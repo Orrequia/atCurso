@@ -1,8 +1,8 @@
 package com.fot.atCurso.service;
 
 import java.io.Serializable;
+import java.util.List;
 import java.util.Optional;
-import java.util.Set;
 
 import org.springframework.data.domain.Pageable;
 
@@ -16,7 +16,7 @@ public interface AbstractService<T, ID extends Serializable> {
 	
 	Optional<T> findById(ID id);
 	
-	Set<T> findAll(Pageable p) throws ParametersNotAllowedException;
+	List<T> findAll(Pageable p) throws ParametersNotAllowedException;
 	
 	void delete(T t);
 }

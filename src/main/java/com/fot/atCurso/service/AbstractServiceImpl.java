@@ -1,7 +1,7 @@
 package com.fot.atCurso.service;
 
+import java.util.List;
 import java.util.Optional;
-import java.util.Set;
 import java.util.stream.Collectors;
 
 import org.springframework.beans.factory.annotation.Autowired;
@@ -36,10 +36,10 @@ public abstract class AbstractServiceImpl<T, D extends GenericDAO<T>> implements
 	}
 
 	@Override
-	public Set<T> findAll(Pageable p) throws ParametersNotAllowedException {
+	public List<T> findAll(Pageable p) throws ParametersNotAllowedException {
 		if(p.getPageNumber() < 0 || p.getPageSize() <= 0 || p.getPageSize() > maxSize)
 			throw new ParametersNotAllowedException("Los parámetros introducidos contienen valores no permitidos, page mayor o igual a 0 y size entre 1 y " + maxSize + " incluídos");
-		return dao.findAll(PageRequest.of(p.getPageNumber(), p.getPageSize())).stream().collect(Collectors.toSet());
+		return dao.findAll(PageRequest.of(p.getPageNumber(), p.getPageSize())).stream().collect(Collectors.toList());
 	}
 
 	@Override
