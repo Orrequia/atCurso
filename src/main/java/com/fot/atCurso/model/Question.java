@@ -40,7 +40,7 @@ public class Question {
 	
 	@JoinColumn(name = FIELD_IDDIFFICULTY)
 	@ManyToOne(fetch = FetchType.LAZY)
-	private Difficulty dificulty;
+	private Difficulty difficulty;
 	
 	@OneToMany(fetch = FetchType.LAZY)
 	@JoinColumn(name=FIELD_IDQUESTION, referencedColumnName=FIELD_IDQUESTION)
