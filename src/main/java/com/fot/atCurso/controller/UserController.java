@@ -1,7 +1,7 @@
 package com.fot.atCurso.controller;
 
+import java.util.List;
 import java.util.Optional;
-import java.util.Set;
 
 import org.hibernate.exception.ConstraintViolationException;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -37,9 +37,9 @@ public class UserController {
 	UserMapper userMapper;
 	
 	@GetMapping
-	public Set<UserDTO> findAll(@RequestParam(defaultValue = "0", required= false ) Integer page, 
+	public List<UserDTO> findAll(@RequestParam(defaultValue = "0", required= false ) Integer page, 
 							 @RequestParam(defaultValue = "10", required= false ) Integer size) throws ParametersNotAllowedException {
-		final Set<User> users = userService.findAll(PageRequest.of(page, size));
+		final List<User> users = userService.findAll(PageRequest.of(page, size));
 		return userMapper.modelToDto(users);
 	}
 	
