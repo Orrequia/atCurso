@@ -8,8 +8,8 @@ import org.springframework.data.domain.Pageable;
 import org.springframework.data.domain.PageRequest;
 import org.springframework.stereotype.Service;
 
+import com.fot.atCurso.component.dates.OperationDates;
 import com.fot.atCurso.dao.ResultDAO;
-import com.fot.atCurso.dao.UserDAO;
 import com.fot.atCurso.exceptions.NotFoundException;
 import com.fot.atCurso.exceptions.ObjectsDoNotMatchException;
 import com.fot.atCurso.model.Result;
@@ -26,9 +26,12 @@ public class ResultServiceImpl extends AbstractServiceImpl<Result, ResultDAO> im
 	@Autowired
 	UserService userService;
 	
+	@Autowired
+	OperationDates operationDates;
+	
 	@Override 
 	public boolean isEqual(Result r1, Result r2) {
-		return r1.getDate().equals(r2.getDate()) &&
+		return operationDates.compare(r1.getDate(), r2.getDate()) &&
 				r1.getScore().equals(r2.getScore()) &&
 				r2.getQuiz().equals(r2.getQuiz());
 	}
@@ -41,7 +44,7 @@ public class ResultServiceImpl extends AbstractServiceImpl<Result, ResultDAO> im
 	
 	@Override
 	public List<Result> findResultByUser(Integer idUser, Pageable p) throws NotFoundException {
-		userService.getAndCheck(idUser);;
+		userService.getAndCheck(idUser);
 		return resultDAO.findByUser(idUser, PageRequest.of(p.getPageNumber(), p.getPageSize()));
 	}
 	
@@ -75,7 +78,6 @@ public class ResultServiceImpl extends AbstractServiceImpl<Result, ResultDAO> im
 		if(!isEqual(bodyResult, result))
 			throw new ObjectsDoNotMatchException("El resultado recibido no coincide con el almacenado");
 		userService.removeResult(user, result);
-		delete(result);
 	}
 	
 	@Override
