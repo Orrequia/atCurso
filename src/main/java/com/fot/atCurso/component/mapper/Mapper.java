@@ -1,6 +1,6 @@
 package com.fot.atCurso.component.mapper;
 
-import java.util.Set;
+import java.util.List;
 
 import com.fot.atCurso.exceptions.NotFoundException;
 
@@ -10,9 +10,9 @@ public interface Mapper<M, D> {
 	
 	D modelToDto(M model);
 	
-	Set<M> dtoToModel(Set<D> dtos) throws NotFoundException;
+	List<M> dtoToModel(List<D> dtos) throws NotFoundException;
 	
-	Set<D> modelToDto(Set<M> models);
+	List<D> modelToDto(List<M> models);
 	
 	Class<? extends D> dtoClazz();
 	

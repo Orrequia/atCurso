@@ -1,6 +1,8 @@
 package com.fot.atCurso.component.mapper;
 
+import java.util.ArrayList;
 import java.util.HashSet;
+import java.util.List;
 import java.util.Set;
 import java.util.stream.Collectors;
 
@@ -27,15 +29,15 @@ public abstract class AbstractMapper<M, D> implements Mapper<M, D> {
 	}
 
 	@Override
-	public Set<M> dtoToModel(Set<D> dtos) throws NotFoundException {
-		Set<M> models = new HashSet<M>();
+	public List<M> dtoToModel(List<D> dtos) throws NotFoundException {
+		List<M> models = new ArrayList<M>();
 		for(D dto : dtos)
 			models.add(dtoToModel(dto));
 		return models;
 	}
 
 	@Override
-	public Set<D> modelToDto(Set<M> models) {
-		return models.stream().map(m -> modelToDto(m)).collect(Collectors.toSet());
+	public List<D> modelToDto(List<M> models) {
+		return models.stream().map(m -> modelToDto(m)).collect(Collectors.toList());
 	}
 }
