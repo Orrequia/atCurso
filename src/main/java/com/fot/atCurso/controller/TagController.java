@@ -10,6 +10,7 @@ import org.springframework.web.bind.annotation.DeleteMapping;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.PostMapping;
+import org.springframework.web.bind.annotation.PutMapping;
 import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestParam;
@@ -55,6 +56,16 @@ public class TagController {
 		final Tag tag = tagMapper.dtoToModel(dto);
 		final Tag createTag = tagService.create(tag);
 		return tagMapper.modelToDto(createTag);
+	}
+	
+	@PutMapping("/{idTag}")
+	public void update(@PathVariable("idTag") Integer id, @RequestBody TagDTO dto) throws IdValueCannotBeReceivedException, NotFoundException {
+		if(dto.getIdTag() != null) 
+			throw new IdValueCannotBeReceivedException("El idTag no se puede recibir en el body");
+		final Optional<Tag> tag = tagService.findById(id);
+		tag.orElseThrow(() -> new NotFoundException("El usuario no existe"));
+		tagService.setValues(tag.get(), tagMapper.dtoToModel(dto));
+		tagService.update(tag.get());
 	}
 	
 	@DeleteMapping("/{idTag}")
