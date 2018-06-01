@@ -1,21 +1,14 @@
 package com.fot.atCurso.service.course;
 
-import java.util.List;
 import java.util.Optional;
-import java.util.Set;
-import java.util.stream.Collectors;
 
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.data.domain.PageImpl;
-import org.springframework.data.domain.PageRequest;
-import org.springframework.data.domain.Pageable;
 import org.springframework.stereotype.Service;
 
 import com.fot.atCurso.dao.CourseDAO;
 import com.fot.atCurso.exceptions.NotFoundException;
 import com.fot.atCurso.model.Course;
 import com.fot.atCurso.model.Quiz;
-import com.fot.atCurso.model.Result;
 import com.fot.atCurso.model.User;
 import com.fot.atCurso.service.AbstractServiceImpl;
 import com.fot.atCurso.service.quiz.QuizService;
@@ -69,5 +62,12 @@ public class CourseServiceImpl extends AbstractServiceImpl<Course, CourseDAO> im
 	@Override
 	public Optional<Quiz> searchQuiz(Course course, Integer idQuiz) {
 		return course.getQuiz().stream().filter(q -> q.getIdQuiz() == idQuiz).findFirst();
+	}
+	
+	@Override
+	public Course getAndCheck(Integer idCourse) throws NotFoundException {
+		Optional<Course> course = findById(idCourse);
+		course.orElseThrow(() -> new NotFoundException("El grupo no existe"));
+		return course.get();
 	}
 }
