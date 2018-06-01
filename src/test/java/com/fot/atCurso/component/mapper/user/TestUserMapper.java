@@ -10,6 +10,7 @@ import org.mockito.Mockito;
 import org.mockito.junit.MockitoJUnitRunner;
 
 import com.fot.atCurso.dto.user.UserDTO;
+import com.fot.atCurso.exceptions.NotFoundException;
 import com.fot.atCurso.model.User;
 
 
@@ -26,7 +27,7 @@ public class TestUserMapper {
 	DozerBeanMapper dozer;
 	
 	@Test
-	public void testDTOToModel() {
+	public void testDTOToModel() throws NotFoundException {
 		final UserDTO userDTO = new UserDTO();
 		userDTO.setName(NAME);
 		final User user = new User();
