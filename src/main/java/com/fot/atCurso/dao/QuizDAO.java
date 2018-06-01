@@ -8,11 +8,10 @@ import org.springframework.data.repository.query.Param;
 import org.springframework.stereotype.Repository;
 
 import com.fot.atCurso.model.Quiz;
-import com.fot.atCurso.model.Result;
 
 @Repository
 public interface QuizDAO extends GenericDAO<Quiz> {
 
-	@Query(value = "SELECT FROM Quiz quiz WHERE quiz.idCourse = :idCourse ORDER BY quiz.name")
-	List<Result> findByUser(@Param("idCourse") Integer idCourse, Pageable p);
+	@Query(value = "SELECT q FROM Quiz AS q JOIN Course AS c WHERE c.idCourse = :idCourse ORDER BY q.name")
+	List<Quiz> findByCourse(@Param("idCourse") Integer idCourse, Pageable p);
 }
