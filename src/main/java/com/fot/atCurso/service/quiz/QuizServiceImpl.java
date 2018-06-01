@@ -2,7 +2,6 @@ package com.fot.atCurso.service.quiz;
 
 import java.util.List;
 import java.util.Optional;
-import java.util.stream.Collectors;
 
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.data.domain.PageRequest;
@@ -14,10 +13,6 @@ import com.fot.atCurso.exceptions.NotFoundException;
 import com.fot.atCurso.exceptions.ObjectsDoNotMatchException;
 import com.fot.atCurso.model.Course;
 import com.fot.atCurso.model.Quiz;
-import com.fot.atCurso.model.Result;
-import com.fot.atCurso.model.Quiz;
-import com.fot.atCurso.model.Tag;
-import com.fot.atCurso.model.Course;
 import com.fot.atCurso.service.AbstractServiceImpl;
 import com.fot.atCurso.service.course.CourseService;
 import com.fot.atCurso.service.tag.TagService;
@@ -37,7 +32,7 @@ public class QuizServiceImpl extends AbstractServiceImpl<Quiz, QuizDAO> implemen
 	@Override
 	public boolean isEqual(Quiz q1, Quiz q2) {
 		return q1.getName().equals(q2.getName()) &&
-				q1.getModality().equals(q2.getModality()) &&
+				q1.getModality() == q2.getModality() &&
 				q1.getQuestion().equals(q2.getQuestion()) &&
 				q1.getTag().equals(q2.getTag());
 	}
@@ -84,9 +79,8 @@ public class QuizServiceImpl extends AbstractServiceImpl<Quiz, QuizDAO> implemen
 		final Course course = courseService.getAndCheck(idCourse);
 		final Quiz quiz = getAndCheckBelongCourse(course, idQuiz);
 		if(!isEqual(bodyQuiz, quiz))
-			throw new ObjectsDoNotMatchException("El quizado recibido no coincide con el almacenado");
+			throw new ObjectsDoNotMatchException("El cuestionario recibido no coincide con el almacenado");
 		courseService.removeQuiz(course, quiz);
-		delete(quiz);
 	}
 	
 	@Override
