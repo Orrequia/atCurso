@@ -54,11 +54,13 @@ public class UserServiceImpl extends AbstractServiceImpl<User, UserDAO> implemen
 	@Override
 	public void addResult(User user, Result result) {
 		user.getResult().add(result);
+		userDAO.save(user);
 	}
 	
 	@Override
 	public void removeResult(User user, Result result) {
 		user.getResult().remove(result);
+		userDAO.save(user);
 	}
 	
 	@Override
