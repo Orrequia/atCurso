@@ -20,4 +20,6 @@ public interface CourseService  extends AbstractService<Course, Integer> {
 	void removeQuiz(Course course, Quiz quiz);
 	Optional<User> searchUser(Course course, Integer idUser);
 	Optional<Quiz> searchQuiz(Course course, Integer idQuiz);	
+	
+	Course getAndCheck(Integer idCourse) throws NotFoundException;
 }
