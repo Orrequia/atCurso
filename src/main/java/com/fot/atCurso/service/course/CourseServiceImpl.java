@@ -5,6 +5,7 @@ import java.util.Optional;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
+import com.fot.atCurso.component.dates.OperationDates;
 import com.fot.atCurso.dao.CourseDAO;
 import com.fot.atCurso.exceptions.NotFoundException;
 import com.fot.atCurso.model.Course;
@@ -26,11 +27,14 @@ public class CourseServiceImpl extends AbstractServiceImpl<Course, CourseDAO> im
 	@Autowired
 	UserService userService;
 	
+	@Autowired
+	OperationDates operationDates;
+	
 	@Override
 	public boolean isEqual(Course c1, Course c2) {
 		return c1.getName().equals( c2.getName()) &&
-				c1.getStart_date().equals(c2.getStart_date()) &&
-				c1.getEnding_date().equals(c2.getEnding_date()) &&
+				operationDates.compare(c1.getStart_date(), c2.getStart_date()) &&
+				operationDates.compare(c1.getEnding_date(), c2.getEnding_date()) &&
 				c1.getUser().equals(c2.getUser()) &&
 				c1.getQuiz().equals(c2.getQuiz());		
 	}
@@ -47,11 +51,13 @@ public class CourseServiceImpl extends AbstractServiceImpl<Course, CourseDAO> im
 	@Override
 	public void addQuiz(Course course, Quiz quiz) {
 		course.getQuiz().add(quiz);
+		courseDAO.save(course);
 	}
 	
 	@Override
 	public void removeQuiz(Course course, Quiz quiz) {
 		course.getQuiz().remove(quiz);
+		courseDAO.save(course);
 	}
 	
 	@Override
