@@ -1,5 +1,6 @@
 package com.fot.atCurso.controller;
 
+import java.util.List;
 import java.util.Optional;
 import java.util.Set;
 import java.util.stream.Collectors;
@@ -34,9 +35,6 @@ import com.fot.atCurso.service.user.UserService;
 @RestController
 @RequestMapping(value= "/user/{idUser}/result")
 public class UserResultController {
-
-	@Autowired
-	UserService userService;
 	
 	@Autowired
 	ResultService resultService;
@@ -45,24 +43,18 @@ public class UserResultController {
 	ResultMapper resultMapper;
 	
 	@GetMapping
-	public Set<ResultDTO> findAll(@RequestParam(defaultValue = "0", required= false ) Integer page, 
+	public List<ResultDTO> findAll(@RequestParam(defaultValue = "0", required= false ) Integer page, 
 							 @RequestParam(defaultValue = "10", required= false ) Integer size,
 							 @PathVariable("idUser") Integer idUser) throws ParametersNotAllowedException, NotFoundException {
-		final Optional<User> user = userService.findById(idUser);
-		user.orElseThrow(() -> new NotFoundException("El usuario no existe"));
-		final Set<Result> results = new PageImpl<Result>(user.get().getResult(), PageRequest.of(page, size), user.get().getResult().size())
-				.stream().collect(Collectors.toSet());
+		final List<Result> results = resultService.findResultByUser(idUser, PageRequest.of(page, size));
 		return resultMapper.modelToDto(results);
 	}
 	
 	@GetMapping("/{idResult}")
 	public ResultDTO findById(@PathVariable("idUser") Integer idUser,
 			 @PathVariable("idResult") Integer idResult) throws NotFoundException {
-		final Optional<User> user = userService.findById(idUser);
-		user.orElseThrow(() -> new NotFoundException("El usuario no existe"));
-		final Optional<Result> result = userService.searchResult(user.get(), idResult);
-		user.orElseThrow(() -> new NotFoundException("Este resultado no existe para este usuario"));
-		return resultMapper.modelToDto(result.get());
+		final Result result = resultService.findOneResultByUser(idUser, idResult);
+		return resultMapper.modelToDto(result);
 	}
 	
 	@PostMapping
@@ -70,10 +62,7 @@ public class UserResultController {
 			@PathVariable("idUser") Integer idUser) throws IdValueCannotBeReceivedException, ConstraintViolationException, NotFoundException {
 		if(dto.getIdResult() != null) 
 			throw new IdValueCannotBeReceivedException("El idResult no se puede recibir");
-		final Optional<User> user = userService.findById(idUser);
-		user.orElseThrow(() -> new NotFoundException("El usuario no existe"));
-		Result createResult = resultService.create(resultMapper.dtoToModel(dto));
-		userService.addResult(user.get(), createResult);
+		Result createResult = resultService.addToUser(resultMapper.dtoToModel(dto), idUser);
 		return resultMapper.modelToDto(createResult);
 	}
 	
@@ -83,25 +72,13 @@ public class UserResultController {
 		    @RequestBody ResultDTO dto) throws IdValueCannotBeReceivedException, NotFoundException {
 		if(dto.getIdResult() != null) 
 			throw new IdValueCannotBeReceivedException("El idResult no se puede recibir");
-		final Optional<User> user = userService.findById(idUser);
-		user.orElseThrow(() -> new NotFoundException("El usuario no existe"));
-		final Optional<Result> result = userService.searchResult(user.get(), idResult);
-		result.orElseThrow(() -> new NotFoundException("Este resultado no existe para este usuario"));
-		resultService.setValues(result.get(), resultMapper.dtoToModel(dto));
-		resultService.update(result.get());
+		resultService.updateToUser(idUser, idResult, resultMapper.dtoToModel(dto));
 	}
 	
 	@DeleteMapping("/{idResult}")
 	public void delete(@PathVariable("idUser") Integer idUser,
 			@PathVariable("idResult") Integer idResult, 
 			@RequestBody ResultDTO dto) throws NotFoundException, ObjectsDoNotMatchException {
-		final Optional<User> user = userService.findById(idUser);
-		user.orElseThrow(() -> new NotFoundException("El usuario no existe"));
-		final Optional<Result> result = userService.searchResult(user.get(), idResult);
-		result.orElseThrow(() -> new NotFoundException("Este resultado no existe para este usuario"));
-		if(!resultService.isEqual(resultMapper.dtoToModel(dto), result.get())) 
-			throw new ObjectsDoNotMatchException("El resultado recibido no coincide con el almacenado");
-		userService.removeResult(user.get(), result.get());
-		resultService.delete(result.get());
+		resultService.deleteToUser(idUser, idResult, resultMapper.dtoToModel(dto));
 	}
 }
