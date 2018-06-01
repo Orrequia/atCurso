@@ -2,6 +2,7 @@ package com.fot.atCurso.service.user;
 
 import java.util.Optional;
 
+import com.fot.atCurso.exceptions.NotFoundException;
 import com.fot.atCurso.model.Result;
 import com.fot.atCurso.model.User;
 import com.fot.atCurso.service.AbstractService;
@@ -18,5 +19,5 @@ public interface UserService extends AbstractService<User, Integer> {
 	
 	void removeResult(User user, Result result);
 	
-	Optional<Result> searchResult(User user, Integer idResult);
+	User getAndCheck(Integer idUser) throws NotFoundException;
 }

@@ -6,6 +6,7 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
 import com.fot.atCurso.dao.UserDAO;
+import com.fot.atCurso.exceptions.NotFoundException;
 import com.fot.atCurso.model.Result;
 import com.fot.atCurso.model.User;
 import com.fot.atCurso.service.AbstractServiceImpl;
@@ -51,7 +52,9 @@ public class UserServiceImpl extends AbstractServiceImpl<User, UserDAO> implemen
 	}
 	
 	@Override
-	public Optional<Result> searchResult(User user, Integer idResult) {
-		return user.getResult().stream().filter(r -> r.getIdResult() == idResult).findFirst();
+	public User getAndCheck(Integer idUser) throws NotFoundException {
+		Optional<User> user = findById(idUser);
+		user.orElseThrow(() -> new NotFoundException("El usuario no existe"));
+		return user.get();
 	}
 }
