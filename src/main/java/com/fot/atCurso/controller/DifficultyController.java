@@ -6,9 +6,11 @@ import java.util.Set;
 import org.hibernate.exception.ConstraintViolationException;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.data.domain.PageRequest;
+import org.springframework.web.bind.annotation.DeleteMapping;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.PostMapping;
+import org.springframework.web.bind.annotation.PutMapping;
 import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestParam;
@@ -18,6 +20,7 @@ import com.fot.atCurso.component.mapper.difficulty.DifficultyMapper;
 import com.fot.atCurso.dto.difficulty.DifficultyDTO;
 import com.fot.atCurso.exceptions.IdValueCannotBeReceivedException;
 import com.fot.atCurso.exceptions.NotFoundException;
+import com.fot.atCurso.exceptions.ObjectsDoNotMatchException;
 import com.fot.atCurso.exceptions.ParametersNotAllowedException;
 import com.fot.atCurso.model.Difficulty;
 import com.fot.atCurso.service.difficulty.DifficultyService;
@@ -53,6 +56,25 @@ public class DifficultyController {
 		final Difficulty difficulty = difficultyMapper.dtoToModel(dto);
 		final Difficulty createDifficulty = difficultyService.create(difficulty);
 		return difficultyMapper.modelToDto(createDifficulty);
+	}
+	
+	@PutMapping("/{idDifficulty}")
+	public void update(@PathVariable("idDifficulty") Integer id, @RequestBody DifficultyDTO dto) throws IdValueCannotBeReceivedException, NotFoundException {
+		if(dto.getIdDifficulty() != null) 
+			throw new IdValueCannotBeReceivedException("El idDifficulty no se puede recibir en el body");
+		final Optional<Difficulty> difficulty = difficultyService.findById(id);
+		difficulty.orElseThrow(() -> new NotFoundException("El usuario no existe"));
+		difficultyService.setValues(difficulty.get(), difficultyMapper.dtoToModel(dto));
+		difficultyService.update(difficulty.get());
+	}
+	
+	@DeleteMapping("/{idDifficulty}")
+	public void delete(@PathVariable("idDifficulty") Integer id, @RequestBody DifficultyDTO dto) throws NotFoundException, ObjectsDoNotMatchException {
+		final Optional<Difficulty> difficulty = difficultyService.findById(id);
+		difficulty.orElseThrow(() -> new NotFoundException("El usuario no existe"));
+		if(!difficultyService.isEqual(difficultyMapper.dtoToModel(dto), difficulty.get())) 
+			throw new ObjectsDoNotMatchException("El usuario recibido no coincide con el almacenado");
+		difficultyService.delete(difficulty.get());
 	}
 }
 	
