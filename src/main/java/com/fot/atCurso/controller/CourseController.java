@@ -16,7 +16,6 @@ import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.RestController;
 
 import com.fot.atCurso.component.mapper.course.CourseMapper;
-import com.fot.atCurso.component.mapper.quiz.QuizMapper;
 import com.fot.atCurso.dto.course.CourseDTO;
 import com.fot.atCurso.exceptions.IdValueCannotBeReceivedException;
 import com.fot.atCurso.exceptions.NotFoundException;
@@ -34,10 +33,7 @@ public class CourseController {
 	
 	@Autowired
 	CourseMapper courseMapper;
-	
-	@Autowired
-	QuizMapper quizMapper;
-	
+		
 	@GetMapping
 	public List<CourseDTO> findAll(@RequestParam(defaultValue = "0", required= false ) Integer page, 
 			 	@RequestParam(defaultValue = "10", required= false ) Integer size) throws ParametersNotAllowedException {
