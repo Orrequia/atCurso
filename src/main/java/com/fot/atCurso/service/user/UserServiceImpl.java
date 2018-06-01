@@ -1,15 +1,22 @@
 package com.fot.atCurso.service.user;
 
+import java.util.List;
 import java.util.Optional;
 
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.data.domain.PageRequest;
+import org.springframework.data.domain.Pageable;
 import org.springframework.stereotype.Service;
 
+import com.fot.atCurso.dao.CourseDAO;
 import com.fot.atCurso.dao.UserDAO;
 import com.fot.atCurso.exceptions.NotFoundException;
+import com.fot.atCurso.exceptions.ObjectsDoNotMatchException;
 import com.fot.atCurso.model.Result;
 import com.fot.atCurso.model.User;
+import com.fot.atCurso.model.Course;
 import com.fot.atCurso.service.AbstractServiceImpl;
+import com.fot.atCurso.service.course.CourseService;
 import com.fot.atCurso.service.result.ResultService;
 
 @Service
@@ -20,6 +27,9 @@ public class UserServiceImpl extends AbstractServiceImpl<User, UserDAO> implemen
 	
 	@Autowired
 	ResultService resultService;
+	
+	@Autowired
+	CourseService courseService;
 
 	@Override
 	public boolean isEqual(User u1, User u2) {
@@ -52,9 +62,29 @@ public class UserServiceImpl extends AbstractServiceImpl<User, UserDAO> implemen
 	}
 	
 	@Override
+	public List<User> findUserByCourse(Integer idCourse, Pageable p) throws NotFoundException {
+		courseService.getAndCheck(idCourse);
+		return userDAO.findByCourse(idCourse, PageRequest.of(p.getPageNumber(), p.getPageSize()));
+	}
+	
+	@Override
+	public User findOneUserByCourse(Integer idCourse, Integer idUser) throws NotFoundException {
+		final Course course = courseService.getAndCheck(idCourse);
+		final User user = getAndCheckBelongCourse(course, idUser);
+		return user;
+	}
+	
+	@Override
 	public User getAndCheck(Integer idUser) throws NotFoundException {
 		Optional<User> user = findById(idUser);
-		user.orElseThrow(() -> new NotFoundException("El usuario no existe"));
+		user.orElseThrow(() -> new NotFoundException("El curso no existe"));
+		return user.get();
+	}
+	
+	@Override
+	public User getAndCheckBelongCourse(Course course, Integer idUser) throws NotFoundException {
+		final Optional<User> user = course.getUser().stream().filter(u -> u.getIdUser() == idUser).findFirst();
+		user.orElseThrow(() -> new NotFoundException("Este usuario no pertenece a este curso"));
 		return user.get();
 	}
 }
