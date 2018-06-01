@@ -1,7 +1,7 @@
 package com.fot.atCurso.controller;
 
+import java.util.List;
 import java.util.Optional;
-import java.util.Set;
 
 import org.hibernate.exception.ConstraintViolationException;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -36,9 +36,9 @@ public class DifficultyController {
 	DifficultyMapper difficultyMapper;
 	
 	@GetMapping
-	public Set<DifficultyDTO> findAll(@RequestParam(defaultValue = "0", required= false ) Integer page, 
+	public List<DifficultyDTO> findAll(@RequestParam(defaultValue = "0", required= false ) Integer page, 
 							 @RequestParam(defaultValue = "10", required= false ) Integer size) throws ParametersNotAllowedException {
-		final Set<Difficulty> difficultys = difficultyService.findAll(PageRequest.of(page, size));
+		final List<Difficulty> difficultys = difficultyService.findAll(PageRequest.of(page, size));
 		return difficultyMapper.modelToDto(difficultys);
 	}
 	
