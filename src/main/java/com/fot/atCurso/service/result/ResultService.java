@@ -14,7 +14,7 @@ public interface ResultService  extends AbstractService<Result, Integer> {
 
 	List<Result> findResultByUser(Integer idUser, Pageable p) throws NotFoundException;
 	Result findOneResultByUser(Integer idUser, Integer idResult) throws NotFoundException;
-	Result addToUser(Result result, Integer idUser) throws NotFoundException;
+	Result addToUser(Integer idUser, Result result) throws NotFoundException;
 	void updateToUser(Integer idUser, Integer idResult, Result newResult) throws NotFoundException;
 	void deleteToUser(Integer idUser, Integer idResult, Result bodyResult) throws NotFoundException, ObjectsDoNotMatchException;
 	Result getAndCheck(User user, Integer idResult) throws NotFoundException;

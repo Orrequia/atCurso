@@ -41,37 +41,31 @@ public class ResultServiceImpl extends AbstractServiceImpl<Result, ResultDAO> im
 	
 	@Override
 	public List<Result> findResultByUser(Integer idUser, Pageable p) throws NotFoundException {
-		final Optional<User> user = userService.findById(idUser);
-		user.orElseThrow(() -> new NotFoundException("El usuario no existe"));
+		userService.getAndCheck(idUser);;
 		return resultDAO.findByUser(idUser, PageRequest.of(p.getPageNumber(), p.getPageSize()));
 	}
 	
 	@Override
 	public Result findOneResultByUser(Integer idUser, Integer idResult) throws NotFoundException {
-		final Optional<User> user = userService.findById(idUser);
-		user.orElseThrow(() -> new NotFoundException("El usuario no existe"));
-		final Optional<Result> result = user.get().getResult().stream().filter(r -> r.getIdResult() == idResult).findFirst();
-		result.orElseThrow(() -> new NotFoundException("Este resultado no existe para este usuario"));
-		return result.get();
+		final User user = userService.getAndCheck(idUser);
+		final Result result = getAndCheck(user, idResult);
+		return result;
 	}
 	
 	@Override
-	public Result addToUser(Result result, Integer idUser) throws NotFoundException {
-		final Optional<User> user = userService.findById(idUser);
-		user.orElseThrow(() -> new NotFoundException("El usuario no existe"));
+	public Result addToUser(Integer idUser, Result result) throws NotFoundException {
+		final User user = userService.getAndCheck(idUser);
 		final Result createResult = create(result);
-		userService.addResult(user.get(), createResult);
+		userService.addResult(user, createResult);
 		return createResult;
 	}
 	
 	@Override
 	public void updateToUser(Integer idUser, Integer idResult, Result newResult) throws NotFoundException {
-		final Optional<User> user = userService.findById(idUser);
-		user.orElseThrow(() -> new NotFoundException("El usuario no existe"));
-		final Optional<Result> result = user.get().getResult().stream().filter(r -> r.getIdResult() == idResult).findFirst();
-		result.orElseThrow(() -> new NotFoundException("Este resultado no existe para este usuario"));
-		setValues(result.get(), newResult);
-		update(result.get());
+		final User user = userService.getAndCheck(idUser);
+		final Result result = getAndCheck(user, idResult);
+		setValues(result, newResult);
+		update(result);
 	}
 	
 	@Override
