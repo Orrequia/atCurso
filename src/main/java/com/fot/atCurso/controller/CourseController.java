@@ -1,7 +1,7 @@
 package com.fot.atCurso.controller;
 
+import java.util.List;
 import java.util.Optional;
-import java.util.Set;
 
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.data.domain.PageRequest;
@@ -39,9 +39,9 @@ public class CourseController {
 	QuizMapper quizMapper;
 	
 	@GetMapping
-	public Set<CourseDTO> findAll(@RequestParam(defaultValue = "0", required= false ) Integer page, 
+	public List<CourseDTO> findAll(@RequestParam(defaultValue = "0", required= false ) Integer page, 
 			 	@RequestParam(defaultValue = "10", required= false ) Integer size) throws ParametersNotAllowedException {
-		final Set<Course> courses = courseService.findAll(PageRequest.of(page, size));
+		final List<Course> courses = courseService.findAll(PageRequest.of(page, size));
 		return courseMapper.modelToDto(courses);
 	}
 	
