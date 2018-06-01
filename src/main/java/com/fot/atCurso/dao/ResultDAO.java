@@ -12,6 +12,6 @@ import com.fot.atCurso.model.Result;
 @Repository
 public interface ResultDAO extends GenericDAO<Result>{
 	
-	@Query(value = "SELECT r FROM Result AS r JOIN User AS u WHERE u.idUser = :idUser ORDER BY r.date desc")
+	@Query(value = "SELECT r FROM User AS u JOIN u.result r WHERE u.idUser = :idUser")
 	List<Result> findByUser(@Param("idUser") Integer idUser, Pageable p);
 }
