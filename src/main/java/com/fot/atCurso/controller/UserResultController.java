@@ -1,13 +1,9 @@
 package com.fot.atCurso.controller;
 
 import java.util.List;
-import java.util.Optional;
-import java.util.Set;
-import java.util.stream.Collectors;
 
 import org.hibernate.exception.ConstraintViolationException;
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.data.domain.PageImpl;
 import org.springframework.data.domain.PageRequest;
 import org.springframework.web.bind.annotation.DeleteMapping;
 import org.springframework.web.bind.annotation.GetMapping;
@@ -21,16 +17,12 @@ import org.springframework.web.bind.annotation.RestController;
 
 import com.fot.atCurso.component.mapper.result.ResultMapper;
 import com.fot.atCurso.dto.result.ResultDTO;
-import com.fot.atCurso.dto.user.UserDTO;
-import com.fot.atCurso.dto.user.UserPostDTO;
 import com.fot.atCurso.exceptions.IdValueCannotBeReceivedException;
 import com.fot.atCurso.exceptions.NotFoundException;
 import com.fot.atCurso.exceptions.ObjectsDoNotMatchException;
 import com.fot.atCurso.exceptions.ParametersNotAllowedException;
 import com.fot.atCurso.model.Result;
-import com.fot.atCurso.model.User;
 import com.fot.atCurso.service.result.ResultService;
-import com.fot.atCurso.service.user.UserService;
 
 @RestController
 @RequestMapping(value= "/user/{idUser}/result")
@@ -62,7 +54,7 @@ public class UserResultController {
 			@PathVariable("idUser") Integer idUser) throws IdValueCannotBeReceivedException, ConstraintViolationException, NotFoundException {
 		if(dto.getIdResult() != null) 
 			throw new IdValueCannotBeReceivedException("El idResult no se puede recibir");
-		Result createResult = resultService.addToUser(resultMapper.dtoToModel(dto), idUser);
+		Result createResult = resultService.addToUser(idUser, resultMapper.dtoToModel(dto));
 		return resultMapper.modelToDto(createResult);
 	}
 	
