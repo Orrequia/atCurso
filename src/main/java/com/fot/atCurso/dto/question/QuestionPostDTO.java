@@ -11,7 +11,7 @@ public class QuestionPostDTO {
 	
 	private Integer idQuestion;
 	private String name;
-	private Integer tag;
-	private Integer difficulty;
+	private Integer idTag;
+	private Integer idDifficulty;
 	private List<AnswerPostDTO> answers;
 }
