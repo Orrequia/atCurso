@@ -6,6 +6,7 @@ import org.springframework.stereotype.Component;
 import com.fot.atCurso.component.mapper.AbstractMapper;
 import com.fot.atCurso.component.mapper.answer.AnswerMapper;
 import com.fot.atCurso.dto.question.QuestionDTO;
+import com.fot.atCurso.dto.question.QuestionPostDTO;
 import com.fot.atCurso.exception.NotFoundException;
 import com.fot.atCurso.model.Question;
 
@@ -39,4 +40,13 @@ public class QuestionMapperImpl extends AbstractMapper<Question, QuestionDTO> im
 		questionDTO.setAnswers(answerMapper.modelToDto(model.getAnswer()));
 		return questionDTO;
 	}
+	
+	@Override
+	public Question dtoToModel(QuestionPostDTO dto) throws NotFoundException {
+		Question question = dozer.map(dto, modelClazz());
+		question.setAnswer(answerMapper.dtoPostToModel(dto.getAnswers()));
+		return question;
+	}
+	
+	
 }
