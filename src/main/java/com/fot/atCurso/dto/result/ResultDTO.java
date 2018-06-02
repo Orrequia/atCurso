@@ -11,5 +11,5 @@ public class ResultDTO {
 	private Integer idResult;
 	private Date date;
 	private Float score;
-	private Integer quiz;
+	private Integer idQuiz;
 }
