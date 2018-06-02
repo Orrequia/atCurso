@@ -17,6 +17,7 @@ import org.springframework.web.bind.annotation.RestController;
 
 import com.fot.atCurso.component.mapper.question.QuestionMapper;
 import com.fot.atCurso.dto.question.QuestionDTO;
+import com.fot.atCurso.dto.question.QuestionPostDTO;
 import com.fot.atCurso.exception.ConstraintBreakException;
 import com.fot.atCurso.exception.IdValueCannotBeReceivedException;
 import com.fot.atCurso.exception.NotFoundException;
@@ -50,7 +51,7 @@ public class QuestionController {
 	}
 	
 	@PostMapping
-	public QuestionDTO create(@RequestBody QuestionDTO dto) throws IdValueCannotBeReceivedException, NotFoundException, ConstraintBreakException {
+	public QuestionDTO create(@RequestBody QuestionPostDTO dto) throws IdValueCannotBeReceivedException, NotFoundException, ConstraintBreakException {
 		if(dto.getIdQuestion() != null) 
 			throw new IdValueCannotBeReceivedException("El idQuestion no se puede recibir");
 		final Question question = questionMapper.dtoToModel(dto);
@@ -59,21 +60,19 @@ public class QuestionController {
 	}
 	
 	@PutMapping("/{idQuestion}")
-	public void update(@PathVariable("idQuestion") Integer id, @RequestBody QuestionDTO dto) throws IdValueCannotBeReceivedException, NotFoundException {
+	public void update(@PathVariable("idQuestion") Integer id, @RequestBody QuestionPostDTO dto) throws IdValueCannotBeReceivedException, NotFoundException, ConstraintBreakException {
 		if(dto.getIdQuestion() != null) 
 			throw new IdValueCannotBeReceivedException("El idQuestion no se puede recibir en el body");
-		final Optional<Question> question = questionService.findById(id);
-		question.orElseThrow(() -> new NotFoundException("El curso no existe"));
-		questionService.setValues(question.get(), questionMapper.dtoToModel(dto));
-		questionService.update(question.get());
+		final Question question = questionService.getAndCheck(id);
+		questionService.setValues(question, questionMapper.dtoToModel(dto));
+		questionService.checkAndUpdate(question);
 	}
 	
 	@DeleteMapping("/{idQuestion}")
 	public void delete(@PathVariable("idQuestion") Integer id, @RequestBody QuestionDTO dto) throws NotFoundException, UnequalObjectsException, ConstraintBreakException {
-		final Optional<Question> question = questionService.findById(id);
-		question.orElseThrow(() -> new NotFoundException("El usuario no existe"));
-		if(!questionService.isEqual(questionMapper.dtoToModel(dto), question.get())) 
+		final Question question = questionService.getAndCheck(id);
+		if(!questionService.isEqual(questionMapper.dtoToModel(dto), question)) 
 			throw new UnequalObjectsException("El usuario recibido no coincide con el almacenado");
-		questionService.delete(question.get());
+		questionService.delete(question);
 	}
 }
