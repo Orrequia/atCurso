@@ -63,16 +63,15 @@ public class QuestionController {
 	public void update(@PathVariable("idQuestion") Integer id, @RequestBody QuestionPostDTO dto) throws IdValueCannotBeReceivedException, NotFoundException, ConstraintBreakException {
 		if(dto.getIdQuestion() != null) 
 			throw new IdValueCannotBeReceivedException("El idQuestion no se puede recibir en el body");
-		final Question question = questionService.getAndCheck(id);
-		questionService.setValues(question, questionMapper.dtoToModel(dto));
-		questionService.checkAndUpdate(question);
+		Question question = questionService.getAndCheck(id);
+		questionService.checkAndUpdate(question, questionMapper.dtoToModel(dto));
 	}
 	
 	@DeleteMapping("/{idQuestion}")
 	public void delete(@PathVariable("idQuestion") Integer id, @RequestBody QuestionDTO dto) throws NotFoundException, UnequalObjectsException, ConstraintBreakException {
 		final Question question = questionService.getAndCheck(id);
 		if(!questionService.isEqual(questionMapper.dtoToModel(dto), question)) 
-			throw new UnequalObjectsException("El usuario recibido no coincide con el almacenado");
-		questionService.delete(question);
+			throw new UnequalObjectsException("La pregunta recibida no coincide con la almacenada");
+		questionService.deleteAll(question);
 	}
 }
