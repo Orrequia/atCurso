@@ -19,7 +19,7 @@ import com.fot.atCurso.component.mapper.question.QuestionMapper;
 import com.fot.atCurso.dto.question.QuestionDTO;
 import com.fot.atCurso.exception.IdValueCannotBeReceivedException;
 import com.fot.atCurso.exception.NotFoundException;
-import com.fot.atCurso.exception.ObjectsDoNotMatchException;
+import com.fot.atCurso.exception.UnequalObjectsException;
 import com.fot.atCurso.exception.ParametersNotAllowedException;
 import com.fot.atCurso.model.Question;
 import com.fot.atCurso.service.question.QuestionService;
@@ -68,11 +68,11 @@ public class QuestionController {
 	}
 	
 	@DeleteMapping("/{idQuestion}")
-	public void delete(@PathVariable("idQuestion") Integer id, @RequestBody QuestionDTO dto) throws NotFoundException, ObjectsDoNotMatchException {
+	public void delete(@PathVariable("idQuestion") Integer id, @RequestBody QuestionDTO dto) throws NotFoundException, UnequalObjectsException {
 		final Optional<Question> question = questionService.findById(id);
 		question.orElseThrow(() -> new NotFoundException("El usuario no existe"));
 		if(!questionService.isEqual(questionMapper.dtoToModel(dto), question.get())) 
-			throw new ObjectsDoNotMatchException("El usuario recibido no coincide con el almacenado");
+			throw new UnequalObjectsException("El usuario recibido no coincide con el almacenado");
 		questionService.delete(question.get());
 	}
 }

@@ -1,15 +1,15 @@
 package com.fot.atCurso.exception;
 
-public class ObjectsDoNotMatchException extends Exception {
+public class UnequalObjectsException extends Exception {
 	private static final long serialVersionUID = 5L;
 
 	public static final String MSG = "Los objetos no coinciden";
 	
-	public ObjectsDoNotMatchException(String message) {
+	public UnequalObjectsException(String message) {
 		super(message);
 	}
 	
-	public ObjectsDoNotMatchException() {
+	public UnequalObjectsException() {
 		super(MSG);
 	}
 }

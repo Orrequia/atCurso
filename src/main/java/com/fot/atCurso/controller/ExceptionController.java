@@ -10,7 +10,7 @@ import org.springframework.web.bind.annotation.ResponseStatus;
 import com.fot.atCurso.dto.ApiErrorDTO;
 import com.fot.atCurso.exception.IdValueCannotBeReceivedException;
 import com.fot.atCurso.exception.NotFoundException;
-import com.fot.atCurso.exception.ObjectsDoNotMatchException;
+import com.fot.atCurso.exception.UnequalObjectsException;
 import com.fot.atCurso.exception.ParametersNotAllowedException;
 
 @ControllerAdvice(basePackages = { "com.fot.atCurso.controller"})
@@ -38,9 +38,9 @@ public class ExceptionController {
 	}
 	
 	@ResponseBody
-	@ExceptionHandler(ObjectsDoNotMatchException.class)
+	@ExceptionHandler(UnequalObjectsException.class)
 	@ResponseStatus(HttpStatus.BAD_REQUEST)
-	public ApiErrorDTO error(ObjectsDoNotMatchException e) {
+	public ApiErrorDTO error(UnequalObjectsException e) {
 		return new ApiErrorDTO(400, e.getMessage());
 	}
 	

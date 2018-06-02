@@ -20,7 +20,7 @@ import com.fot.atCurso.component.mapper.difficulty.DifficultyMapper;
 import com.fot.atCurso.dto.difficulty.DifficultyDTO;
 import com.fot.atCurso.exception.IdValueCannotBeReceivedException;
 import com.fot.atCurso.exception.NotFoundException;
-import com.fot.atCurso.exception.ObjectsDoNotMatchException;
+import com.fot.atCurso.exception.UnequalObjectsException;
 import com.fot.atCurso.exception.ParametersNotAllowedException;
 import com.fot.atCurso.model.Difficulty;
 import com.fot.atCurso.service.difficulty.DifficultyService;
@@ -69,11 +69,11 @@ public class DifficultyController {
 	}
 	
 	@DeleteMapping("/{idDifficulty}")
-	public void delete(@PathVariable("idDifficulty") Integer id, @RequestBody DifficultyDTO dto) throws NotFoundException, ObjectsDoNotMatchException {
+	public void delete(@PathVariable("idDifficulty") Integer id, @RequestBody DifficultyDTO dto) throws NotFoundException, UnequalObjectsException {
 		final Optional<Difficulty> difficulty = difficultyService.findById(id);
 		difficulty.orElseThrow(() -> new NotFoundException("El usuario no existe"));
 		if(!difficultyService.isEqual(difficultyMapper.dtoToModel(dto), difficulty.get())) 
-			throw new ObjectsDoNotMatchException("El usuario recibido no coincide con el almacenado");
+			throw new UnequalObjectsException("El usuario recibido no coincide con el almacenado");
 		difficultyService.delete(difficulty.get());
 	}
 }

@@ -19,7 +19,7 @@ import com.fot.atCurso.component.mapper.quiz.QuizMapper;
 import com.fot.atCurso.dto.quiz.QuizDTO;
 import com.fot.atCurso.exception.IdValueCannotBeReceivedException;
 import com.fot.atCurso.exception.NotFoundException;
-import com.fot.atCurso.exception.ObjectsDoNotMatchException;
+import com.fot.atCurso.exception.UnequalObjectsException;
 import com.fot.atCurso.exception.ParametersNotAllowedException;
 import com.fot.atCurso.model.Quiz;
 import com.fot.atCurso.service.quiz.QuizService;
@@ -70,7 +70,7 @@ public class CourseQuizController {
 	@DeleteMapping("/{idQuiz}")
 	public void delete(@PathVariable("idCourse") Integer idCourse,
 			@PathVariable("idQuiz") Integer idQuiz, 
-			@RequestBody QuizDTO dto) throws NotFoundException, ObjectsDoNotMatchException {
+			@RequestBody QuizDTO dto) throws NotFoundException, UnequalObjectsException {
 		quizService.deleteToCourse(idCourse, idQuiz, quizMapper.dtoToModel(dto));
 	}
 }

@@ -19,7 +19,7 @@ import com.fot.atCurso.component.mapper.course.CourseMapper;
 import com.fot.atCurso.dto.course.CourseDTO;
 import com.fot.atCurso.exception.IdValueCannotBeReceivedException;
 import com.fot.atCurso.exception.NotFoundException;
-import com.fot.atCurso.exception.ObjectsDoNotMatchException;
+import com.fot.atCurso.exception.UnequalObjectsException;
 import com.fot.atCurso.exception.ParametersNotAllowedException;
 import com.fot.atCurso.model.Course;
 import com.fot.atCurso.service.course.CourseService;
@@ -68,11 +68,11 @@ public class CourseController {
 	}
 	
 	@DeleteMapping("/{idCourse}")
-	public void delete(@PathVariable("idCourse") Integer id, @RequestBody CourseDTO dto) throws NotFoundException, ObjectsDoNotMatchException {
+	public void delete(@PathVariable("idCourse") Integer id, @RequestBody CourseDTO dto) throws NotFoundException, UnequalObjectsException {
 		final Optional<Course> course = courseService.findById(id);
 		course.orElseThrow(() -> new NotFoundException("El usuario no existe"));
 		if(!courseService.isEqual(courseMapper.dtoToModel(dto), course.get())) 
-			throw new ObjectsDoNotMatchException("El usuario recibido no coincide con el almacenado");
+			throw new UnequalObjectsException("El usuario recibido no coincide con el almacenado");
 		courseService.delete(course.get());
 	}
 }

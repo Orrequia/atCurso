@@ -20,7 +20,7 @@ import com.fot.atCurso.component.mapper.tag.TagMapper;
 import com.fot.atCurso.dto.tag.TagDTO;
 import com.fot.atCurso.exception.IdValueCannotBeReceivedException;
 import com.fot.atCurso.exception.NotFoundException;
-import com.fot.atCurso.exception.ObjectsDoNotMatchException;
+import com.fot.atCurso.exception.UnequalObjectsException;
 import com.fot.atCurso.exception.ParametersNotAllowedException;
 import com.fot.atCurso.model.Tag;
 import com.fot.atCurso.service.tag.TagService;
@@ -69,11 +69,11 @@ public class TagController {
 	}
 	
 	@DeleteMapping("/{idTag}")
-	public void delete(@PathVariable("idTag") Integer id, @RequestBody TagDTO dto) throws NotFoundException, ObjectsDoNotMatchException {
+	public void delete(@PathVariable("idTag") Integer id, @RequestBody TagDTO dto) throws NotFoundException, UnequalObjectsException {
 		final Optional<Tag> tag = tagService.findById(id);
 		tag.orElseThrow(() -> new NotFoundException("El tag no existe"));
 		if(!tagService.isEqual(tagMapper.dtoToModel(dto), tag.get())) 
-			throw new ObjectsDoNotMatchException("El tag recibido no coincide con el almacenado");
+			throw new UnequalObjectsException("El tag recibido no coincide con el almacenado");
 		tagService.delete(tag.get());
 	}
 }

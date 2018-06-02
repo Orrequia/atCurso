@@ -11,7 +11,7 @@ import org.springframework.stereotype.Service;
 import com.fot.atCurso.component.dates.OperationDates;
 import com.fot.atCurso.dao.ResultDAO;
 import com.fot.atCurso.exception.NotFoundException;
-import com.fot.atCurso.exception.ObjectsDoNotMatchException;
+import com.fot.atCurso.exception.UnequalObjectsException;
 import com.fot.atCurso.model.Result;
 import com.fot.atCurso.model.User;
 import com.fot.atCurso.service.AbstractServiceImpl;
@@ -72,11 +72,11 @@ public class ResultServiceImpl extends AbstractServiceImpl<Result, ResultDAO> im
 	}
 	
 	@Override
-	public void deleteToUser(Integer idUser, Integer idResult, Result bodyResult) throws NotFoundException, ObjectsDoNotMatchException {
+	public void deleteToUser(Integer idUser, Integer idResult, Result bodyResult) throws NotFoundException, UnequalObjectsException {
 		final User user = userService.getAndCheck(idUser);
 		final Result result = getAndCheckBelongUser(user, idResult);
 		if(!isEqual(bodyResult, result))
-			throw new ObjectsDoNotMatchException("El resultado recibido no coincide con el almacenado");
+			throw new UnequalObjectsException("El resultado recibido no coincide con el almacenado");
 		userService.removeResult(user, result);
 	}
 	

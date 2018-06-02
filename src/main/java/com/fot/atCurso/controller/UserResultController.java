@@ -19,7 +19,7 @@ import com.fot.atCurso.component.mapper.result.ResultMapper;
 import com.fot.atCurso.dto.result.ResultDTO;
 import com.fot.atCurso.exception.IdValueCannotBeReceivedException;
 import com.fot.atCurso.exception.NotFoundException;
-import com.fot.atCurso.exception.ObjectsDoNotMatchException;
+import com.fot.atCurso.exception.UnequalObjectsException;
 import com.fot.atCurso.exception.ParametersNotAllowedException;
 import com.fot.atCurso.model.Result;
 import com.fot.atCurso.service.result.ResultService;
@@ -70,7 +70,7 @@ public class UserResultController {
 	@DeleteMapping("/{idResult}")
 	public void delete(@PathVariable("idUser") Integer idUser,
 			@PathVariable("idResult") Integer idResult, 
-			@RequestBody ResultDTO dto) throws NotFoundException, ObjectsDoNotMatchException {
+			@RequestBody ResultDTO dto) throws NotFoundException, UnequalObjectsException {
 		resultService.deleteToUser(idUser, idResult, resultMapper.dtoToModel(dto));
 	}
 }

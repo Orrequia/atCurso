@@ -10,7 +10,7 @@ import org.springframework.stereotype.Service;
 
 import com.fot.atCurso.dao.QuizDAO;
 import com.fot.atCurso.exception.NotFoundException;
-import com.fot.atCurso.exception.ObjectsDoNotMatchException;
+import com.fot.atCurso.exception.UnequalObjectsException;
 import com.fot.atCurso.model.Course;
 import com.fot.atCurso.model.Quiz;
 import com.fot.atCurso.service.AbstractServiceImpl;
@@ -75,11 +75,11 @@ public class QuizServiceImpl extends AbstractServiceImpl<Quiz, QuizDAO> implemen
 	}
 	
 	@Override
-	public void deleteToCourse(Integer idCourse, Integer idQuiz, Quiz bodyQuiz) throws NotFoundException, ObjectsDoNotMatchException {
+	public void deleteToCourse(Integer idCourse, Integer idQuiz, Quiz bodyQuiz) throws NotFoundException, UnequalObjectsException {
 		final Course course = courseService.getAndCheck(idCourse);
 		final Quiz quiz = getAndCheckBelongCourse(course, idQuiz);
 		if(!isEqual(bodyQuiz, quiz))
-			throw new ObjectsDoNotMatchException("El cuestionario recibido no coincide con el almacenado");
+			throw new UnequalObjectsException("El cuestionario recibido no coincide con el almacenado");
 		courseService.removeQuiz(course, quiz);
 	}
 	
