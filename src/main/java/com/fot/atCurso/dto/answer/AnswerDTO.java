@@ -5,6 +5,5 @@ import lombok.Data;
 @Data
 public class AnswerDTO {
 
-	private Integer idAnswer;
 	private String name;
 }
