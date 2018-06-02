@@ -39,7 +39,7 @@ public class CourseController {
 			 	@RequestParam(defaultValue = "10", required= false ) Integer size,
 			 	@RequestParam(defaultValue = "0", required=false) Integer user) throws ParametersNotAllowedException {
 		List<Course> courses;
-		if(user != 0) courses = courseService.findByUser(PageRequest.of(page, size));
+		if(user != 0) courses = courseService.findByUser(user, PageRequest.of(page, size));
 		else courses = courseService.findAll(PageRequest.of(page, size));
 		return courseMapper.modelToDto(courses);
 	}
