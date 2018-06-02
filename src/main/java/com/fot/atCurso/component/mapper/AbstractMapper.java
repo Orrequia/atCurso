@@ -10,7 +10,7 @@ import org.dozer.DozerBeanMapper;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Component;
 
-import com.fot.atCurso.exceptions.NotFoundException;
+import com.fot.atCurso.exception.NotFoundException;
 
 @Component
 public abstract class AbstractMapper<M, D> implements Mapper<M, D> {
@@ -31,8 +31,9 @@ public abstract class AbstractMapper<M, D> implements Mapper<M, D> {
 	@Override
 	public List<M> dtoToModel(List<D> dtos) throws NotFoundException {
 		List<M> models = new ArrayList<M>();
-		for(D dto : dtos)
-			models.add(dtoToModel(dto));
+		if(dtos != null) 
+			for(D dto : dtos)
+				models.add(dtoToModel(dto));
 		return models;
 	}
 
