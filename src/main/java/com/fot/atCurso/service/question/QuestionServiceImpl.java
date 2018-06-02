@@ -35,10 +35,15 @@ public class QuestionServiceImpl extends AbstractServiceImpl<Question, QuestionD
 	}
 	
 	@Override
-	public Question create(Question question) throws ConstraintBreakException {
+	public Question checkAndCreate(Question question) throws ConstraintBreakException {
 		if(validate(question))
 			return questionDAO.save(question);
 		throw new ConstraintBreakException("El número de respuestas es incorrecto (1-" + maxAnswers + ") y solo debe existir una correcta.");
+	}
+	
+	@Override
+	public void checkAndUpdate(Question question) throws ConstraintBreakException {
+		checkAndCreate(question);
 	}
 	
 	private boolean validate(Question question) {
