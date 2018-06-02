@@ -32,5 +32,5 @@ public class TagServiceImpl extends AbstractServiceImpl<Tag, TagDAO> implements 
 		Optional<Tag> tag = findById(idTag);
 		tag.orElseThrow(() -> new NotFoundException("El tag no existe"));
 		return tag.get();
-	
+	}
 }
