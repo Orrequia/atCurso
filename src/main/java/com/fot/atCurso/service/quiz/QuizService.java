@@ -4,8 +4,8 @@ import java.util.List;
 
 import org.springframework.data.domain.Pageable;
 
-import com.fot.atCurso.exceptions.NotFoundException;
-import com.fot.atCurso.exceptions.ObjectsDoNotMatchException;
+import com.fot.atCurso.exception.NotFoundException;
+import com.fot.atCurso.exception.ObjectsDoNotMatchException;
 import com.fot.atCurso.model.Course;
 import com.fot.atCurso.model.Quiz;
 import com.fot.atCurso.service.AbstractService;

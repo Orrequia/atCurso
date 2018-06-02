@@ -17,10 +17,10 @@ import org.springframework.web.bind.annotation.RestController;
 
 import com.fot.atCurso.component.mapper.course.CourseMapper;
 import com.fot.atCurso.dto.course.CourseDTO;
-import com.fot.atCurso.exceptions.IdValueCannotBeReceivedException;
-import com.fot.atCurso.exceptions.NotFoundException;
-import com.fot.atCurso.exceptions.ObjectsDoNotMatchException;
-import com.fot.atCurso.exceptions.ParametersNotAllowedException;
+import com.fot.atCurso.exception.IdValueCannotBeReceivedException;
+import com.fot.atCurso.exception.NotFoundException;
+import com.fot.atCurso.exception.ObjectsDoNotMatchException;
+import com.fot.atCurso.exception.ParametersNotAllowedException;
 import com.fot.atCurso.model.Course;
 import com.fot.atCurso.service.course.CourseService;
 

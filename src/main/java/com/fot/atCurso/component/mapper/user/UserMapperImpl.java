@@ -10,7 +10,7 @@ import org.springframework.stereotype.Component;
 
 import com.fot.atCurso.component.mapper.AbstractMapper;
 import com.fot.atCurso.dto.user.UserDTO;
-import com.fot.atCurso.exceptions.NotFoundException;
+import com.fot.atCurso.exception.NotFoundException;
 import com.fot.atCurso.model.Result;
 import com.fot.atCurso.model.User;
 import com.fot.atCurso.service.result.ResultService;

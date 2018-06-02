@@ -6,7 +6,7 @@ import org.springframework.stereotype.Component;
 import com.fot.atCurso.component.mapper.AbstractMapper;
 import com.fot.atCurso.component.mapper.answer.AnswerMapper;
 import com.fot.atCurso.dto.question.QuestionDTO;
-import com.fot.atCurso.exceptions.NotFoundException;
+import com.fot.atCurso.exception.NotFoundException;
 import com.fot.atCurso.model.Question;
 
 

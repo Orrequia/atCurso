@@ -1,4 +1,4 @@
-package com.fot.atCurso.exceptions;
+package com.fot.atCurso.exception;
 
 public class IdValueCannotBeReceivedException extends Exception {
 

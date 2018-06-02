@@ -5,7 +5,7 @@ import java.util.Optional;
 
 import org.springframework.data.domain.Pageable;
 
-import com.fot.atCurso.exceptions.NotFoundException;
+import com.fot.atCurso.exception.NotFoundException;
 import com.fot.atCurso.model.Course;
 import com.fot.atCurso.model.Result;
 import com.fot.atCurso.model.User;

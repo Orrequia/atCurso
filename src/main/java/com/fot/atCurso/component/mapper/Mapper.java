@@ -2,7 +2,7 @@ package com.fot.atCurso.component.mapper;
 
 import java.util.List;
 
-import com.fot.atCurso.exceptions.NotFoundException;
+import com.fot.atCurso.exception.NotFoundException;
 
 public interface Mapper<M, D> {
 	

@@ -6,7 +6,7 @@ import java.util.Set;
 import org.springframework.data.domain.PageRequest;
 import org.springframework.data.domain.Pageable;
 
-import com.fot.atCurso.exceptions.NotFoundException;
+import com.fot.atCurso.exception.NotFoundException;
 import com.fot.atCurso.model.Course;
 import com.fot.atCurso.model.Quiz;
 import com.fot.atCurso.model.User;

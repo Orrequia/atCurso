@@ -1,4 +1,4 @@
-package com.fot.atCurso.exceptions;
+package com.fot.atCurso.exception;
 
 public class ObjectsDoNotMatchException extends Exception {
 	private static final long serialVersionUID = 5L;

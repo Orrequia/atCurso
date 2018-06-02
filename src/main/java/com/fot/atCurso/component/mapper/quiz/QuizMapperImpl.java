@@ -11,7 +11,7 @@ import org.springframework.stereotype.Component;
 
 import com.fot.atCurso.component.mapper.AbstractMapper;
 import com.fot.atCurso.dto.quiz.QuizDTO;
-import com.fot.atCurso.exceptions.NotFoundException;
+import com.fot.atCurso.exception.NotFoundException;
 import com.fot.atCurso.model.Question;
 import com.fot.atCurso.model.Quiz;
 import com.fot.atCurso.model.Tag;

@@ -6,7 +6,7 @@ import java.util.Optional;
 
 import org.springframework.data.domain.Pageable;
 
-import com.fot.atCurso.exceptions.ParametersNotAllowedException;
+import com.fot.atCurso.exception.ParametersNotAllowedException;
 
 public interface AbstractService<T, ID extends Serializable> {
 

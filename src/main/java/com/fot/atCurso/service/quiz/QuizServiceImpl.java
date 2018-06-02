@@ -9,8 +9,8 @@ import org.springframework.data.domain.Pageable;
 import org.springframework.stereotype.Service;
 
 import com.fot.atCurso.dao.QuizDAO;
-import com.fot.atCurso.exceptions.NotFoundException;
-import com.fot.atCurso.exceptions.ObjectsDoNotMatchException;
+import com.fot.atCurso.exception.NotFoundException;
+import com.fot.atCurso.exception.ObjectsDoNotMatchException;
 import com.fot.atCurso.model.Course;
 import com.fot.atCurso.model.Quiz;
 import com.fot.atCurso.service.AbstractServiceImpl;

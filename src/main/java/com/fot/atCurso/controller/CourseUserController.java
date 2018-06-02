@@ -11,8 +11,8 @@ import org.springframework.web.bind.annotation.RequestParam;
 
 import com.fot.atCurso.component.mapper.user.UserMapper;
 import com.fot.atCurso.dto.user.UserDTO;
-import com.fot.atCurso.exceptions.NotFoundException;
-import com.fot.atCurso.exceptions.ParametersNotAllowedException;
+import com.fot.atCurso.exception.NotFoundException;
+import com.fot.atCurso.exception.ParametersNotAllowedException;
 import com.fot.atCurso.model.User;
 import com.fot.atCurso.service.user.UserService;
 
