@@ -8,6 +8,7 @@ import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestParam;
+import org.springframework.web.bind.annotation.RestController;
 
 import com.fot.atCurso.component.mapper.user.UserMapper;
 import com.fot.atCurso.dto.user.UserDTO;
@@ -16,6 +17,7 @@ import com.fot.atCurso.exception.ParametersNotAllowedException;
 import com.fot.atCurso.model.User;
 import com.fot.atCurso.service.user.UserService;
 
+@RestController
 @RequestMapping(value="course/{idCourse}/user")
 public class CourseUserController {
 	
