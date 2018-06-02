@@ -43,9 +43,8 @@ public class CourseController {
 	
 	@GetMapping("/{idCourse}")
 	public CourseDTO findById(@PathVariable("idCourse") Integer idCourse) throws NotFoundException {
-		final Optional<Course> course = courseService.findById(idCourse);
-		if (course.isPresent()) return courseMapper.modelToDto(course.get());
-		throw new NotFoundException("El curso no existe");
+		Course course = courseService.getAndCheck(idCourse);
+		return courseMapper.modelToDto(course);
 	}
 	
 	@PostMapping
@@ -61,18 +60,16 @@ public class CourseController {
 	public void update(@PathVariable("idCourse") Integer id, @RequestBody CourseDTO dto) throws IdValueCannotBeReceivedException, NotFoundException {
 		if(dto.getIdCourse() != null) 
 			throw new IdValueCannotBeReceivedException("El idCourse no se puede recibir en el body");
-		final Optional<Course> course = courseService.findById(id);
-		course.orElseThrow(() -> new NotFoundException("El curso no existe"));
-		courseService.setValues(course.get(), courseMapper.dtoToModel(dto));
-		courseService.update(course.get());
+		Course course = courseService.getAndCheck(id);
+		courseService.setValues(course, courseMapper.dtoToModel(dto));
+		courseService.update(course);
 	}
 	
 	@DeleteMapping("/{idCourse}")
 	public void delete(@PathVariable("idCourse") Integer id, @RequestBody CourseDTO dto) throws NotFoundException, UnequalObjectsException {
-		final Optional<Course> course = courseService.findById(id);
-		course.orElseThrow(() -> new NotFoundException("El usuario no existe"));
-		if(!courseService.isEqual(courseMapper.dtoToModel(dto), course.get())) 
+		Course course = courseService.getAndCheck(id);
+		if(!courseService.isEqual(courseMapper.dtoToModel(dto), course)) 
 			throw new UnequalObjectsException("El usuario recibido no coincide con el almacenado");
-		courseService.delete(course.get());
+		courseService.delete(course);
 	}
 }
