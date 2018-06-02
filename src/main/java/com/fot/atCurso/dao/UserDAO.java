@@ -17,6 +17,6 @@ public interface UserDAO extends GenericDAO<User> {
 	
 	Optional<User> findOneByEmail(String email);
 	
-	@Query(value = "SELECT u FROM User AS u JOIN Course AS c WHERE c.idCourse = :idCourse ORDER BY u.name")
+	@Query(value = "SELECT u FROM Course AS c JOIN c.user AS u WHERE c.idCourse = :idCourse ORDER BY u.name")
 	List<User> findByCourse(@Param("idCourse") Integer idCourse, Pageable p);
 }
