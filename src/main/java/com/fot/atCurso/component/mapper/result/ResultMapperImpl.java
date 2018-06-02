@@ -30,7 +30,7 @@ public class ResultMapperImpl extends AbstractMapper<Result, ResultDTO> implemen
 	
 	@Override
 	public Result dtoToModel(ResultDTO dto) throws NotFoundException {
-		Quiz quiz = integerToQuiz(dto.getQuiz());
+		Quiz quiz = integerToQuiz(dto.getIdQuiz());
 		return map(dto, quiz);
 	}
 	
@@ -61,7 +61,7 @@ public class ResultMapperImpl extends AbstractMapper<Result, ResultDTO> implemen
 	
 	private ResultDTO map(Result model, Integer quiz) {
 		ResultDTO dto = dozer.map(model, dtoClazz());
-		dto.setQuiz(quiz);
+		dto.setIdQuiz(quiz);
 		return dto;
 	}
 }
