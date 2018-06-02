@@ -3,11 +3,10 @@ package com.fot.atCurso.service.question;
 import java.util.ArrayList;
 import java.util.List;
 import java.util.Optional;
-import java.util.stream.Collectors;
 
 import org.apache.commons.collections.CollectionUtils;
-import org.apache.commons.lang3.tuple.Pair;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.data.domain.Pageable;
 import org.springframework.stereotype.Service;
 
 import com.fot.atCurso.dao.QuestionDAO;
@@ -15,8 +14,10 @@ import com.fot.atCurso.exception.ConstraintBreakException;
 import com.fot.atCurso.exception.NotFoundException;
 import com.fot.atCurso.model.Answer;
 import com.fot.atCurso.model.Question;
+import com.fot.atCurso.model.Tag;
 import com.fot.atCurso.service.AbstractServiceImpl;
 import com.fot.atCurso.service.answer.AnswerService;
+import com.fot.atCurso.service.tag.TagService;
 
 import lombok.extern.slf4j.Slf4j;
 
@@ -31,6 +32,15 @@ public class QuestionServiceImpl extends AbstractServiceImpl<Question, QuestionD
 	
 	@Autowired
 	AnswerService answerService;
+	
+	@Autowired
+	TagService tagService;
+	
+	@Override
+	public List<Question> findByTag(Integer idTag, Pageable p) throws NotFoundException {
+		Tag tag = tagService.getAndCheck(idTag);
+		return questionDAO.findByTag(tag, p);
+	}
 	
 	@Override
 	public boolean isEqual(Question q1, Question q2) {
