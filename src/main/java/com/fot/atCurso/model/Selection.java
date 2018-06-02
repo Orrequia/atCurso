@@ -1,5 +1,8 @@
 package com.fot.atCurso.model;
 
+import java.util.Date;
+
+import javax.persistence.Column;
 import javax.persistence.Entity;
 import javax.persistence.FetchType;
 import javax.persistence.GeneratedValue;
@@ -9,7 +12,6 @@ import javax.persistence.JoinColumn;
 import javax.persistence.ManyToOne;
 
 import lombok.Getter;
-import lombok.NoArgsConstructor;
 import lombok.Setter;
 
 @Getter
@@ -19,26 +21,28 @@ public class Selection {
 	
 	public static final String FIELD_IDUSER = "idUser";
 	public static final String FIELD_IDQUIZ = "idQuiz";
-	public static final String FIELD_IDANSWER = "idAnswer";
-	public static final String FIELD_IDQUESTION = "idQuestion";
 
 	@Id
 	@GeneratedValue(strategy=GenerationType.IDENTITY)
 	private Integer idSelection;
 	
-	@JoinColumn(name = FIELD_IDUSER)
+	@JoinColumn(name = FIELD_IDUSER, nullable=false))
 	@ManyToOne(fetch = FetchType.LAZY)
 	private User user;
 	
-	@JoinColumn(name = FIELD_IDQUIZ)
+	@JoinColumn(name = FIELD_IDQUIZ, nullable=false)
 	@ManyToOne(fetch = FetchType.LAZY)
 	private Quiz quiz;
 	
-	@JoinColumn(name = FIELD_IDQUESTION)
-	@ManyToOne(fetch = FetchType.LAZY)
-	private Question question;
+	@Column(nullable = false)
+	private String question;
 	
-	@JoinColumn(name = FIELD_IDANSWER)
-	@ManyToOne(fetch = FetchType.LAZY)
-	private Answer answer;
+	private String answer;
+	
+	private Boolean wasCorrect;
+	
+	private Date date_asked;
+	
+	@Column(nullable = false)
+	private Date date_responded;
 }
