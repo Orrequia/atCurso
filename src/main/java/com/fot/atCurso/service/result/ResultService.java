@@ -14,6 +14,8 @@ public interface ResultService  extends AbstractService<Result, Integer> {
 
 	List<Result> findResultByUser(Integer idUser, Pageable p) throws NotFoundException;
 	Result findOneResultByUser(Integer idUser, Integer idResult) throws NotFoundException;
+	List<Result> findResultByCourse(Integer idCourse, Pageable p) throws NotFoundException;
+	Result findOneResultByCourse(Integer idCourse, Integer idResult) throws NotFoundException;
 	Result addToUser(Integer idUser, Result result) throws NotFoundException;
 	void updateToUser(Integer idUser, Integer idResult, Result newResult) throws NotFoundException;
 	void deleteToUser(Integer idUser, Integer idResult, Result bodyResult) throws NotFoundException, UnequalObjectsException;

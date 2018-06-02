@@ -12,9 +12,11 @@ import com.fot.atCurso.component.dates.OperationDates;
 import com.fot.atCurso.dao.ResultDAO;
 import com.fot.atCurso.exception.NotFoundException;
 import com.fot.atCurso.exception.UnequalObjectsException;
+import com.fot.atCurso.model.Course;
 import com.fot.atCurso.model.Result;
 import com.fot.atCurso.model.User;
 import com.fot.atCurso.service.AbstractServiceImpl;
+import com.fot.atCurso.service.course.CourseService;
 import com.fot.atCurso.service.user.UserService;
 
 @Service
@@ -25,6 +27,9 @@ public class ResultServiceImpl extends AbstractServiceImpl<Result, ResultDAO> im
 	
 	@Autowired
 	UserService userService;
+	
+	@Autowired
+	CourseService courseService;
 	
 	@Autowired
 	OperationDates operationDates;
@@ -53,6 +58,17 @@ public class ResultServiceImpl extends AbstractServiceImpl<Result, ResultDAO> im
 		final User user = userService.getAndCheck(idUser);
 		final Result result = getAndCheckBelongUser(user, idResult);
 		return result;
+	}
+	
+	@Override
+	public List<Result> findResultByCourse(Integer idCourse, Pageable p) throws NotFoundException {
+		Course course = courseService.getAndCheck(idCourse);
+		return resultDAO.findByCourse(idCourse, PageRequest.of(p.getPageNumber(), p.getPageSize()));
+	}
+	
+	@Override
+	public Result findOneResultByCourse(Integer idCourse, Integer idResult) throws NotFoundException {
+		return resultDAO.findOneByCourse(idCourse, idResult);
 	}
 	
 	@Override
