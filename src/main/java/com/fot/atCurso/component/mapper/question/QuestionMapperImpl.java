@@ -29,14 +29,14 @@ public class QuestionMapperImpl extends AbstractMapper<Question, QuestionDTO> im
 	@Override
 	public Question dtoToModel(QuestionDTO dto) throws NotFoundException {
 		Question question = dozer.map(dto, modelClazz());
-		question.setAnswer(answerMapper.dtoToModel(dto.getAnwers()));
+		question.setAnswer(answerMapper.dtoToModel(dto.getAnswers()));
 		return question;
 	}
 	
 	@Override
 	public QuestionDTO modelToDto(Question model) {
 		QuestionDTO questionDTO = dozer.map(model, dtoClazz());
-		questionDTO.setAnwers(answerMapper.modelToDto(model.getAnswer()));
+		questionDTO.setAnswers(answerMapper.modelToDto(model.getAnswer()));
 		return questionDTO;
 	}
 }

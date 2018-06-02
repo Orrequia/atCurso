@@ -13,5 +13,5 @@ public class QuestionDTO {
 	private String name;
 	private Integer tag;
 	private Integer difficulty;
-	private List<AnswerDTO> anwers;
+	private List<AnswerDTO> answers;
 }
