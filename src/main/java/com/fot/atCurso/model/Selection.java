@@ -10,6 +10,8 @@ import javax.persistence.GenerationType;
 import javax.persistence.Id;
 import javax.persistence.JoinColumn;
 import javax.persistence.ManyToOne;
+import javax.persistence.Temporal;
+import javax.persistence.TemporalType;
 
 import lombok.Getter;
 import lombok.Setter;
@@ -41,8 +43,9 @@ public class Selection {
 	
 	private Boolean wasCorrect;
 	
-	private Date date_asked;
+	@Temporal(TemporalType.TIMESTAMP)
+	private Date askedDate;
 	
-	@Column(nullable = false)
-	private Date date_responded;
+	@Temporal(TemporalType.TIMESTAMP)
+	private Date respondedDate;
 }
