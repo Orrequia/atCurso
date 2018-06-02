@@ -53,7 +53,7 @@ public class Quiz {
 	@ManyToMany(fetch = FetchType.LAZY)
 	@JoinTable(
       name="quiz_tag",
-      joinColumns=@JoinColumn(name=FIELD_IDQUESTIONARY, referencedColumnName=FIELD_IDQUESTIONARY),
-      inverseJoinColumns=@JoinColumn(name=FIELD_IDTAG, referencedColumnName=FIELD_IDTAG))
+      joinColumns=@JoinColumn(name=FIELD_IDQUESTIONARY, referencedColumnName=FIELD_IDQUESTIONARY, nullable=false),
+      inverseJoinColumns=@JoinColumn(name=FIELD_IDTAG, referencedColumnName=FIELD_IDTAG, nullable=false))
 	private List<Tag> tag;
 }

@@ -33,7 +33,7 @@ public class Result {
 	
 	private Float score;
 	
-	@JoinColumn(name = FIELD_IDQUIZ)
+	@JoinColumn(name = FIELD_IDQUIZ, nullable=false)
 	@ManyToOne(fetch = FetchType.LAZY)
 	private Quiz quiz;
 }

@@ -34,15 +34,15 @@ public class Question {
 	@Column(nullable = false)
 	private String name;
 	
-	@JoinColumn(name = FIELD_IDTAG)
+	@JoinColumn(name = FIELD_IDTAG, nullable=false)
 	@ManyToOne(fetch = FetchType.LAZY)
 	private Tag tag;
 	
-	@JoinColumn(name = FIELD_IDDIFFICULTY)
+	@JoinColumn(name = FIELD_IDDIFFICULTY, nullable=false)
 	@ManyToOne(fetch = FetchType.LAZY)
 	private Difficulty difficulty;
 	
 	@OneToMany(fetch = FetchType.LAZY)
-	@JoinColumn(name=FIELD_IDQUESTION, referencedColumnName=FIELD_IDQUESTION)
+	@JoinColumn(name=FIELD_IDQUESTION, referencedColumnName=FIELD_IDQUESTION, nullable=false)
 	private List<Answer> answer;
 }
