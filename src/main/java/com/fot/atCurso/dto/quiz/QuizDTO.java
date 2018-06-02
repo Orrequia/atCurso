@@ -1,5 +1,6 @@
 package com.fot.atCurso.dto.quiz;
 
+import java.util.Date;
 import java.util.List;
 
 import com.fot.atCurso.enums.ModalityEnum;
@@ -12,6 +13,7 @@ public class QuizDTO {
 	private Integer idQuiz;
 	private String name;
 	private ModalityEnum modality;
+	private Date deliveryTime;
 	private List<Integer> tags;
 	private List<Integer> questions;
 }
