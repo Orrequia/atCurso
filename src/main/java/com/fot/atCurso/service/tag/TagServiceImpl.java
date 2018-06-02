@@ -1,9 +1,13 @@
 package com.fot.atCurso.service.tag;
 
+import java.util.Optional;
+
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
 import com.fot.atCurso.dao.TagDAO;
+import com.fot.atCurso.exception.NotFoundException;
+import com.fot.atCurso.model.Course;
 import com.fot.atCurso.model.Tag;
 import com.fot.atCurso.service.AbstractServiceImpl;
 
@@ -22,4 +26,11 @@ public class TagServiceImpl extends AbstractServiceImpl<Tag, TagDAO> implements 
 	public void setValues(Tag to, Tag from) {
 		to.setName(from.getName());
 	}
+	
+	@Override
+	public Tag getAndCheck(Integer idTag) throws NotFoundException {
+		Optional<Tag> tag = findById(idTag);
+		tag.orElseThrow(() -> new NotFoundException("El tag no existe"));
+		return tag.get();
+	
 }
