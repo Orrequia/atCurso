@@ -37,7 +37,7 @@ public class CourseController {
 	@GetMapping
 	public List<CourseDTO> findAll(@RequestParam(defaultValue = "0", required= false ) Integer page, 
 			 	@RequestParam(defaultValue = "10", required= false ) Integer size,
-			 	@RequestParam(defaultValue = "0", required=false) Integer user) throws ParametersNotAllowedException {
+			 	@RequestParam(defaultValue = "0", required=false) Integer user) throws ParametersNotAllowedException, NotFoundException {
 		List<Course> courses;
 		if(user != 0) courses = courseService.findByUser(user, PageRequest.of(page, size));
 		else courses = courseService.findAll(PageRequest.of(page, size));
