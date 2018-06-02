@@ -53,7 +53,7 @@ public class UserResultController {
 	public ResultDTO create(@RequestBody ResultDTO dto,
 			@PathVariable("idUser") Integer idUser) throws IdValueCannotBeReceivedException, ConstraintViolationException, NotFoundException {
 		if(dto.getIdResult() != null) 
-			throw new IdValueCannotBeReceivedException("El idResult no se puede recibir");
+			throw new IdValueCannotBeReceivedException("El idResult no se puede recibir en el body");
 		Result createResult = resultService.addToUser(idUser, resultMapper.dtoToModel(dto));
 		return resultMapper.modelToDto(createResult);
 	}
@@ -63,7 +63,7 @@ public class UserResultController {
 			@PathVariable("idResult") Integer idResult, 
 		    @RequestBody ResultDTO dto) throws IdValueCannotBeReceivedException, NotFoundException {
 		if(dto.getIdResult() != null) 
-			throw new IdValueCannotBeReceivedException("El idResult no se puede recibir");
+			throw new IdValueCannotBeReceivedException("El idResult no se puede recibir en el body");
 		resultService.updateToUser(idUser, idResult, resultMapper.dtoToModel(dto));
 	}
 	

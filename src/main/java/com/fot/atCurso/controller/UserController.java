@@ -45,15 +45,14 @@ public class UserController {
 	
 	@GetMapping("/{idUser}")
 	public UserDTO findById(@PathVariable("idUser") Integer id) throws NotFoundException {
-		final Optional<User> user = userService.findById(id);
-		if (user.isPresent()) return userMapper.modelToDto(user.get());
-		throw new NotFoundException("El usuario no existe");
+		final User user = userService.getAndCheck(id);
+		return userMapper.modelToDto(user);
 	}
 	
 	@PostMapping
 	public UserDTO create(@RequestBody UserPostDTO dto) throws IdValueCannotBeReceivedException, ConstraintViolationException, NotFoundException {
 		if(dto.getIdUser() != null) 
-			throw new IdValueCannotBeReceivedException("El idUser no se puede recibir");
+			throw new IdValueCannotBeReceivedException("El idUser no se puede recibir en el body");
 		final User user = userMapper.dtoToModel(dto);
 		final User createUser = userService.create(user);
 		return userMapper.modelToDto(createUser);
@@ -63,18 +62,16 @@ public class UserController {
 	public void update(@PathVariable("idUser") Integer id, @RequestBody UserPostDTO dto) throws IdValueCannotBeReceivedException, NotFoundException {
 		if(dto.getIdUser() != null) 
 			throw new IdValueCannotBeReceivedException("El idUser no se puede recibir en el body");
-		final Optional<User> user = userService.findById(id);
-		user.orElseThrow(() -> new NotFoundException("El usuario no existe"));
-		userService.setValues(user.get(), userMapper.dtoToModel(dto));
-		userService.update(user.get());
+		final User user = userService.getAndCheck(id);
+		userService.setValues(user, userMapper.dtoToModel(dto));
+		userService.update(user);
 	}
 	
 	@DeleteMapping("/{idUser}")
 	public void delete(@PathVariable("idUser") Integer id, @RequestBody UserDTO dto) throws NotFoundException, UnequalObjectsException {
-		final Optional<User> user = userService.findById(id);
-		user.orElseThrow(() -> new NotFoundException("El usuario no existe"));
-		if(!userService.isEqual(userMapper.dtoToModel(dto), user.get())) 
+		final User user = userService.getAndCheck(id);
+		if(!userService.isEqual(userMapper.dtoToModel(dto), user)) 
 			throw new UnequalObjectsException("El usuario recibido no coincide con el almacenado");
-		userService.delete(user.get());
+		userService.delete(user);
 	}
 }

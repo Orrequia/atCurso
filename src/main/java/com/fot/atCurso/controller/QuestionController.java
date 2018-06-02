@@ -48,15 +48,14 @@ class QuestionController {
 	
 	@GetMapping("/{idQuestion}")
 	public QuestionDTO findById(@PathVariable("idQuestion") Integer idQuestion) throws NotFoundException {
-		final Optional<Question> question = questionService.findById(idQuestion);
-		if (question.isPresent()) return questionMapper.modelToDto(question.get());
-		throw new NotFoundException("El curso no existe");
+		final Question question = questionService.getAndCheck(idQuestion);
+		return questionMapper.modelToDto(question);
 	}
 	
 	@PostMapping
 	public QuestionDTO create(@RequestBody QuestionPostDTO dto) throws IdValueCannotBeReceivedException, NotFoundException, ConstraintBreakException {
 		if(dto.getIdQuestion() != null) 
-			throw new IdValueCannotBeReceivedException("El idQuestion no se puede recibir");
+			throw new IdValueCannotBeReceivedException("El idQuestion no se puede recibir en el body");
 		final Question question = questionMapper.dtoToModel(dto);
 		final Question createQuestion = questionService.checkAndCreate(question);
 		return questionMapper.modelToDto(createQuestion);

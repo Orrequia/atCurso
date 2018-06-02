@@ -53,7 +53,7 @@ public class CourseQuizController {
 	public QuizDTO create(@RequestBody QuizDTO dto,
 			@PathVariable("idCourse") Integer idCourse) throws IdValueCannotBeReceivedException, ConstraintViolationException, NotFoundException {
 		if(dto.getIdQuiz() != null) 
-			throw new IdValueCannotBeReceivedException("El idQuiz no se puede recibir");
+			throw new IdValueCannotBeReceivedException("El idQuiz no se puede recibir en el body");
 		Quiz createQuiz = quizService.addToCourse(idCourse, quizMapper.dtoToModel(dto));
 		return quizMapper.modelToDto(createQuiz);
 	}
@@ -63,7 +63,7 @@ public class CourseQuizController {
 			@PathVariable("idQuiz") Integer idQuiz, 
 		    @RequestBody QuizDTO dto) throws IdValueCannotBeReceivedException, NotFoundException {
 		if(dto.getIdQuiz() != null) 
-			throw new IdValueCannotBeReceivedException("El idQuiz no se puede recibir");
+			throw new IdValueCannotBeReceivedException("El idQuiz no se puede recibir en el body");
 		quizService.updateToCourse(idCourse, idQuiz, quizMapper.dtoToModel(dto));
 	}
 	

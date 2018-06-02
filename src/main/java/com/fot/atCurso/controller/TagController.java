@@ -44,15 +44,14 @@ public class TagController {
 	
 	@GetMapping("/{idTag}")
 	public TagDTO findById(@PathVariable("idTag") Integer id) throws NotFoundException {
-		final Optional<Tag> tag = tagService.findById(id);
-		if (tag.isPresent()) return tagMapper.modelToDto(tag.get());
-		throw new NotFoundException("El tag no existe");
+		final Tag tag = tagService.getAndCheck(id);
+		return tagMapper.modelToDto(tag);
 	}
 	
 	@PostMapping
 	public TagDTO create(@RequestBody TagDTO dto) throws IdValueCannotBeReceivedException, ConstraintViolationException, NotFoundException {
 		if(dto.getIdTag() != null) 
-			throw new IdValueCannotBeReceivedException("El idTag no se puede recibir");
+			throw new IdValueCannotBeReceivedException("El idTag no se puede recibir en el body");
 		final Tag tag = tagMapper.dtoToModel(dto);
 		final Tag createTag = tagService.create(tag);
 		return tagMapper.modelToDto(createTag);
@@ -62,18 +61,16 @@ public class TagController {
 	public void update(@PathVariable("idTag") Integer id, @RequestBody TagDTO dto) throws IdValueCannotBeReceivedException, NotFoundException {
 		if(dto.getIdTag() != null) 
 			throw new IdValueCannotBeReceivedException("El idTag no se puede recibir en el body");
-		final Optional<Tag> tag = tagService.findById(id);
-		tag.orElseThrow(() -> new NotFoundException("El usuario no existe"));
-		tagService.setValues(tag.get(), tagMapper.dtoToModel(dto));
-		tagService.update(tag.get());
+		final Tag tag = tagService.getAndCheck(id);
+		tagService.setValues(tag, tagMapper.dtoToModel(dto));
+		tagService.update(tag);
 	}
 	
 	@DeleteMapping("/{idTag}")
 	public void delete(@PathVariable("idTag") Integer id, @RequestBody TagDTO dto) throws NotFoundException, UnequalObjectsException {
-		final Optional<Tag> tag = tagService.findById(id);
-		tag.orElseThrow(() -> new NotFoundException("El tag no existe"));
-		if(!tagService.isEqual(tagMapper.dtoToModel(dto), tag.get())) 
+		final Tag tag = tagService.getAndCheck(id);
+		if(!tagService.isEqual(tagMapper.dtoToModel(dto), tag)) 
 			throw new UnequalObjectsException("El tag recibido no coincide con el almacenado");
-		tagService.delete(tag.get());
+		tagService.delete(tag);
 	}
 }

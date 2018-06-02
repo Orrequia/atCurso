@@ -53,7 +53,7 @@ public class CourseController {
 	@PostMapping
 	public CourseDTO create(@RequestBody CourseDTO dto) throws IdValueCannotBeReceivedException, NotFoundException {
 		if(dto.getIdCourse() != null) 
-			throw new IdValueCannotBeReceivedException("El idCourse no se puede recibir");
+			throw new IdValueCannotBeReceivedException("El idCourse no se puede recibir en el body");
 		final Course course = courseMapper.dtoToModel(dto);
 		final Course createCourse = courseService.create(course);
 		return courseMapper.modelToDto(createCourse);

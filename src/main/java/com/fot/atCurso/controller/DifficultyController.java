@@ -44,15 +44,14 @@ public class DifficultyController {
 	
 	@GetMapping("/{idDifficulty}")
 	public DifficultyDTO findById(@PathVariable("idDifficulty") Integer id) throws NotFoundException {
-		final Optional<Difficulty> difficulty = difficultyService.findById(id);
-		if (difficulty.isPresent()) return difficultyMapper.modelToDto(difficulty.get());
-		throw new NotFoundException("El difficulty no existe");
+		final Difficulty difficulty = difficultyService.getAndCheck(id);
+		return difficultyMapper.modelToDto(difficulty);
 	}
 	
 	@PostMapping
 	public DifficultyDTO create(@RequestBody DifficultyDTO dto) throws IdValueCannotBeReceivedException, ConstraintViolationException, NotFoundException {
 		if(dto.getIdDifficulty() != null) 
-			throw new IdValueCannotBeReceivedException("El idDifficulty no se puede recibir");
+			throw new IdValueCannotBeReceivedException("El idDifficulty no se puede recibir en el body");
 		final Difficulty difficulty = difficultyMapper.dtoToModel(dto);
 		final Difficulty createDifficulty = difficultyService.create(difficulty);
 		return difficultyMapper.modelToDto(createDifficulty);
@@ -62,19 +61,17 @@ public class DifficultyController {
 	public void update(@PathVariable("idDifficulty") Integer id, @RequestBody DifficultyDTO dto) throws IdValueCannotBeReceivedException, NotFoundException {
 		if(dto.getIdDifficulty() != null) 
 			throw new IdValueCannotBeReceivedException("El idDifficulty no se puede recibir en el body");
-		final Optional<Difficulty> difficulty = difficultyService.findById(id);
-		difficulty.orElseThrow(() -> new NotFoundException("El usuario no existe"));
-		difficultyService.setValues(difficulty.get(), difficultyMapper.dtoToModel(dto));
-		difficultyService.update(difficulty.get());
+		final Difficulty difficulty = difficultyService.getAndCheck(id);
+		difficultyService.setValues(difficulty, difficultyMapper.dtoToModel(dto));
+		difficultyService.update(difficulty);
 	}
 	
 	@DeleteMapping("/{idDifficulty}")
 	public void delete(@PathVariable("idDifficulty") Integer id, @RequestBody DifficultyDTO dto) throws NotFoundException, UnequalObjectsException {
-		final Optional<Difficulty> difficulty = difficultyService.findById(id);
-		difficulty.orElseThrow(() -> new NotFoundException("El usuario no existe"));
-		if(!difficultyService.isEqual(difficultyMapper.dtoToModel(dto), difficulty.get())) 
+		final Difficulty difficulty = difficultyService.getAndCheck(id);
+		if(!difficultyService.isEqual(difficultyMapper.dtoToModel(dto), difficulty)) 
 			throw new UnequalObjectsException("El usuario recibido no coincide con el almacenado");
-		difficultyService.delete(difficulty.get());
+		difficultyService.delete(difficulty);
 	}
 }
 	
