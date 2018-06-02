@@ -38,8 +38,8 @@ public class QuestionMapperImpl extends AbstractMapper<Question, QuestionDTO> im
 	@Override
 	public Question dtoToModel(QuestionDTO dto) throws NotFoundException {
 		Question question = dozer.map(dto, modelClazz());
-		question.setDifficulty(difficultyService.getAndCheck(dto.getIdDifficulty()));
-		question.setTag(tagService.getAndCheck(dto.getIdTag()));
+		if(dto.getIdDifficulty() != null) question.setDifficulty(difficultyService.getAndCheck(dto.getIdDifficulty()));
+		if(dto.getIdTag() != null) question.setTag(tagService.getAndCheck(dto.getIdTag()));
 		question.setAnswer(answerMapper.dtoToModel(dto.getAnswers()));
 		return question;
 	}
@@ -47,6 +47,8 @@ public class QuestionMapperImpl extends AbstractMapper<Question, QuestionDTO> im
 	@Override
 	public QuestionDTO modelToDto(Question model) {
 		QuestionDTO questionDTO = dozer.map(model, dtoClazz());
+		if(model.getDifficulty() != null) questionDTO.setIdDifficulty(model.getDifficulty().getIdDifficulty());
+		if(model.getTag() != null) questionDTO.setIdTag(model.getTag().getIdTag());
 		questionDTO.setAnswers(answerMapper.modelToDto(model.getAnswer()));
 		return questionDTO;
 	}
@@ -54,6 +56,8 @@ public class QuestionMapperImpl extends AbstractMapper<Question, QuestionDTO> im
 	@Override
 	public Question dtoToModel(QuestionPostDTO dto) throws NotFoundException {
 		Question question = dozer.map(dto, modelClazz());
+		if(dto.getIdDifficulty() != null) question.setDifficulty(difficultyService.getAndCheck(dto.getIdDifficulty()));
+		if(dto.getIdTag() != null) question.setTag(tagService.getAndCheck(dto.getIdTag()));
 		question.setAnswer(answerMapper.dtoPostToModel(dto.getAnswers()));
 		return question;
 	}
