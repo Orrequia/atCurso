@@ -3,9 +3,6 @@ package com.fot.atCurso.dto.course;
 import java.util.Date;
 import java.util.List;
 
-import com.fot.atCurso.model.Quiz;
-import com.fot.atCurso.model.User;
-
 import lombok.Data;
 
 @Data

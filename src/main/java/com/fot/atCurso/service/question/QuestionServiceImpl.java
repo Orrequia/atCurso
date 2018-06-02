@@ -19,10 +19,7 @@ import com.fot.atCurso.service.AbstractServiceImpl;
 import com.fot.atCurso.service.answer.AnswerService;
 import com.fot.atCurso.service.tag.TagService;
 
-import lombok.extern.slf4j.Slf4j;
-
 @Service
-@Slf4j
 public class QuestionServiceImpl extends AbstractServiceImpl<Question, QuestionDAO> implements QuestionService {
 	
 	private static final Integer maxAnswers = 4;

@@ -8,10 +8,8 @@ import org.springframework.data.domain.PageRequest;
 import org.springframework.data.domain.Pageable;
 import org.springframework.stereotype.Service;
 
-import com.fot.atCurso.dao.CourseDAO;
 import com.fot.atCurso.dao.UserDAO;
 import com.fot.atCurso.exception.NotFoundException;
-import com.fot.atCurso.exception.UnequalObjectsException;
 import com.fot.atCurso.model.Result;
 import com.fot.atCurso.model.User;
 import com.fot.atCurso.model.Course;

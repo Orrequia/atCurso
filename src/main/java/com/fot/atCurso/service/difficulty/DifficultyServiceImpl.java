@@ -7,9 +7,7 @@ import org.springframework.stereotype.Service;
 
 import com.fot.atCurso.dao.DifficultyDAO;
 import com.fot.atCurso.exception.NotFoundException;
-import com.fot.atCurso.model.Course;
 import com.fot.atCurso.model.Difficulty;
-import com.fot.atCurso.model.User;
 import com.fot.atCurso.service.AbstractServiceImpl;
 
 @Service

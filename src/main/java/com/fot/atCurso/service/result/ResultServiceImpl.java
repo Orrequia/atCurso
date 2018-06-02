@@ -12,7 +12,6 @@ import com.fot.atCurso.component.dates.OperationDates;
 import com.fot.atCurso.dao.ResultDAO;
 import com.fot.atCurso.exception.NotFoundException;
 import com.fot.atCurso.exception.UnequalObjectsException;
-import com.fot.atCurso.model.Course;
 import com.fot.atCurso.model.Result;
 import com.fot.atCurso.model.User;
 import com.fot.atCurso.service.AbstractServiceImpl;

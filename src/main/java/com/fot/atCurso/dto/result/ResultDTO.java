@@ -1,7 +1,6 @@
 package com.fot.atCurso.dto.result;
 
 import java.util.Date;
-import java.util.List;
 
 import lombok.Data;
 
