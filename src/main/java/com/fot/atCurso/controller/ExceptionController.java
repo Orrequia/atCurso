@@ -8,6 +8,7 @@ import org.springframework.web.bind.annotation.ResponseBody;
 import org.springframework.web.bind.annotation.ResponseStatus;
 
 import com.fot.atCurso.dto.ApiErrorDTO;
+import com.fot.atCurso.exception.ConstraintBreakException;
 import com.fot.atCurso.exception.IdValueCannotBeReceivedException;
 import com.fot.atCurso.exception.NotFoundException;
 import com.fot.atCurso.exception.UnequalObjectsException;
@@ -27,6 +28,13 @@ public class ExceptionController {
 	@ExceptionHandler(ConstraintViolationException.class)
 	@ResponseStatus(HttpStatus.BAD_REQUEST)
 	public ApiErrorDTO error(ConstraintViolationException e) {
+		return new ApiErrorDTO(400, e.getMessage());
+	}
+	
+	@ResponseBody
+	@ExceptionHandler(ConstraintBreakException.class)
+	@ResponseStatus(HttpStatus.BAD_REQUEST)
+	public ApiErrorDTO error(ConstraintBreakException e) {
 		return new ApiErrorDTO(400, e.getMessage());
 	}
 	
