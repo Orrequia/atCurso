@@ -79,7 +79,7 @@ public class UserServiceImpl extends AbstractServiceImpl<User, UserDAO> implemen
 	@Override
 	public User getAndCheck(Integer idUser) throws NotFoundException {
 		Optional<User> user = findById(idUser);
-		user.orElseThrow(() -> new NotFoundException("El curso no existe"));
+		user.orElseThrow(() -> new NotFoundException("El usuario no existe"));
 		return user.get();
 	}
 	

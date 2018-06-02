@@ -31,7 +31,7 @@ public class DifficultyServiceImpl extends AbstractServiceImpl<Difficulty, Diffi
 	@Override
 	public Difficulty getAndCheck(Integer idDifficulty) throws NotFoundException {
 		Optional<Difficulty> difficulty = findById(idDifficulty);
-		difficulty.orElseThrow(() -> new NotFoundException("La dificultuad no existe"));
+		difficulty.orElseThrow(() -> new NotFoundException("La dificultad no existe"));
 		return difficulty.get();
 	}
 }
