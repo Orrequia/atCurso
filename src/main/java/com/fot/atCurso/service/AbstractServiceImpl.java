@@ -10,7 +10,6 @@ import org.springframework.data.domain.Pageable;
 import org.springframework.stereotype.Service;
 
 import com.fot.atCurso.dao.GenericDAO;
-import com.fot.atCurso.exception.ConstraintBreakException;
 import com.fot.atCurso.exception.ParametersNotAllowedException;
 
 @Service
