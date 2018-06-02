@@ -12,5 +12,6 @@ public interface QuestionService  extends AbstractService<Question, Integer> {
 	
 	Question getAndCheck(Integer idQuestion) throws NotFoundException;
 	Question checkAndCreate(Question question) throws ConstraintBreakException;
-	void checkAndUpdate(Question question) throws ConstraintBreakException;
+	void checkAndUpdate(Question to, Question from) throws ConstraintBreakException;
+	void deleteAll(Question q);
 }

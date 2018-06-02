@@ -1,8 +1,12 @@
 package com.fot.atCurso.service.question;
 
+import java.util.ArrayList;
+import java.util.List;
 import java.util.Optional;
 import java.util.stream.Collectors;
 
+import org.apache.commons.collections.CollectionUtils;
+import org.apache.commons.lang3.tuple.Pair;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
@@ -33,7 +37,15 @@ public class QuestionServiceImpl extends AbstractServiceImpl<Question, QuestionD
 		return q1.getName().equals(q2.getName()) &&
 				q1.getTag().equals(q2.getTag()) &&
 				q1.getDifficulty().equals(q2.getDifficulty()) &&
-				q1.getAnswer().equals(q2.getAnswer());
+				CollectionUtils.isEqualCollection(getStringsAnswer(q1.getAnswer()),
+												  getStringsAnswer(q2.getAnswer()));
+	}
+	
+	private List<String> getStringsAnswer(List<Answer> answers) {
+		List<String> sAnswers = new ArrayList<String>();
+		for(Answer a : answers) 
+			sAnswers.add(a.getName());
+		return sAnswers;
 	}
 	
 	@Override 
@@ -41,26 +53,26 @@ public class QuestionServiceImpl extends AbstractServiceImpl<Question, QuestionD
 		to.setName(from.getName());
 		to.setTag(from.getTag());
 		to.setDifficulty(from.getDifficulty());
-		deleteOldAnswers(from);
-		to.setAnswer(from.getAnswer());
+		updateAnswers(to, from);
 	}
 	
 	@Override
 	public Question checkAndCreate(Question question) throws ConstraintBreakException {
 		if(validate(question)) {
-			for(Answer a : question.getAnswer())
-				answerService.create(a);
+			addNewsAnswers(question);
 			return questionDAO.save(question);
 		}
 		throw new ConstraintBreakException("El número de respuestas es incorrecto (1-" + maxAnswers + ") y solo debe existir una correcta.");
 	}
 	
 	@Override
-	public void checkAndUpdate(Question question) throws ConstraintBreakException {
-		if(validate(question)) {
-			createNewAnswers(question);
-			questionDAO.save(question);
+	public void checkAndUpdate(Question to, Question from) throws ConstraintBreakException {
+		if(validate(from)) {
+			setValues(to, from);
+			questionDAO.save(to);
 		}
+		else 
+			throw new ConstraintBreakException("El número de respuestas es incorrecto (1-" + maxAnswers + ") y solo debe existir una correcta.");
 	}
 	
 	@Override
@@ -71,20 +83,36 @@ public class QuestionServiceImpl extends AbstractServiceImpl<Question, QuestionD
 	}
 	
 	private boolean validate(Question question) {
-		log.info(Integer.toString(question.getAnswer().size()));
-		question.getAnswer().stream().forEach(a -> log.info("Soy correcta?: " + a.getCorrect()));
 		if(question.getAnswer().size() > 0 && question.getAnswer().size() <= maxAnswers)
-			return question.getAnswer().stream().filter(a -> a.getCorrect() != null && a.getCorrect()).collect(Collectors.toList()).size() == 1;
+			return question.getAnswer().stream().filter(a -> a.getCorrect() != null && a.getCorrect()).count() == 1;
 		return false;
 	}
 	
-	private void deleteOldAnswers(Question q) {
-		for(Answer a : q.getAnswer())
-			answerService.delete(a);
+	private void deleteAnswers(Question q) {
+		if(q.getAnswer() != null) {
+			for(Answer a : q.getAnswer()) {
+				answerService.delete(a);
+			}
+			q.setAnswer(new ArrayList<Answer>());
+		}
 	}
 	
-	private void createNewAnswers(Question q) {
-		for(Answer a : q.getAnswer())
-			answerService.create(a);
+	private void addNewsAnswers(Question q) {
+		if(q.getAnswer() != null)
+			for(Answer a : q.getAnswer())
+				a = answerService.create(a);	
+	}
+	
+	private void updateAnswers(Question to, Question from) {
+		deleteAnswers(to);
+		if(from.getAnswer() != null)
+			for(Answer a : from.getAnswer())
+				to.getAnswer().add(answerService.create(a));	
+	}
+	
+	@Override
+	public void deleteAll(Question q) {
+		deleteAnswers(q);
+		questionDAO.delete(q);
 	}
 }
