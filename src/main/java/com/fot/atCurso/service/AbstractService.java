@@ -11,7 +11,7 @@ import com.fot.atCurso.exception.ParametersNotAllowedException;
 
 public interface AbstractService<T, ID extends Serializable> {
 
-	T create(T t) throws ConstraintBreakException;
+	T create(T t);
 	
 	void update(T t);
 	

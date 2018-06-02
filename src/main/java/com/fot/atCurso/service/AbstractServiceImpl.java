@@ -22,7 +22,7 @@ public abstract class AbstractServiceImpl<T, D extends GenericDAO<T>> implements
 	D dao;
 	
 	@Override
-	public T create(T t) throws ConstraintBreakException {
+	public T create(T t) {
 		return dao.save(t);
 	}
 
