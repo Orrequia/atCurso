@@ -73,7 +73,7 @@ public class CourseServiceImpl extends AbstractServiceImpl<Course, CourseDAO> im
 	@Override
 	public Course getAndCheck(Integer idCourse) throws NotFoundException {
 		Optional<Course> course = findById(idCourse);
-		course.orElseThrow(() -> new NotFoundException("El grupo no existe"));
+		course.orElseThrow(() -> new NotFoundException("El curso no existe"));
 		return course.get();
 	}
 }
