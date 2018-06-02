@@ -62,13 +62,15 @@ public class ResultServiceImpl extends AbstractServiceImpl<Result, ResultDAO> im
 	
 	@Override
 	public List<Result> findResultByCourse(Integer idCourse, Pageable p) throws NotFoundException {
-		Course course = courseService.getAndCheck(idCourse);
+		courseService.getAndCheck(idCourse);
 		return resultDAO.findByCourse(idCourse, PageRequest.of(p.getPageNumber(), p.getPageSize()));
 	}
 	
 	@Override
 	public Result findOneResultByCourse(Integer idCourse, Integer idResult) throws NotFoundException {
-		return resultDAO.findOneByCourse(idCourse, idResult);
+		Optional<Result> result = resultDAO.findOneByCourse(idCourse, idResult);
+		result.orElseThrow(() -> new NotFoundException("No existe este resultado para este curso"));
+		return result.get();
 	}
 	
 	@Override
