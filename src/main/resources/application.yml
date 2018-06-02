@@ -1,13 +1,4 @@
-logging:
-  level.org.springframework: INFO
 spring:
-  datasource:
-    url: jdbc:hsqldb:mem:dataSource
-    username: sa
-    password: 
----
-spring:
-  profiles: local
   datasource:
     url: jdbc:mysql://localhost:3306/atCurso?useSSL=false
     username: root
