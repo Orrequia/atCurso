@@ -1,8 +1,10 @@
 package com.fot.atCurso.service.course;
 
+import java.util.List;
 import java.util.Optional;
 
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.data.domain.Pageable;
 import org.springframework.stereotype.Service;
 
 import com.fot.atCurso.component.dates.OperationDates;
@@ -30,6 +32,11 @@ public class CourseServiceImpl extends AbstractServiceImpl<Course, CourseDAO> im
 	@Autowired
 	OperationDates operationDates;
 	
+	@Override
+	public List<Course> findByUser(Integer idUser, Pageable p) throws NotFoundException {
+		User user = userService.getAndCheck(idUser);
+		return courseDAO.findByUser(user, p);
+	}
 	@Override
 	public boolean isEqual(Course c1, Course c2) {
 		return c1.getName().equals( c2.getName()) &&
