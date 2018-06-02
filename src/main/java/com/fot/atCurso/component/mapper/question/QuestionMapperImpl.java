@@ -9,6 +9,8 @@ import com.fot.atCurso.dto.question.QuestionDTO;
 import com.fot.atCurso.dto.question.QuestionPostDTO;
 import com.fot.atCurso.exception.NotFoundException;
 import com.fot.atCurso.model.Question;
+import com.fot.atCurso.service.difficulty.DifficultyService;
+import com.fot.atCurso.service.tag.TagService;
 
 
 @Component
@@ -16,6 +18,12 @@ public class QuestionMapperImpl extends AbstractMapper<Question, QuestionDTO> im
 
 	@Autowired
 	AnswerMapper answerMapper;
+	
+	@Autowired
+	DifficultyService difficultyService;
+	
+	@Autowired
+	TagService tagService;
 	
 	@Override
 	public Class<? extends QuestionDTO> dtoClazz() {
@@ -30,6 +38,8 @@ public class QuestionMapperImpl extends AbstractMapper<Question, QuestionDTO> im
 	@Override
 	public Question dtoToModel(QuestionDTO dto) throws NotFoundException {
 		Question question = dozer.map(dto, modelClazz());
+		question.setDifficulty(difficultyService.getAndCheck(dto.getIdDifficulty()));
+		question.setTag(tagService.getAndCheck(dto.getIdTag()));
 		question.setAnswer(answerMapper.dtoToModel(dto.getAnswers()));
 		return question;
 	}
