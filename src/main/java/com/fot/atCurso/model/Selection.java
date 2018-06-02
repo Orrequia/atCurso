@@ -28,7 +28,7 @@ public class Selection {
 	@GeneratedValue(strategy=GenerationType.IDENTITY)
 	private Integer idSelection;
 	
-	@JoinColumn(name = FIELD_IDUSER, nullable=false))
+	@JoinColumn(name = FIELD_IDUSER, nullable=false)
 	@ManyToOne(fetch = FetchType.LAZY)
 	private User user;
 	
