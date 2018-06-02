@@ -28,7 +28,7 @@ import com.fot.atCurso.service.question.QuestionService;
 
 @RestController
 @RequestMapping(value= "/question")
-public class QuestionController {
+class QuestionController {
 	
 	@Autowired
 	QuestionService questionService;
@@ -38,8 +38,11 @@ public class QuestionController {
 		
 	@GetMapping
 	public List<QuestionDTO> findAll(@RequestParam(defaultValue = "0", required= false ) Integer page, 
-			 	@RequestParam(defaultValue = "10", required= false ) Integer size) throws ParametersNotAllowedException {
-		final List<Question> questions = questionService.findAll(PageRequest.of(page, size));
+			 	@RequestParam(defaultValue = "10", required= false ) Integer size,
+			 	@RequestParam(defaultValue = "0", required=false) Integer tag) throws ParametersNotAllowedException, NotFoundException {
+		List<Question> questions;
+		if(tag != 0) questions = questionService.findByTag(tag, PageRequest.of(page, size));
+		else questions = questionService.findAll(PageRequest.of(page, size));
 		return questionMapper.modelToDto(questions);
 	}
 	
