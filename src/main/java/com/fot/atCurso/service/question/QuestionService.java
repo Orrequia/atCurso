@@ -4,6 +4,8 @@ import java.util.List;
 
 import org.springframework.data.domain.Pageable;
 
+import com.fot.atCurso.exception.CannotGetNewQuestionWithAnswerBeforeException;
+import com.fot.atCurso.exception.CompletedQuizException;
 import com.fot.atCurso.exception.ConstraintBreakException;
 import com.fot.atCurso.exception.NotFoundException;
 import com.fot.atCurso.model.Question;
@@ -22,5 +24,5 @@ public interface QuestionService  extends AbstractService<Question, Integer> {
 	void checkAndUpdate(Question to, Question from) throws ConstraintBreakException;
 	
 	
-	List<Question> getAndCheckQuestions(Integer idUser, Integer idQuiz) throws NotFoundException;
+	List<Question> getAndCheckQuestions(Integer idUser, Integer idQuiz) throws NotFoundException, CannotGetNewQuestionWithAnswerBeforeException, CompletedQuizException;
 }
