@@ -4,7 +4,7 @@ import java.io.Serializable;
 
 public class ApiErrorDTO implements Serializable {
 
-	private static final long serialVersionUID = 2L;
+	private static final long serialVersionUID = 980798687L;
 	
 	private Integer code;
 	private String msg;

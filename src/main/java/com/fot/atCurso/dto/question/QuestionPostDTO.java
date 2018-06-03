@@ -1,5 +1,6 @@
 package com.fot.atCurso.dto.question;
 
+import java.io.Serializable;
 import java.util.List;
 
 import com.fot.atCurso.dto.answer.AnswerPostDTO;
@@ -7,7 +8,9 @@ import com.fot.atCurso.dto.answer.AnswerPostDTO;
 import lombok.Data;
 
 @Data
-public class QuestionPostDTO {
+public class QuestionPostDTO implements Serializable {
+	
+	private static final long serialVersionUID = 9689751L;
 	
 	private Integer idQuestion;
 	private String name;

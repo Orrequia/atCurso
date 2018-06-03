@@ -1,13 +1,16 @@
 package com.fot.atCurso.dto.course;
 
+import java.io.Serializable;
 import java.util.Date;
 import java.util.List;
 
 import lombok.Data;
 
 @Data
-public class CourseDTO {
+public class CourseDTO implements Serializable {
 
+	private static final long serialVersionUID = 866461L;
+	
 	private Integer idCourse;
 	private String name;
 	private Date start_date;

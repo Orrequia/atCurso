@@ -7,5 +7,7 @@ import lombok.EqualsAndHashCode;
 @EqualsAndHashCode(callSuper=false)
 public class AnswerPostDTO extends AnswerDTO {
 
+	private static final long serialVersionUID = 65945365L;
+	
 	private Boolean correct;
 }
