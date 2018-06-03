@@ -17,6 +17,8 @@ public interface QuizService  extends AbstractService<Quiz, Integer> {
 	Quiz addToCourse(Integer idCourse, Quiz quiz) throws NotFoundException;
 	void updateToCourse(Integer idCourse, Integer idQuiz, Quiz newQuiz) throws NotFoundException;
 	void deleteToCourse(Integer idCourse, Integer idQuiz, Quiz bodyQuiz) throws NotFoundException, UnequalObjectsException;
+	
+	Quiz getAndCheck(Integer idQuiz) throws NotFoundException;
 	Quiz getAndCheckBelongCourse(Course course, Integer idQuiz) throws NotFoundException;
 	
 	boolean isEqual(Quiz q1, Quiz q2);

@@ -84,6 +84,13 @@ public class QuizServiceImpl extends AbstractServiceImpl<Quiz, QuizDAO> implemen
 	}
 	
 	@Override
+	public Quiz getAndCheck(Integer idQuiz) throws NotFoundException {
+		final Optional<Quiz> quiz = quizDAO.findById(idQuiz);
+		quiz.orElseThrow(() -> new NotFoundException("El cuestionario no existe"));
+		return quiz.get();
+	}
+	
+	@Override
 	public Quiz getAndCheckBelongCourse(Course course, Integer idQuiz) throws NotFoundException {
 		final Optional<Quiz> quiz = course.getQuiz().stream().filter(q -> q.getIdQuiz() == idQuiz).findFirst();
 		quiz.orElseThrow(() -> new NotFoundException("Este cuestionario no existe para este curso"));
