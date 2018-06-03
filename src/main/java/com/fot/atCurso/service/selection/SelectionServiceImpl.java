@@ -5,6 +5,7 @@ import java.util.Date;
 import java.util.List;
 
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.stereotype.Service;
 
 import com.fot.atCurso.component.dates.OperationDates;
 import com.fot.atCurso.dao.SelectionDAO;
@@ -15,9 +16,11 @@ import com.fot.atCurso.model.Selection;
 import com.fot.atCurso.model.User;
 import com.fot.atCurso.service.AbstractServiceImpl;
 
+@Service
 public class SelectionServiceImpl extends AbstractServiceImpl<Selection, SelectionDAO> implements SelectionService {
 	
-	private static final Long possibleDelay = 2L; 
+	private static final Long possibleDelay = 1000L; 
+	
 	@Autowired
 	SelectionDAO selectionDAO;
 	
@@ -42,6 +45,7 @@ public class SelectionServiceImpl extends AbstractServiceImpl<Selection, Selecti
 		selection.setQuiz(quiz);
 		selection.setQuestion(question.getName());
 		selection.setAskedDate(askedDate);
+		selectionDAO.save(selection);
 		return selection;
 	}
 	
@@ -55,6 +59,7 @@ public class SelectionServiceImpl extends AbstractServiceImpl<Selection, Selecti
 			selection.setQuiz(quiz);
 			selection.setQuestion(q.getName());
 			selection.setAskedDate(askedDate);
+			selectionDAO.save(selection);
 			selections.add(selection);
 		}
 		return selections;
@@ -66,7 +71,7 @@ public class SelectionServiceImpl extends AbstractServiceImpl<Selection, Selecti
 		if(selection.getRespondedDate() == null) {
 			Date respondedDate = new Date();
 			selection.setRespondedDate(respondedDate);
-			if(operationDates.diferenceInSeconds(selection.getAskedDate(), respondedDate) <= 
+			if(operationDates.difference(selection.getAskedDate(), respondedDate) <= 
 					quiz.getDeliveryTime().getTime() + possibleDelay) {
 				selection.setAnswer(answer.getName());
 				selection.setWasCorrect(answer.getCorrect());
@@ -75,6 +80,7 @@ public class SelectionServiceImpl extends AbstractServiceImpl<Selection, Selecti
 				selection.setAnswer("");
 				selection.setWasCorrect(false);
 			}
+			selectionDAO.save(selection);
 		}
 	}
 	
