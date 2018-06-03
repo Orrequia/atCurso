@@ -20,7 +20,7 @@ public class SelectionServiceImpl extends AbstractServiceImpl<Selection, Selecti
 	
 	@Override
 	public boolean isFirstTime(User user, Quiz quiz) {
-		return selectionDAO.findByUserAndQuiz(user, quiz).size() == 0;
+		return selectionDAO.findByUserAndQuizOrderByAskedDateDesc(user, quiz).size() == 0;
 	}
 	
 	@Override
