@@ -1,5 +1,6 @@
 package com.fot.atCurso.service.quiz;
 
+import java.util.Collections;
 import java.util.List;
 import java.util.Optional;
 
@@ -9,6 +10,7 @@ import org.springframework.data.domain.Pageable;
 import org.springframework.stereotype.Service;
 
 import com.fot.atCurso.dao.QuizDAO;
+import com.fot.atCurso.exception.ConstraintBreakException;
 import com.fot.atCurso.exception.NotFoundException;
 import com.fot.atCurso.exception.UnequalObjectsException;
 import com.fot.atCurso.model.Course;
@@ -16,6 +18,7 @@ import com.fot.atCurso.model.Question;
 import com.fot.atCurso.model.Quiz;
 import com.fot.atCurso.service.AbstractServiceImpl;
 import com.fot.atCurso.service.course.CourseService;
+import com.fot.atCurso.service.question.QuestionService;
 import com.fot.atCurso.service.tag.TagService;
 
 @Service
@@ -29,6 +32,9 @@ public class QuizServiceImpl extends AbstractServiceImpl<Quiz, QuizDAO> implemen
 	
 	@Autowired
 	CourseService courseService;
+	
+	@Autowired
+	QuestionService questionService;
 	
 	@Override
 	public boolean isEqual(Quiz q1, Quiz q2) {
@@ -60,8 +66,9 @@ public class QuizServiceImpl extends AbstractServiceImpl<Quiz, QuizDAO> implemen
 	}
 
 	@Override
-	public Quiz addToCourse(Integer idCourse, Quiz quiz) throws NotFoundException {
+	public Quiz addToCourse(Integer idCourse, Quiz quiz) throws NotFoundException, ConstraintBreakException {
 		final Course course = courseService.getAndCheck(idCourse);
+		checkHaveTags(quiz);
 		checkTagsQuestionsInTagsQuiz(quiz);
 		final Quiz createQuiz = create(quiz);
 		courseService.addQuiz(course, createQuiz);
@@ -69,9 +76,10 @@ public class QuizServiceImpl extends AbstractServiceImpl<Quiz, QuizDAO> implemen
 	}
 	
 	@Override
-	public void updateToCourse(Integer idCourse, Integer idQuiz, Quiz newQuiz) throws NotFoundException {
+	public void updateToCourse(Integer idCourse, Integer idQuiz, Quiz newQuiz) throws NotFoundException, ConstraintBreakException {
 		final Course course = courseService.getAndCheck(idCourse);
 		final Quiz quiz = getAndCheckBelongCourse(course, idQuiz);
+		checkHaveTags(quiz);
 		checkTagsQuestionsInTagsQuiz(quiz);
 		setValues(quiz, newQuiz);
 		update(quiz);
@@ -98,6 +106,22 @@ public class QuizServiceImpl extends AbstractServiceImpl<Quiz, QuizDAO> implemen
 		final Optional<Quiz> quiz = course.getQuiz().stream().filter(q -> q.getIdQuiz() == idQuiz).findFirst();
 		quiz.orElseThrow(() -> new NotFoundException("Este cuestionario no existe para este curso"));
 		return quiz.get();
+	}
+	
+	@Override
+	public void generateQuestions(Quiz quiz, Integer nQuestions) throws ConstraintBreakException {
+		checkHaveTags(quiz);
+		List<Question> questions = questionService.findByTags(quiz.getTag());
+		if(questions.size() <= nQuestions) quiz.setQuestion(questions);
+		else {
+			Collections.shuffle(questions);
+			quiz.setQuestion(questions.subList(0, nQuestions-1));
+		}
+	}
+	
+	private void checkHaveTags(Quiz quiz) throws ConstraintBreakException {
+		if(quiz.getTag() == null)
+			throw new ConstraintBreakException("El cuestionario debe tener al menos un tag");
 	}
 	
 	private void checkTagsQuestionsInTagsQuiz(Quiz quiz) throws NotFoundException {
