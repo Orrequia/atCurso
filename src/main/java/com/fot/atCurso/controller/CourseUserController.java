@@ -13,7 +13,7 @@ import org.springframework.web.bind.annotation.RestController;
 import com.fot.atCurso.component.mapper.user.UserMapper;
 import com.fot.atCurso.dto.user.UserDTO;
 import com.fot.atCurso.exception.NotFoundException;
-import com.fot.atCurso.exception.ParametersNotAllowedException;
+import com.fot.atCurso.exception.IncorrectParametersException;
 import com.fot.atCurso.model.User;
 import com.fot.atCurso.service.user.UserService;
 
@@ -30,7 +30,7 @@ public class CourseUserController {
 	@GetMapping
 	public List<UserDTO> findAll(@RequestParam(defaultValue = "0", required= false) Integer page, 
 							 @RequestParam(defaultValue = "10", required= false) Integer size,
-							 @PathVariable("idCourse") Integer idCourse) throws ParametersNotAllowedException, NotFoundException {
+							 @PathVariable("idCourse") Integer idCourse) throws IncorrectParametersException, NotFoundException {
 		final List<User> users = userService.findUserByCourse(idCourse, PageRequest.of(page, size));
 		return userMapper.modelToDto(users);
 	}

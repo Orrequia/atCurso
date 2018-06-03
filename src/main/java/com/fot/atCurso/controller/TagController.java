@@ -20,7 +20,7 @@ import com.fot.atCurso.dto.tag.TagDTO;
 import com.fot.atCurso.exception.IdValueCannotBeReceivedException;
 import com.fot.atCurso.exception.NotFoundException;
 import com.fot.atCurso.exception.UnequalObjectsException;
-import com.fot.atCurso.exception.ParametersNotAllowedException;
+import com.fot.atCurso.exception.IncorrectParametersException;
 import com.fot.atCurso.model.Tag;
 import com.fot.atCurso.service.tag.TagService;
 
@@ -36,7 +36,7 @@ public class TagController {
 	
 	@GetMapping
 	public List<TagDTO> findAll(@RequestParam(defaultValue = "0", required= false ) Integer page, 
-							 @RequestParam(defaultValue = "10", required= false ) Integer size) throws ParametersNotAllowedException {
+							 @RequestParam(defaultValue = "10", required= false ) Integer size) throws IncorrectParametersException {
 		final List<Tag> tags = tagService.findAll(PageRequest.of(page, size));
 		return tagMapper.modelToDto(tags);
 	}

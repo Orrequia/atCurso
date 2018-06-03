@@ -12,6 +12,7 @@ import com.fot.atCurso.dao.QuizDAO;
 import com.fot.atCurso.exception.NotFoundException;
 import com.fot.atCurso.exception.UnequalObjectsException;
 import com.fot.atCurso.model.Course;
+import com.fot.atCurso.model.Question;
 import com.fot.atCurso.model.Quiz;
 import com.fot.atCurso.service.AbstractServiceImpl;
 import com.fot.atCurso.service.course.CourseService;
@@ -61,6 +62,7 @@ public class QuizServiceImpl extends AbstractServiceImpl<Quiz, QuizDAO> implemen
 	@Override
 	public Quiz addToCourse(Integer idCourse, Quiz quiz) throws NotFoundException {
 		final Course course = courseService.getAndCheck(idCourse);
+		checkTagsQuestionsInTagsQuiz(quiz);
 		final Quiz createQuiz = create(quiz);
 		courseService.addQuiz(course, createQuiz);
 		return createQuiz;
@@ -70,6 +72,7 @@ public class QuizServiceImpl extends AbstractServiceImpl<Quiz, QuizDAO> implemen
 	public void updateToCourse(Integer idCourse, Integer idQuiz, Quiz newQuiz) throws NotFoundException {
 		final Course course = courseService.getAndCheck(idCourse);
 		final Quiz quiz = getAndCheckBelongCourse(course, idQuiz);
+		checkTagsQuestionsInTagsQuiz(quiz);
 		setValues(quiz, newQuiz);
 		update(quiz);
 	}
@@ -96,4 +99,28 @@ public class QuizServiceImpl extends AbstractServiceImpl<Quiz, QuizDAO> implemen
 		quiz.orElseThrow(() -> new NotFoundException("Este cuestionario no existe para este curso"));
 		return quiz.get();
 	}
+	
+	private void checkTagsQuestionsInTagsQuiz(Quiz quiz) throws NotFoundException {
+		for(Question q : quiz.getQuestion()) {
+			if(!quiz.getTag().contains(q.getTag())) {
+				throw new NotFoundException("El tag de alguna pregunta no pertenece a la lista de tags del cuestionario");
+			}
+		}
+	}
+	
+	
+	
+	
+	
+	
+	
+	
+	
+	
+	
+	
+	
+	
+	
+	
 }

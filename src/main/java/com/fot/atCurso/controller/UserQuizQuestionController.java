@@ -13,7 +13,7 @@ import com.fot.atCurso.dto.question.QuestionDTO;
 import com.fot.atCurso.exception.CannotGetNewQuestionWithAnswerBeforeException;
 import com.fot.atCurso.exception.AlreadyDoneException;
 import com.fot.atCurso.exception.NotFoundException;
-import com.fot.atCurso.exception.ParametersNotAllowedException;
+import com.fot.atCurso.exception.IncorrectParametersException;
 import com.fot.atCurso.service.question.QuestionService;
 
 @RestController
@@ -28,7 +28,7 @@ public class UserQuizQuestionController {
 	
 	@GetMapping
 	public List<QuestionDTO> getQuestions(@PathVariable("idUser") Integer idUser, 
-			@PathVariable("idQuiz") Integer idQuiz) throws ParametersNotAllowedException, NotFoundException, CannotGetNewQuestionWithAnswerBeforeException, AlreadyDoneException {
+			@PathVariable("idQuiz") Integer idQuiz) throws IncorrectParametersException, NotFoundException, CannotGetNewQuestionWithAnswerBeforeException, AlreadyDoneException {
 		return questionMapper.modelToDto(questionService.getAndCheckQuestions(idUser, idQuiz));
 	}
 }

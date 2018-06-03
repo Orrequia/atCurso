@@ -20,7 +20,7 @@ import com.fot.atCurso.dto.result.ResultDTO;
 import com.fot.atCurso.exception.IdValueCannotBeReceivedException;
 import com.fot.atCurso.exception.NotFoundException;
 import com.fot.atCurso.exception.UnequalObjectsException;
-import com.fot.atCurso.exception.ParametersNotAllowedException;
+import com.fot.atCurso.exception.IncorrectParametersException;
 import com.fot.atCurso.model.Result;
 import com.fot.atCurso.service.result.ResultService;
 
@@ -37,7 +37,7 @@ public class UserResultController {
 	@GetMapping
 	public List<ResultDTO> findAll(@RequestParam(defaultValue = "0", required= false ) Integer page, 
 							 @RequestParam(defaultValue = "10", required= false ) Integer size,
-							 @PathVariable("idUser") Integer idUser) throws ParametersNotAllowedException, NotFoundException {
+							 @PathVariable("idUser") Integer idUser) throws IncorrectParametersException, NotFoundException {
 		final List<Result> results = resultService.findResultByUser(idUser, PageRequest.of(page, size));
 		return resultMapper.modelToDto(results);
 	}

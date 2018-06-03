@@ -1,15 +1,15 @@
 package com.fot.atCurso.exception;
 
-public class ParametersNotAllowedException extends Exception {
+public class IncorrectParametersException extends Exception {
 	private static final long serialVersionUID = 789876787L;
 
 	public static final String MSG = "Los valores de los parámetros no están permitidos";
 	
-	public ParametersNotAllowedException(String message) {
+	public IncorrectParametersException(String message) {
 		super(message);
 	}
 	
-	public ParametersNotAllowedException() {
+	public IncorrectParametersException() {
 		super(MSG);
 	}
 }

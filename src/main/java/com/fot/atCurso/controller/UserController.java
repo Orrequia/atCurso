@@ -21,7 +21,7 @@ import com.fot.atCurso.dto.user.UserPostDTO;
 import com.fot.atCurso.exception.IdValueCannotBeReceivedException;
 import com.fot.atCurso.exception.NotFoundException;
 import com.fot.atCurso.exception.UnequalObjectsException;
-import com.fot.atCurso.exception.ParametersNotAllowedException;
+import com.fot.atCurso.exception.IncorrectParametersException;
 import com.fot.atCurso.model.User;
 import com.fot.atCurso.service.user.UserService;
  
@@ -37,7 +37,7 @@ public class UserController {
 	
 	@GetMapping
 	public List<UserDTO> findAll(@RequestParam(defaultValue = "0", required= false ) Integer page, 
-							 @RequestParam(defaultValue = "10", required= false ) Integer size) throws ParametersNotAllowedException {
+							 @RequestParam(defaultValue = "10", required= false ) Integer size) throws IncorrectParametersException {
 		final List<User> users = userService.findAll(PageRequest.of(page, size));
 		return userMapper.modelToDto(users);
 	}

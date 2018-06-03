@@ -6,7 +6,7 @@ import java.util.Optional;
 
 import org.springframework.data.domain.Pageable;
 
-import com.fot.atCurso.exception.ParametersNotAllowedException;
+import com.fot.atCurso.exception.IncorrectParametersException;
 
 public interface AbstractService<T, ID extends Serializable> {
 
@@ -16,7 +16,7 @@ public interface AbstractService<T, ID extends Serializable> {
 	
 	Optional<T> findById(ID id);
 	
-	List<T> findAll(Pageable p) throws ParametersNotAllowedException;
+	List<T> findAll(Pageable p) throws IncorrectParametersException;
 	
 	void delete(T t);
 }

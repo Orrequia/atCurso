@@ -15,7 +15,7 @@ import com.fot.atCurso.exception.NotFoundException;
 import com.fot.atCurso.exception.UnequalObjectsException;
 import com.fot.atCurso.exception.CannotGetNewQuestionWithAnswerBeforeException;
 import com.fot.atCurso.exception.AlreadyDoneException;
-import com.fot.atCurso.exception.ParametersNotAllowedException;
+import com.fot.atCurso.exception.IncorrectParametersException;
 
 @ControllerAdvice(basePackages = { "com.fot.atCurso.controller"})
 public class ExceptionController {
@@ -80,9 +80,9 @@ public class ExceptionController {
 	}
 	
 	@ResponseBody
-	@ExceptionHandler(ParametersNotAllowedException.class)
+	@ExceptionHandler(IncorrectParametersException.class)
 	@ResponseStatus(HttpStatus.BAD_REQUEST)
-	public ApiErrorDTO error(ParametersNotAllowedException e) {
+	public ApiErrorDTO error(IncorrectParametersException e) {
 		return new ApiErrorDTO(400, e.getMessage());
 	}
 }
