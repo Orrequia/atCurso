@@ -10,11 +10,13 @@ import com.fot.atCurso.exception.ConstraintBreakException;
 import com.fot.atCurso.exception.NotFoundException;
 import com.fot.atCurso.model.Question;
 import com.fot.atCurso.model.Quiz;
+import com.fot.atCurso.model.Tag;
 import com.fot.atCurso.service.AbstractService;
 
 public interface QuestionService  extends AbstractService<Question, Integer> {
 
 	List<Question> findByTag(Integer idTag, Pageable p) throws NotFoundException;
+	List<Question> findByTags(List<Tag> tags);
 	
 	boolean isEqual(Question q1, Question q2);
 	void setValues(Question to, Question from);

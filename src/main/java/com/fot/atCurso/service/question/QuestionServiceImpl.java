@@ -135,6 +135,11 @@ public class QuestionServiceImpl extends AbstractServiceImpl<Question, QuestionD
 		userService.getAndCheckBelongCourse(course.get(), idUser);
 	}
 	
+	@Override
+	public List<Question> findByTags(List<Tag> tags) {
+		return questionDAO.findByTagIn(tags);
+	}
+	
 	private List<Question> getAllQuestions(User user, Quiz quiz) throws AlreadyDoneException {
 		List<Question> questions = quiz.getQuestion();
 		if(selectionService.isFirstTime(user, quiz))
