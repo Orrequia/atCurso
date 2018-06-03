@@ -39,7 +39,7 @@ public class ResultServiceImpl extends AbstractServiceImpl<Result, ResultDAO> im
 	public boolean isEqual(Result r1, Result r2) {
 		return operationDates.compare(r1.getDate(), r2.getDate()) &&
 				r1.getScore().equals(r2.getScore()) &&
-				r2.getQuiz().equals(r2.getQuiz());
+				r1.getQuiz().equals(r2.getQuiz());
 	}
 	@Override
 	public void setValues(Result to, Result from) {
@@ -107,6 +107,7 @@ public class ResultServiceImpl extends AbstractServiceImpl<Result, ResultDAO> im
 		if(!isEqual(bodyResult, result))
 			throw new UnequalObjectsException("El resultado recibido no coincide con el almacenado");
 		userService.removeResult(user, result);
+		resultDAO.delete(result);
 	}
 	
 	@Override
