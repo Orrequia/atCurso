@@ -14,6 +14,7 @@ import com.fot.atCurso.service.AbstractService;
 public interface CourseService  extends AbstractService<Course, Integer> {
 
 	List<Course> findByUser(Integer idUser, Pageable p) throws NotFoundException;
+	Optional<Course> findByQuiz(Integer idQuiz) throws NotFoundException;
 	
 	boolean isEqual(Course u1, Course u2);
 	void setValues(Course to, Course from);	

@@ -37,6 +37,13 @@ public class CourseServiceImpl extends AbstractServiceImpl<Course, CourseDAO> im
 		User user = userService.getAndCheck(idUser);
 		return courseDAO.findByUser(user, p);
 	}
+	
+	@Override
+	public Optional<Course> findByQuiz(Integer idQuiz) throws NotFoundException {
+		Quiz quiz = quizService.getAndCheck(idQuiz);
+		return courseDAO.findOneByQuiz(quiz);
+	}
+	
 	@Override
 	public boolean isEqual(Course c1, Course c2) {
 		return c1.getName().equals( c2.getName()) &&
