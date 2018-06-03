@@ -24,5 +24,7 @@ public interface QuizService  extends AbstractService<Quiz, Integer> {
 	
 	boolean isEqual(Quiz q1, Quiz q2);
 	void setValues(Quiz to, Quiz from);
+	
+	void generateQuestions(Quiz quiz, Integer nQuestions) throws ConstraintBreakException;
 }
 
