@@ -9,6 +9,8 @@ import org.springframework.web.bind.annotation.RestController;
 
 import com.fot.atCurso.component.mapper.answer.AnswerMapper;
 import com.fot.atCurso.dto.answer.AnswerDTO;
+import com.fot.atCurso.exception.AlreadyDoneException;
+import com.fot.atCurso.exception.ExceededTimeException;
 import com.fot.atCurso.exception.NotFoundException;
 import com.fot.atCurso.service.answer.AnswerService;
 
@@ -26,7 +28,7 @@ public class UserQuizQuestionAnswerController {
 	public AnswerDTO respond(@RequestBody AnswerDTO dto,
 			@PathVariable("idUser") Integer idUser,
 			@PathVariable("idQuiz") Integer idQuiz,
-			@PathVariable("idQuestion") Integer idQuestion) throws NotFoundException {
+			@PathVariable("idQuestion") Integer idQuestion) throws NotFoundException, ExceededTimeException, AlreadyDoneException {
 		return answerMapper.modelToDto(answerService.addAnswerToSelection(idUser, idQuiz, idQuestion, answerMapper.dtoToModel(dto)));
 	}
 }
