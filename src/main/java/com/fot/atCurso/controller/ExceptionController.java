@@ -13,10 +13,18 @@ import com.fot.atCurso.exception.IdValueCannotBeReceivedException;
 import com.fot.atCurso.exception.NotFoundException;
 import com.fot.atCurso.exception.UnequalObjectsException;
 import com.fot.atCurso.exception.CannotGetNewQuestionWithAnswerBeforeException;
+import com.fot.atCurso.exception.CompletedQuizException;
 import com.fot.atCurso.exception.ParametersNotAllowedException;
 
 @ControllerAdvice(basePackages = { "com.fot.atCurso.controller"})
 public class ExceptionController {
+	
+	@ResponseBody
+	@ExceptionHandler(CompletedQuizException.class)
+	@ResponseStatus(HttpStatus.OK)
+	public ApiErrorDTO error(CompletedQuizException e) {
+		return new ApiErrorDTO(200, e.getMessage());
+	}
 	
 	@ResponseBody
 	@ExceptionHandler(NotFoundException.class)
