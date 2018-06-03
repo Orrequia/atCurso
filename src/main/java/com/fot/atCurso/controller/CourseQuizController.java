@@ -17,10 +17,11 @@ import org.springframework.web.bind.annotation.RestController;
 
 import com.fot.atCurso.component.mapper.quiz.QuizMapper;
 import com.fot.atCurso.dto.quiz.QuizDTO;
+import com.fot.atCurso.exception.ConstraintBreakException;
 import com.fot.atCurso.exception.IdValueCannotBeReceivedException;
+import com.fot.atCurso.exception.IncorrectParametersException;
 import com.fot.atCurso.exception.NotFoundException;
 import com.fot.atCurso.exception.UnequalObjectsException;
-import com.fot.atCurso.exception.ParametersNotAllowedException;
 import com.fot.atCurso.model.Quiz;
 import com.fot.atCurso.service.quiz.QuizService;
 
@@ -37,7 +38,7 @@ public class CourseQuizController {
 	@GetMapping
 	public List<QuizDTO> findAll(@RequestParam(defaultValue = "0", required= false ) Integer page, 
 							 @RequestParam(defaultValue = "10", required= false ) Integer size,
-							 @PathVariable("idCourse") Integer idCourse) throws ParametersNotAllowedException, NotFoundException {
+							 @PathVariable("idCourse") Integer idCourse) throws IncorrectParametersException, NotFoundException {
 		final List<Quiz> results = quizService.findQuizByCourse(idCourse, PageRequest.of(page, size));
 		return quizMapper.modelToDto(results);
 	}
@@ -51,20 +52,28 @@ public class CourseQuizController {
 	
 	@PostMapping
 	public QuizDTO create(@RequestBody QuizDTO dto,
-			@PathVariable("idCourse") Integer idCourse) throws IdValueCannotBeReceivedException, ConstraintViolationException, NotFoundException {
+			@PathVariable("idCourse") Integer idCourse,
+			@RequestParam(defaultValue = "false", required = false) Boolean autoQuestions,
+			@RequestParam(defaultValue = "10", required = false) Integer nQuestions) throws IdValueCannotBeReceivedException, ConstraintViolationException, NotFoundException, IncorrectParametersException, ConstraintBreakException {
 		if(dto.getIdQuiz() != null) 
 			throw new IdValueCannotBeReceivedException("El idQuiz no se puede recibir en el body");
-		Quiz createQuiz = quizService.addToCourse(idCourse, quizMapper.dtoToModel(dto));
+		Quiz quiz = quizMapper.dtoToModel(dto);
+		if(autoQuestions == true) quizService.generateQuestions(quiz, nQuestions);
+		Quiz createQuiz = quizService.addToCourse(idCourse, quiz);
 		return quizMapper.modelToDto(createQuiz);
 	}
 	
 	@PutMapping("/{idQuiz}")
 	public void update(@PathVariable("idCourse") Integer idCourse,
 			@PathVariable("idQuiz") Integer idQuiz, 
-		    @RequestBody QuizDTO dto) throws IdValueCannotBeReceivedException, NotFoundException {
+			@RequestParam(defaultValue = "false", required = false) Boolean autoQuestions,
+			@RequestParam(defaultValue = "10", required = false) Integer nQuestions,
+		    @RequestBody QuizDTO dto) throws IdValueCannotBeReceivedException, NotFoundException, ConstraintBreakException {
 		if(dto.getIdQuiz() != null) 
 			throw new IdValueCannotBeReceivedException("El idQuiz no se puede recibir en el body");
-		quizService.updateToCourse(idCourse, idQuiz, quizMapper.dtoToModel(dto));
+		Quiz quiz = quizMapper.dtoToModel(dto);
+		if(autoQuestions == true) quizService.generateQuestions(quiz, nQuestions);
+		quizService.updateToCourse(idCourse, idQuiz, quiz);
 	}
 	
 	@DeleteMapping("/{idQuiz}")
