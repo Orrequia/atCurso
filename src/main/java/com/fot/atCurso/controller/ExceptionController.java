@@ -9,22 +9,32 @@ import org.springframework.web.bind.annotation.ResponseStatus;
 
 import com.fot.atCurso.dto.ApiErrorDTO;
 import com.fot.atCurso.exception.ConstraintBreakException;
+import com.fot.atCurso.exception.ExceededTimeException;
 import com.fot.atCurso.exception.IdValueCannotBeReceivedException;
 import com.fot.atCurso.exception.NotFoundException;
 import com.fot.atCurso.exception.UnequalObjectsException;
 import com.fot.atCurso.exception.CannotGetNewQuestionWithAnswerBeforeException;
-import com.fot.atCurso.exception.CompletedQuizException;
+import com.fot.atCurso.exception.AlreadyDoneException;
 import com.fot.atCurso.exception.ParametersNotAllowedException;
 
 @ControllerAdvice(basePackages = { "com.fot.atCurso.controller"})
 public class ExceptionController {
 	
 	@ResponseBody
-	@ExceptionHandler(CompletedQuizException.class)
+	@ExceptionHandler(AlreadyDoneException.class)
 	@ResponseStatus(HttpStatus.OK)
-	public ApiErrorDTO error(CompletedQuizException e) {
+	public ApiErrorDTO error(AlreadyDoneException e) {
 		return new ApiErrorDTO(200, e.getMessage());
 	}
+	
+	
+	@ResponseBody
+	@ExceptionHandler(ExceededTimeException.class)
+	@ResponseStatus(HttpStatus.PRECONDITION_FAILED)
+	public ApiErrorDTO error(ExceededTimeException e) {
+		return new ApiErrorDTO(412, e.getMessage());
+	}
+	
 	
 	@ResponseBody
 	@ExceptionHandler(NotFoundException.class)
@@ -37,7 +47,7 @@ public class ExceptionController {
 	@ExceptionHandler(ConstraintViolationException.class)
 	@ResponseStatus(HttpStatus.BAD_REQUEST)
 	public ApiErrorDTO error(ConstraintViolationException e) {
-		return new ApiErrorDTO(400, e.getMessage());
+		return new ApiErrorDTO(400, e.getSQLException().getMessage());
 	}
 	
 	@ResponseBody
