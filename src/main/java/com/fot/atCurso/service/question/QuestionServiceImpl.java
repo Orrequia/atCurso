@@ -12,12 +12,15 @@ import org.springframework.stereotype.Service;
 
 import com.fot.atCurso.dao.QuestionDAO;
 import com.fot.atCurso.enums.ModalityEnum;
+import com.fot.atCurso.exception.CannotGetNewQuestionWithAnswerBeforeException;
+import com.fot.atCurso.exception.CompletedQuizException;
 import com.fot.atCurso.exception.ConstraintBreakException;
 import com.fot.atCurso.exception.NotFoundException;
 import com.fot.atCurso.model.Answer;
 import com.fot.atCurso.model.Course;
 import com.fot.atCurso.model.Question;
 import com.fot.atCurso.model.Quiz;
+import com.fot.atCurso.model.Selection;
 import com.fot.atCurso.model.Tag;
 import com.fot.atCurso.model.User;
 import com.fot.atCurso.service.AbstractServiceImpl;
@@ -110,7 +113,7 @@ public class QuestionServiceImpl extends AbstractServiceImpl<Question, QuestionD
 	}
 	
 	@Override
-	public List<Question> getAndCheckQuestions(Integer idUser, Integer idQuiz) throws NotFoundException {
+	public List<Question> getAndCheckQuestions(Integer idUser, Integer idQuiz) throws NotFoundException, CannotGetNewQuestionWithAnswerBeforeException, CompletedQuizException {
 		checkConditionsUserAndQuiz(idUser, idQuiz);
 		Quiz quiz = quizService.getAndCheck(idQuiz);
 		User user = userService.getAndCheck(idUser);
@@ -125,21 +128,41 @@ public class QuestionServiceImpl extends AbstractServiceImpl<Question, QuestionD
 	}
 	
 	private List<Question> getAllQuestions(User user, Quiz quiz) {
-		List<Question> questions = questionDAO.findByQuiz(quiz.getIdQuiz());
+		List<Question> questions = quiz.getQuestion();
 		if(selectionService.isFirstTime(user, quiz))
 			selectionService.create(user, quiz, questions);
 		Collections.shuffle(questions);
 		return questions;
 	}
 
-	private Question getOneQuestion(User user, Quiz quiz) {
-		List<Question> questions = questionDAO.findByQuiz(quiz.getIdQuiz());
+	private Question getOneQuestion(User user, Quiz quiz) throws CannotGetNewQuestionWithAnswerBeforeException, CompletedQuizException {
+		List<Question> questions = quiz.getQuestion();
 		Collections.shuffle(questions);
-		if(selectionService.isFirstTime(user, quiz)) {
+		if(selectionService.isFirstTime(user, quiz))
 			return questions.get(0);
+		else {
+			List<Selection> selections = selectionService.findByUserAndQuiz(user, quiz);
+			if(selections.get(0).getRespondedDate() == null)
+				throw new CannotGetNewQuestionWithAnswerBeforeException("No puedes obtener una nueva pregunta si no has respondido la anterior");
+			return getOtherQuestion(user, quiz, selections);
 		}
-		selectionService.findByUserAndQuiz(user, quiz);
-		return null;
+	}
+	
+	private Question getOtherQuestion(User user, Quiz quiz, List<Selection> selections) throws CompletedQuizException {
+		List<Question> questions = quiz.getQuestion();
+		for(Question q : questions) {
+			int i = 0;
+			boolean found = false;
+			while(!found) {
+				if(q.getName() == selections.get(i).getQuestion()) found = true;
+				i++;
+			}
+			if(!found) {
+				selectionService.create(user, quiz, q);
+				return q;
+			}
+		}
+		throw new CompletedQuizException("Ya no quedan mas preguntas, has finalizado el cuestionario");
 	}
 
 	private boolean validate(Question question) {
