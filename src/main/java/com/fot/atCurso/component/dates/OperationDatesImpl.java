@@ -14,4 +14,9 @@ public class OperationDatesImpl implements OperationDates {
 		if(d2 == null) return false;
 		return d1.compareTo(d2) == 0;
 	}
+	
+	@Override
+	public Long diferenceInSeconds(Date d1, Date d2) {
+		return Math.abs((d1.getTime() - d2.getTime())/1000);
+	}
 }
