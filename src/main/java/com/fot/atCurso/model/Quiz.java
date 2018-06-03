@@ -42,6 +42,7 @@ public class Quiz {
 	private String name;
 	
 	@Enumerated(EnumType.STRING)
+	@Column(nullable = false)
 	private ModalityEnum modality;
 	
 	@Temporal(TemporalType.TIME)
