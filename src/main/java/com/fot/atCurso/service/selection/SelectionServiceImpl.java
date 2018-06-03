@@ -6,7 +6,9 @@ import java.util.List;
 
 import org.springframework.beans.factory.annotation.Autowired;
 
+import com.fot.atCurso.component.dates.OperationDates;
 import com.fot.atCurso.dao.SelectionDAO;
+import com.fot.atCurso.model.Answer;
 import com.fot.atCurso.model.Question;
 import com.fot.atCurso.model.Quiz;
 import com.fot.atCurso.model.Selection;
@@ -15,8 +17,12 @@ import com.fot.atCurso.service.AbstractServiceImpl;
 
 public class SelectionServiceImpl extends AbstractServiceImpl<Selection, SelectionDAO> implements SelectionService {
 	
+	private static final Long possibleDelay = 2L; 
 	@Autowired
 	SelectionDAO selectionDAO;
+	
+	@Autowired
+	OperationDates operationDates;
 	
 	@Override
 	public boolean isFirstTime(User user, Quiz quiz) {
@@ -52,5 +58,29 @@ public class SelectionServiceImpl extends AbstractServiceImpl<Selection, Selecti
 			selections.add(selection);
 		}
 		return selections;
+	}
+	
+	@Override
+	public void answerTheQuestion(User user, Quiz quiz, Question question, Answer answer) {
+		Selection selection = selectionDAO.findOneByUserAndQuizAndQuestion(user, quiz, question.getName());
+		if(selection.getRespondedDate() == null) {
+			Date respondedDate = new Date();
+			selection.setRespondedDate(respondedDate);
+			if(operationDates.diferenceInSeconds(selection.getAskedDate(), respondedDate) <= 
+					quiz.getDeliveryTime().getTime() + possibleDelay) {
+				selection.setAnswer(answer.getName());
+				selection.setWasCorrect(answer.getCorrect());
+			}
+			else {
+				selection.setAnswer("");
+				selection.setWasCorrect(false);
+			}
+		}
+	}
+	
+	@Override
+	public boolean allQuestionsBeenAnswered(User user, Quiz quiz) {
+		List<Selection> selections = selectionDAO.findByUserAndQuizOrderByAskedDateDesc(user, quiz);
+		return selections.size() == selections.size();
 	}
 }

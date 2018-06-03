@@ -2,6 +2,7 @@ package com.fot.atCurso.service.selection;
 
 import java.util.List;
 
+import com.fot.atCurso.model.Answer;
 import com.fot.atCurso.model.Question;
 import com.fot.atCurso.model.Quiz;
 import com.fot.atCurso.model.Selection;
@@ -15,4 +16,7 @@ public interface SelectionService extends AbstractService<Selection, Integer> {
 	List<Selection> findByUserAndQuiz(User user, Quiz quiz);
 	Selection create(User user, Quiz quiz, Question question);
 	List<Selection> create(User user, Quiz quiz, List<Question> questions);
+	
+	void answerTheQuestion(User user, Quiz quiz, Question question, Answer answer);
+	boolean allQuestionsBeenAnswered(User user, Quiz quiz);
 }
