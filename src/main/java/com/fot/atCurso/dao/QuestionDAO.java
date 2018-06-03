@@ -12,4 +12,5 @@ import com.fot.atCurso.model.Tag;
 public interface QuestionDAO extends GenericDAO<Question>{
 
 	List<Question> findByTag(Tag tag, Pageable p);
+	List<Question> findByTagIn(List<Tag> tags);
 }
