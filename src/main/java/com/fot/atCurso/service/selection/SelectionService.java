@@ -12,5 +12,6 @@ public interface SelectionService extends AbstractService<Selection, Integer> {
 
 	boolean isFirstTime(User user, Quiz quiz);
 	
+	List<Selection> findByUserAndQuiz(User user, Quiz quiz);
 	List<Selection> create(User user, Quiz quiz, List<Question> questions);
 }

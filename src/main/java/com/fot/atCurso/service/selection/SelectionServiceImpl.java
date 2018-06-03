@@ -24,6 +24,11 @@ public class SelectionServiceImpl extends AbstractServiceImpl<Selection, Selecti
 	}
 	
 	@Override
+	public List<Selection> findByUserAndQuiz(User user, Quiz quiz) {
+		return selectionDAO.findByUserAndQuizOrderByAskedDateDesc(user, quiz);
+	}
+	
+	@Override
 	public List<Selection> create(User user, Quiz quiz, List<Question> questions) {
 		Date askedDate = new Date();
 		List<Selection> selections = new ArrayList<Selection>();
