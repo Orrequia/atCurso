@@ -1,6 +1,7 @@
 package com.fot.atCurso.service.question;
 
 import java.util.ArrayList;
+import java.util.Collections;
 import java.util.List;
 import java.util.Optional;
 
@@ -10,14 +11,22 @@ import org.springframework.data.domain.Pageable;
 import org.springframework.stereotype.Service;
 
 import com.fot.atCurso.dao.QuestionDAO;
+import com.fot.atCurso.enums.ModalityEnum;
 import com.fot.atCurso.exception.ConstraintBreakException;
 import com.fot.atCurso.exception.NotFoundException;
 import com.fot.atCurso.model.Answer;
+import com.fot.atCurso.model.Course;
 import com.fot.atCurso.model.Question;
+import com.fot.atCurso.model.Quiz;
 import com.fot.atCurso.model.Tag;
+import com.fot.atCurso.model.User;
 import com.fot.atCurso.service.AbstractServiceImpl;
 import com.fot.atCurso.service.answer.AnswerService;
+import com.fot.atCurso.service.course.CourseService;
+import com.fot.atCurso.service.quiz.QuizService;
+import com.fot.atCurso.service.selection.SelectionService;
 import com.fot.atCurso.service.tag.TagService;
+import com.fot.atCurso.service.user.UserService;
 
 @Service
 public class QuestionServiceImpl extends AbstractServiceImpl<Question, QuestionDAO> implements QuestionService {
@@ -32,6 +41,18 @@ public class QuestionServiceImpl extends AbstractServiceImpl<Question, QuestionD
 	
 	@Autowired
 	TagService tagService;
+	
+	@Autowired
+	UserService userService;
+	
+	@Autowired
+	QuizService quizService;
+	
+	@Autowired
+	CourseService courseService;
+	
+	@Autowired
+	SelectionService selectionService;
 	
 	@Override
 	public List<Question> findByTag(Integer idTag, Pageable p) throws NotFoundException {
@@ -48,19 +69,18 @@ public class QuestionServiceImpl extends AbstractServiceImpl<Question, QuestionD
 												  getStringsAnswer(q2.getAnswer()));
 	}
 	
-	private List<String> getStringsAnswer(List<Answer> answers) {
-		List<String> sAnswers = new ArrayList<String>();
-		for(Answer a : answers) 
-			sAnswers.add(a.getName());
-		return sAnswers;
-	}
-	
 	@Override 
 	public void setValues(Question to, Question from) {
 		to.setName(from.getName());
 		to.setTag(from.getTag());
 		to.setDifficulty(from.getDifficulty());
 		updateAnswers(to, from);
+	}
+	
+	@Override
+	public void deleteAll(Question q) {
+		deleteAnswers(q);
+		questionDAO.delete(q);
 	}
 	
 	@Override
@@ -89,6 +109,33 @@ public class QuestionServiceImpl extends AbstractServiceImpl<Question, QuestionD
 		return question.get();
 	}
 	
+	@Override
+	public List<Question> getAndCheckQuestions(Integer idUser, Integer idQuiz, Pageable p) throws NotFoundException {
+		checkConditionsUserAndQuiz(idUser, idQuiz);
+		Quiz quiz = quizService.getAndCheck(idQuiz);
+		User user = userService.getAndCheck(idUser);
+		if(quiz.getModality() == ModalityEnum.ALLINONE) return getAllQuestions(user, quiz); 
+		else return Collections.singletonList(getOneQuestion(user, quiz));
+	}
+	
+	private void checkConditionsUserAndQuiz(Integer idUser, Integer idQuiz) throws NotFoundException {
+		Optional<Course> course = courseService.findByQuiz(idQuiz);
+		course.orElseThrow(() -> new NotFoundException("El cuestionario no existe"));
+		userService.getAndCheckBelongCourse(course.get(), idUser);
+	}
+	
+	private List<Question> getAllQuestions(User user, Quiz quiz) {
+		List<Question> questions = questionDAO.findByQuiz(quiz.getIdQuiz());
+		if(selectionService.isFirstTime(user, quiz))
+			selectionService.create(user, quiz, questions);
+		return questions;
+	}
+
+	private Question getOneQuestion(User user, Quiz quiz) {
+		
+		return null;
+	}
+
 	private boolean validate(Question question) {
 		if(question.getAnswer().size() > 0 && question.getAnswer().size() <= maxAnswers)
 			return question.getAnswer().stream().filter(a -> a.getCorrect() != null && a.getCorrect()).count() == 1;
@@ -117,9 +164,10 @@ public class QuestionServiceImpl extends AbstractServiceImpl<Question, QuestionD
 				to.getAnswer().add(answerService.create(a));	
 	}
 	
-	@Override
-	public void deleteAll(Question q) {
-		deleteAnswers(q);
-		questionDAO.delete(q);
+	private List<String> getStringsAnswer(List<Answer> answers) {
+		List<String> sAnswers = new ArrayList<String>();
+		for(Answer a : answers) 
+			sAnswers.add(a.getName());
+		return sAnswers;
 	}
 }
