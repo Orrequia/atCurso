@@ -113,6 +113,13 @@ public class QuestionServiceImpl extends AbstractServiceImpl<Question, QuestionD
 	}
 	
 	@Override
+	public Question getAndCheckBelongQuiz(Quiz quiz, Integer idQuestion) throws NotFoundException {
+		final Optional<Question> question = quiz.getQuestion().stream().filter(q -> q.getIdQuestion() == idQuestion).findFirst();
+		question.orElseThrow(() -> new NotFoundException("Esta pregunta no pertenece a este cuestionario"));
+		return question.get();
+	}
+	
+	@Override
 	public List<Question> getAndCheckQuestions(Integer idUser, Integer idQuiz) throws NotFoundException, CannotGetNewQuestionWithAnswerBeforeException, CompletedQuizException {
 		checkConditionsUserAndQuiz(idUser, idQuiz);
 		Quiz quiz = quizService.getAndCheck(idQuiz);
@@ -121,7 +128,8 @@ public class QuestionServiceImpl extends AbstractServiceImpl<Question, QuestionD
 		else return Collections.singletonList(getOneQuestion(user, quiz));
 	}
 	
-	private void checkConditionsUserAndQuiz(Integer idUser, Integer idQuiz) throws NotFoundException {
+	@Override
+	public void checkConditionsUserAndQuiz(Integer idUser, Integer idQuiz) throws NotFoundException {
 		Optional<Course> course = courseService.findByQuiz(idQuiz);
 		course.orElseThrow(() -> new NotFoundException("El cuestionario no existe"));
 		userService.getAndCheckBelongCourse(course.get(), idUser);

@@ -9,6 +9,7 @@ import com.fot.atCurso.exception.CompletedQuizException;
 import com.fot.atCurso.exception.ConstraintBreakException;
 import com.fot.atCurso.exception.NotFoundException;
 import com.fot.atCurso.model.Question;
+import com.fot.atCurso.model.Quiz;
 import com.fot.atCurso.service.AbstractService;
 
 public interface QuestionService  extends AbstractService<Question, Integer> {
@@ -20,9 +21,11 @@ public interface QuestionService  extends AbstractService<Question, Integer> {
 	void deleteAll(Question q);
 	
 	Question getAndCheck(Integer idQuestion) throws NotFoundException;
+	Question getAndCheckBelongQuiz(Quiz quiz, Integer idQuestion) throws NotFoundException;
 	Question checkAndCreate(Question question) throws ConstraintBreakException;
 	void checkAndUpdate(Question to, Question from) throws ConstraintBreakException;
 	
+	void checkConditionsUserAndQuiz(Integer idUser, Integer idQuiz) throws NotFoundException;
 	
 	List<Question> getAndCheckQuestions(Integer idUser, Integer idQuiz) throws NotFoundException, CannotGetNewQuestionWithAnswerBeforeException, CompletedQuizException;
 }
