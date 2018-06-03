@@ -12,6 +12,7 @@ import com.fot.atCurso.exception.ConstraintBreakException;
 import com.fot.atCurso.exception.IdValueCannotBeReceivedException;
 import com.fot.atCurso.exception.NotFoundException;
 import com.fot.atCurso.exception.UnequalObjectsException;
+import com.fot.atCurso.exception.CannotGetNewQuestionWithAnswerBeforeException;
 import com.fot.atCurso.exception.ParametersNotAllowedException;
 
 @ControllerAdvice(basePackages = { "com.fot.atCurso.controller"})
@@ -30,6 +31,14 @@ public class ExceptionController {
 	public ApiErrorDTO error(ConstraintViolationException e) {
 		return new ApiErrorDTO(400, e.getMessage());
 	}
+	
+	@ResponseBody
+	@ExceptionHandler(CannotGetNewQuestionWithAnswerBeforeException.class)
+	@ResponseStatus(HttpStatus.PRECONDITION_FAILED)
+	public ApiErrorDTO error(CannotGetNewQuestionWithAnswerBeforeException e) {
+		return new ApiErrorDTO(412, e.getMessage());
+	}
+	
 	
 	@ResponseBody
 	@ExceptionHandler(ConstraintBreakException.class)
