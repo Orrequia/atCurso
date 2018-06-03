@@ -1,5 +1,6 @@
 package com.fot.atCurso.service.result;
 
+import java.util.Date;
 import java.util.List;
 import java.util.Optional;
 
@@ -12,6 +13,7 @@ import com.fot.atCurso.component.dates.OperationDates;
 import com.fot.atCurso.dao.ResultDAO;
 import com.fot.atCurso.exception.NotFoundException;
 import com.fot.atCurso.exception.UnequalObjectsException;
+import com.fot.atCurso.model.Quiz;
 import com.fot.atCurso.model.Result;
 import com.fot.atCurso.model.User;
 import com.fot.atCurso.service.AbstractServiceImpl;
@@ -44,6 +46,16 @@ public class ResultServiceImpl extends AbstractServiceImpl<Result, ResultDAO> im
 		to.setDate(from.getDate());
 		to.setScore(from.getScore());
 		to.setQuiz(from.getQuiz());
+	}
+	
+	@Override
+	public Result create(User user, Quiz quiz, Float score) throws NotFoundException {
+		Result result = new Result();
+		result.setQuiz(quiz);
+		result.setScore(score);
+		result.setDate(new Date());
+		addToUser(user.getIdUser(), result);
+		return result;
 	}
 	
 	@Override

@@ -6,12 +6,15 @@ import org.springframework.data.domain.Pageable;
 
 import com.fot.atCurso.exception.NotFoundException;
 import com.fot.atCurso.exception.UnequalObjectsException;
+import com.fot.atCurso.model.Quiz;
 import com.fot.atCurso.model.Result;
 import com.fot.atCurso.model.User;
 import com.fot.atCurso.service.AbstractService;
 
 public interface ResultService  extends AbstractService<Result, Integer> {
 
+	Result create(User user, Quiz quiz, Float score) throws NotFoundException;
+	
 	List<Result> findResultByUser(Integer idUser, Pageable p) throws NotFoundException;
 	Result findOneResultByUser(Integer idUser, Integer idResult) throws NotFoundException;
 	List<Result> findResultByCourse(Integer idCourse, Pageable p) throws NotFoundException;
