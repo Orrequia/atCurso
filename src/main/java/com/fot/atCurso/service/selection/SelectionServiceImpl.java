@@ -29,6 +29,17 @@ public class SelectionServiceImpl extends AbstractServiceImpl<Selection, Selecti
 	}
 	
 	@Override
+	public Selection create(User user, Quiz quiz, Question question) {
+		Date askedDate = new Date();
+		Selection selection = new Selection();
+		selection.setUser(user);
+		selection.setQuiz(quiz);
+		selection.setQuestion(question.getName());
+		selection.setAskedDate(askedDate);
+		return selection;
+	}
+	
+	@Override
 	public List<Selection> create(User user, Quiz quiz, List<Question> questions) {
 		Date askedDate = new Date();
 		List<Selection> selections = new ArrayList<Selection>();
