@@ -15,9 +15,12 @@ public interface QuestionService  extends AbstractService<Question, Integer> {
 	
 	boolean isEqual(Question q1, Question q2);
 	void setValues(Question to, Question from);
+	void deleteAll(Question q);
 	
 	Question getAndCheck(Integer idQuestion) throws NotFoundException;
 	Question checkAndCreate(Question question) throws ConstraintBreakException;
 	void checkAndUpdate(Question to, Question from) throws ConstraintBreakException;
-	void deleteAll(Question q);
+	
+	
+	List<Question> getAndCheckQuestions(Integer idUser, Integer idQuiz, Pageable p) throws NotFoundException;
 }
