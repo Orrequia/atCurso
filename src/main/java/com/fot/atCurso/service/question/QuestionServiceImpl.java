@@ -13,7 +13,7 @@ import org.springframework.stereotype.Service;
 import com.fot.atCurso.dao.QuestionDAO;
 import com.fot.atCurso.enums.ModalityEnum;
 import com.fot.atCurso.exception.CannotGetNewQuestionWithAnswerBeforeException;
-import com.fot.atCurso.exception.CompletedQuizException;
+import com.fot.atCurso.exception.AlreadyDoneException;
 import com.fot.atCurso.exception.ConstraintBreakException;
 import com.fot.atCurso.exception.NotFoundException;
 import com.fot.atCurso.model.Answer;
@@ -120,7 +120,7 @@ public class QuestionServiceImpl extends AbstractServiceImpl<Question, QuestionD
 	}
 	
 	@Override
-	public List<Question> getAndCheckQuestions(Integer idUser, Integer idQuiz) throws NotFoundException, CannotGetNewQuestionWithAnswerBeforeException, CompletedQuizException {
+	public List<Question> getAndCheckQuestions(Integer idUser, Integer idQuiz) throws NotFoundException, CannotGetNewQuestionWithAnswerBeforeException, AlreadyDoneException {
 		checkConditionsUserAndQuiz(idUser, idQuiz);
 		Quiz quiz = quizService.getAndCheck(idQuiz);
 		User user = userService.getAndCheck(idUser);
@@ -135,33 +135,38 @@ public class QuestionServiceImpl extends AbstractServiceImpl<Question, QuestionD
 		userService.getAndCheckBelongCourse(course.get(), idUser);
 	}
 	
-	private List<Question> getAllQuestions(User user, Quiz quiz) {
+	private List<Question> getAllQuestions(User user, Quiz quiz) throws AlreadyDoneException {
 		List<Question> questions = quiz.getQuestion();
 		if(selectionService.isFirstTime(user, quiz))
 			selectionService.create(user, quiz, questions);
+		else throw new AlreadyDoneException("Ya has iniciado el cuestionario, respondelas por favor");
 		Collections.shuffle(questions);
 		return questions;
 	}
 
-	private Question getOneQuestion(User user, Quiz quiz) throws CannotGetNewQuestionWithAnswerBeforeException, CompletedQuizException {
+	private Question getOneQuestion(User user, Quiz quiz) throws CannotGetNewQuestionWithAnswerBeforeException, AlreadyDoneException {
 		List<Question> questions = quiz.getQuestion();
 		Collections.shuffle(questions);
-		if(selectionService.isFirstTime(user, quiz))
+		if(selectionService.isFirstTime(user, quiz)) {
+			selectionService.create(user, quiz, questions.get(0));
 			return questions.get(0);
+		}
 		else {
 			List<Selection> selections = selectionService.findByUserAndQuiz(user, quiz);
 			if(selections.get(0).getRespondedDate() == null)
 				throw new CannotGetNewQuestionWithAnswerBeforeException("No puedes obtener una nueva pregunta si no has respondido la anterior");
+			if(selectionService.allQuestionsBeenAnswered(user, quiz)) 
+				throw new AlreadyDoneException("Ya has realizado este cuestionario, revisa tu expediente");
 			return getOtherQuestion(user, quiz, selections);
 		}
 	}
 	
-	private Question getOtherQuestion(User user, Quiz quiz, List<Selection> selections) throws CompletedQuizException {
+	private Question getOtherQuestion(User user, Quiz quiz, List<Selection> selections) throws AlreadyDoneException {
 		List<Question> questions = quiz.getQuestion();
 		for(Question q : questions) {
 			int i = 0;
 			boolean found = false;
-			while(!found) {
+			while(!found && i < selections.size()) {
 				if(q.getName() == selections.get(i).getQuestion()) found = true;
 				i++;
 			}
@@ -170,7 +175,7 @@ public class QuestionServiceImpl extends AbstractServiceImpl<Question, QuestionD
 				return q;
 			}
 		}
-		throw new CompletedQuizException("Ya no quedan mas preguntas, has finalizado el cuestionario");
+		throw new AlreadyDoneException("Ya no quedan mas preguntas, has finalizado el cuestionario, revisa tu expediente.");
 	}
 
 	private boolean validate(Question question) {
