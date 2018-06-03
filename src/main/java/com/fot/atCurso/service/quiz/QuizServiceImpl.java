@@ -120,7 +120,7 @@ public class QuizServiceImpl extends AbstractServiceImpl<Quiz, QuizDAO> implemen
 	}
 	
 	private void checkHaveTags(Quiz quiz) throws ConstraintBreakException {
-		if(quiz.getTag() == null)
+		if(quiz.getTag() == null || quiz.getTag().size() == 0)
 			throw new ConstraintBreakException("El cuestionario debe tener al menos un tag");
 	}
 	
