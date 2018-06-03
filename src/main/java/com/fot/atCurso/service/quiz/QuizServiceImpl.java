@@ -92,6 +92,7 @@ public class QuizServiceImpl extends AbstractServiceImpl<Quiz, QuizDAO> implemen
 		if(!isEqual(bodyQuiz, quiz))
 			throw new UnequalObjectsException("El cuestionario recibido no coincide con el almacenado");
 		courseService.removeQuiz(course, quiz);
+		quizDAO.delete(quiz);
 	}
 	
 	@Override
