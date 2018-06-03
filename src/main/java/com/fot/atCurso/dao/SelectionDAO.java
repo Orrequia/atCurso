@@ -12,4 +12,5 @@ import com.fot.atCurso.model.User;
 public interface SelectionDAO extends GenericDAO<Selection>{
 
 	List<Selection> findByUserAndQuizOrderByAskedDateDesc(User user, Quiz quiz);
+	Selection findOneByUserAndQuizAndQuestion(User user, Quiz quiz, String question);
 }
