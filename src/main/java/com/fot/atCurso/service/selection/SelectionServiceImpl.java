@@ -3,18 +3,24 @@ package com.fot.atCurso.service.selection;
 import java.util.ArrayList;
 import java.util.Date;
 import java.util.List;
+import java.util.Optional;
+import java.util.stream.Collectors;
 
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
 import com.fot.atCurso.component.dates.OperationDates;
 import com.fot.atCurso.dao.SelectionDAO;
+import com.fot.atCurso.exception.AlreadyDoneException;
+import com.fot.atCurso.exception.ExceededTimeException;
+import com.fot.atCurso.exception.NotFoundException;
 import com.fot.atCurso.model.Answer;
 import com.fot.atCurso.model.Question;
 import com.fot.atCurso.model.Quiz;
 import com.fot.atCurso.model.Selection;
 import com.fot.atCurso.model.User;
 import com.fot.atCurso.service.AbstractServiceImpl;
+import com.fot.atCurso.service.answer.AnswerService;
 
 @Service
 public class SelectionServiceImpl extends AbstractServiceImpl<Selection, SelectionDAO> implements SelectionService {
@@ -25,7 +31,10 @@ public class SelectionServiceImpl extends AbstractServiceImpl<Selection, Selecti
 	SelectionDAO selectionDAO;
 	
 	@Autowired
-	OperationDates operationDates;
+	AnswerService answerService;
+	
+	@Autowired
+	OperationDates opDates;
 	
 	@Override
 	public boolean isFirstTime(User user, Quiz quiz) {
@@ -66,27 +75,41 @@ public class SelectionServiceImpl extends AbstractServiceImpl<Selection, Selecti
 	}
 	
 	@Override
-	public void answerTheQuestion(User user, Quiz quiz, Question question, Answer answer) {
-		Selection selection = selectionDAO.findOneByUserAndQuizAndQuestion(user, quiz, question.getName());
+	public void answerTheQuestion(User user, Quiz quiz, Question question, Answer answer) throws ExceededTimeException, AlreadyDoneException, NotFoundException {
+		Selection selection = getAndCheck(user, quiz, question.getName());
 		if(selection.getRespondedDate() == null) {
-			Date respondedDate = new Date();
-			selection.setRespondedDate(respondedDate);
-			if(operationDates.difference(selection.getAskedDate(), respondedDate) <= 
-					quiz.getDeliveryTime().getTime() + possibleDelay) {
-				selection.setAnswer(answer.getName());
-				selection.setWasCorrect(answer.getCorrect());
-			}
-			else {
-				selection.setAnswer("");
-				selection.setWasCorrect(false);
-			}
-			selectionDAO.save(selection);
+			Date resedDate = new Date();
+			selection.setRespondedDate(resedDate);
+			if(opDates.difference(selection.getAskedDate(), resedDate) <= quiz.getDeliveryTime().getTime() + possibleDelay)
+				completeQuestion(selection, question, answer);
+			else helplessQuestion(selection);
 		}
+		else throw new AlreadyDoneException("Esta pregunta ya ha sido respondida");
 	}
 	
 	@Override
 	public boolean allQuestionsBeenAnswered(User user, Quiz quiz) {
 		List<Selection> selections = selectionDAO.findByUserAndQuizOrderByAskedDateDesc(user, quiz);
-		return selections.size() == selections.size();
+		selections = selections.stream().filter(s -> s.getRespondedDate() != null).collect(Collectors.toList());
+		return selections.size() == quiz.getQuestion().size();
+	}
+	
+	private Selection getAndCheck(User user, Quiz quiz, String name) throws NotFoundException {
+		Optional<Selection> selection = selectionDAO.findOneByUserAndQuizAndQuestion(user, quiz, name);
+		selection.orElseThrow(() -> new NotFoundException("Esta pregunta no te pertenece aún."));
+		return selection.get();
+	}
+	
+	private void completeQuestion(Selection selection, Question question, Answer answer) {
+		selection.setAnswer(answer.getName());
+		selection.setWasCorrect(answerService.getCorrect(question).getName().equals(answer.getName()));
+		selectionDAO.save(selection);
+	}
+	
+	private void helplessQuestion(Selection selection) throws ExceededTimeException {
+		selection.setAnswer("");
+		selection.setWasCorrect(false);
+		selectionDAO.save(selection);
+		throw new ExceededTimeException("Has respondido demasiado tarde, esta pregunta queda anulada");
 	}
 }
