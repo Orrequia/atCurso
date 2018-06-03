@@ -13,7 +13,4 @@ import com.fot.atCurso.model.Tag;
 public interface QuestionDAO extends GenericDAO<Question>{
 
 	List<Question> findByTag(Tag tag, Pageable p);
-	
-	@Query(value = "SELECT q FROM Quiz AS qz JOIn qz.question AS q WHERE qz.idQuiz = :idQuiz")
-	List<Question> findByQuiz(Integer idQuiz);
 }
