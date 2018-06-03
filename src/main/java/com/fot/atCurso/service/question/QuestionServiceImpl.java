@@ -110,7 +110,7 @@ public class QuestionServiceImpl extends AbstractServiceImpl<Question, QuestionD
 	}
 	
 	@Override
-	public List<Question> getAndCheckQuestions(Integer idUser, Integer idQuiz, Pageable p) throws NotFoundException {
+	public List<Question> getAndCheckQuestions(Integer idUser, Integer idQuiz) throws NotFoundException {
 		checkConditionsUserAndQuiz(idUser, idQuiz);
 		Quiz quiz = quizService.getAndCheck(idQuiz);
 		User user = userService.getAndCheck(idUser);
@@ -128,11 +128,17 @@ public class QuestionServiceImpl extends AbstractServiceImpl<Question, QuestionD
 		List<Question> questions = questionDAO.findByQuiz(quiz.getIdQuiz());
 		if(selectionService.isFirstTime(user, quiz))
 			selectionService.create(user, quiz, questions);
+		Collections.shuffle(questions);
 		return questions;
 	}
 
 	private Question getOneQuestion(User user, Quiz quiz) {
-		
+		List<Question> questions = questionDAO.findByQuiz(quiz.getIdQuiz());
+		Collections.shuffle(questions);
+		if(selectionService.isFirstTime(user, quiz)) {
+			return questions.get(0);
+		}
+		selectionService.findByUserAndQuiz(user, quiz);
 		return null;
 	}
 

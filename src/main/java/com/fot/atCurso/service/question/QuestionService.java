@@ -22,5 +22,5 @@ public interface QuestionService  extends AbstractService<Question, Integer> {
 	void checkAndUpdate(Question to, Question from) throws ConstraintBreakException;
 	
 	
-	List<Question> getAndCheckQuestions(Integer idUser, Integer idQuiz, Pageable p) throws NotFoundException;
+	List<Question> getAndCheckQuestions(Integer idUser, Integer idQuiz) throws NotFoundException;
 }
