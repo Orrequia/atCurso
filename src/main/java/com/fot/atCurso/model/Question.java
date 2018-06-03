@@ -43,6 +43,6 @@ public class Question {
 	private Difficulty difficulty;
 	
 	@OneToMany(fetch = FetchType.LAZY)
-	@JoinColumn(name=FIELD_IDQUESTION, referencedColumnName=FIELD_IDQUESTION, nullable=false)
+	@JoinColumn(name=FIELD_IDQUESTION, referencedColumnName=FIELD_IDQUESTION)
 	private List<Answer> answer;
 }
