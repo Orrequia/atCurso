@@ -11,7 +11,7 @@ import org.springframework.web.bind.annotation.RestController;
 import com.fot.atCurso.component.mapper.question.QuestionMapper;
 import com.fot.atCurso.dto.question.QuestionDTO;
 import com.fot.atCurso.exception.CannotGetNewQuestionWithAnswerBeforeException;
-import com.fot.atCurso.exception.CompletedQuizException;
+import com.fot.atCurso.exception.AlreadyDoneException;
 import com.fot.atCurso.exception.NotFoundException;
 import com.fot.atCurso.exception.ParametersNotAllowedException;
 import com.fot.atCurso.service.question.QuestionService;
@@ -28,7 +28,7 @@ public class UserQuizQuestionController {
 	
 	@GetMapping
 	public List<QuestionDTO> getQuestions(@PathVariable("idUser") Integer idUser, 
-			@PathVariable("idQuiz") Integer idQuiz) throws ParametersNotAllowedException, NotFoundException, CannotGetNewQuestionWithAnswerBeforeException, CompletedQuizException {
+			@PathVariable("idQuiz") Integer idQuiz) throws ParametersNotAllowedException, NotFoundException, CannotGetNewQuestionWithAnswerBeforeException, AlreadyDoneException {
 		return questionMapper.modelToDto(questionService.getAndCheckQuestions(idUser, idQuiz));
 	}
 }
