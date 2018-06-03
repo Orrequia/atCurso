@@ -115,7 +115,7 @@ public class QuizServiceImpl extends AbstractServiceImpl<Quiz, QuizDAO> implemen
 		if(questions.size() <= nQuestions) quiz.setQuestion(questions);
 		else {
 			Collections.shuffle(questions);
-			quiz.setQuestion(questions.subList(0, nQuestions-1));
+			quiz.setQuestion(questions.subList(0, nQuestions));
 		}
 	}
 	
