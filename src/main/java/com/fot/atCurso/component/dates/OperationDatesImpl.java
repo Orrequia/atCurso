@@ -16,7 +16,7 @@ public class OperationDatesImpl implements OperationDates {
 	}
 	
 	@Override
-	public Long diferenceInSeconds(Date d1, Date d2) {
-		return Math.abs((d1.getTime() - d2.getTime())/1000);
+	public Long difference(Date d1, Date d2) {
+		return Math.abs((d1.getTime() - d2.getTime()));
 	}
 }
