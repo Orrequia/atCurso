@@ -3,6 +3,7 @@ package com.fot.atCurso.model;
 import java.util.Date;
 import java.util.List;
 
+import javax.persistence.CascadeType;
 import javax.persistence.Column;
 import javax.persistence.Entity;
 import javax.persistence.FetchType;
@@ -46,7 +47,7 @@ public class Course {
 	inverseJoinColumns=@JoinColumn(name=User.FIELD_IDUSER, referencedColumnName=User.FIELD_IDUSER))
 	private List<User> user;
 	
-	@OneToMany(fetch = FetchType.LAZY)
+	@OneToMany(fetch = FetchType.LAZY, cascade=CascadeType.REMOVE)
 	@JoinColumn(name=FIELD_IDCOURSE, referencedColumnName=FIELD_IDCOURSE)
 	private List<Quiz> quiz;
 }
