@@ -2,6 +2,7 @@ package com.fot.atCurso.model;
 
 import java.util.List;
 
+import javax.persistence.CascadeType;
 import javax.persistence.Column;
 import javax.persistence.Entity;
 import javax.persistence.FetchType;
@@ -42,7 +43,7 @@ public class Question {
 	@ManyToOne(fetch = FetchType.LAZY)
 	private Difficulty difficulty;
 	
-	@OneToMany(fetch = FetchType.LAZY)
+	@OneToMany(fetch = FetchType.LAZY, cascade=CascadeType.REMOVE)
 	@JoinColumn(name=FIELD_IDQUESTION, referencedColumnName=FIELD_IDQUESTION)
 	private List<Answer> answer;
 }
