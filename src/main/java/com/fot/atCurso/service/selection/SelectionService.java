@@ -22,4 +22,6 @@ public interface SelectionService extends AbstractService<Selection, Integer> {
 	
 	void answerTheQuestion(User user, Quiz quiz, Question question, Answer answer) throws ExceededTimeException, AlreadyDoneException, NotFoundException;
 	boolean allQuestionsBeenAnswered(User user, Quiz quiz);
+	
+	void deleteByUser(User user);
 }

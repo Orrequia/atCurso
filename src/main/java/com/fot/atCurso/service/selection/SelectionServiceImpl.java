@@ -94,6 +94,14 @@ public class SelectionServiceImpl extends AbstractServiceImpl<Selection, Selecti
 		return selections.size() == quiz.getQuestion().size();
 	}
 	
+	@Override
+	public void deleteByUser(User user) {
+		List<Selection> selections = selectionDAO.findByUser(user);
+		for(Selection s : selections) {
+			selectionDAO.delete(s);
+		}
+	}
+	
 	private Selection getAndCheck(User user, Quiz quiz, String name) throws NotFoundException {
 		Optional<Selection> selection = selectionDAO.findOneByUserAndQuizAndQuestion(user, quiz, name);
 		selection.orElseThrow(() -> new NotFoundException("Esta pregunta no te pertenece aún."));
