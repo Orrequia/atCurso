@@ -107,7 +107,6 @@ public class ResultServiceImpl extends AbstractServiceImpl<Result, ResultDAO> im
 		if(!isEqual(bodyResult, result))
 			throw new UnequalObjectsException("El resultado recibido no coincide con el almacenado");
 		userService.removeResult(user, result);
-		resultDAO.delete(result);
 	}
 	
 	@Override
