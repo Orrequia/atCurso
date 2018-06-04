@@ -10,6 +10,7 @@ import javax.persistence.GenerationType;
 
 import java.util.List;
 
+import javax.persistence.CascadeType;
 import javax.persistence.Column;
 
 import lombok.Getter;
@@ -34,7 +35,7 @@ public class User {
 	
 	private String password;
 	
-	@OneToMany(fetch = FetchType.LAZY)
+	@OneToMany(fetch = FetchType.LAZY, cascade=CascadeType.REMOVE)
 	@JoinColumn(name=FIELD_IDUSER, referencedColumnName=FIELD_IDUSER)
 	private List<Result> result;	
 }
