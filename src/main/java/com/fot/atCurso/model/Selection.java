@@ -13,6 +13,9 @@ import javax.persistence.ManyToOne;
 import javax.persistence.Temporal;
 import javax.persistence.TemporalType;
 
+import org.hibernate.annotations.OnDelete;
+import org.hibernate.annotations.OnDeleteAction;
+
 import lombok.Getter;
 import lombok.Setter;
 
@@ -30,6 +33,7 @@ public class Selection {
 	
 	@JoinColumn(name = FIELD_IDUSER, nullable=false)
 	@ManyToOne(fetch = FetchType.LAZY)
+	@OnDelete(action = OnDeleteAction.CASCADE)
 	private User user;
 	
 	@JoinColumn(name = FIELD_IDQUIZ, nullable=false)
