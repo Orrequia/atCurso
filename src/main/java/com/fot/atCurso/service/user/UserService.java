@@ -26,6 +26,8 @@ public interface UserService extends AbstractService<User, Integer> {
 	
 	void removeResult(User user, Result result);
 	
+	void removeAllSelections(User user);
+	
 	User getAndCheck(Integer idUser) throws NotFoundException;
 	User getAndCheckBelongCourse(Course course, Integer idUser) throws NotFoundException;
 	

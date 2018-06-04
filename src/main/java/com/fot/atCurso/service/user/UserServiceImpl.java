@@ -19,6 +19,7 @@ import com.fot.atCurso.model.Course;
 import com.fot.atCurso.service.AbstractServiceImpl;
 import com.fot.atCurso.service.course.CourseService;
 import com.fot.atCurso.service.result.ResultService;
+import com.fot.atCurso.service.selection.SelectionService;
 
 @Service
 public class UserServiceImpl extends AbstractServiceImpl<User, UserDAO> implements UserService {
@@ -31,6 +32,9 @@ public class UserServiceImpl extends AbstractServiceImpl<User, UserDAO> implemen
 	
 	@Autowired
 	CourseService courseService;
+	
+	@Autowired
+	SelectionService selectionService;
 
 	@Override
 	public boolean isEqual(User u1, User u2) {
@@ -62,6 +66,11 @@ public class UserServiceImpl extends AbstractServiceImpl<User, UserDAO> implemen
 	public void removeResult(User user, Result result) {
 		user.getResult().remove(result);
 		userDAO.save(user);
+	}
+	
+	@Override
+	public void removeAllSelections(User user) {
+		selectionService.deleteByUser(user);
 	}
 	
 	@Override
