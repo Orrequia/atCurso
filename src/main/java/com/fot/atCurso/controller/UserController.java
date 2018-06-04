@@ -18,6 +18,7 @@ import org.springframework.web.bind.annotation.RestController;
 import com.fot.atCurso.component.mapper.user.UserMapper;
 import com.fot.atCurso.dto.user.UserDTO;
 import com.fot.atCurso.dto.user.UserPostDTO;
+import com.fot.atCurso.exception.ConstraintBreakException;
 import com.fot.atCurso.exception.IdValueCannotBeReceivedException;
 import com.fot.atCurso.exception.NotFoundException;
 import com.fot.atCurso.exception.UnequalObjectsException;
@@ -49,19 +50,21 @@ public class UserController {
 	}
 	
 	@PostMapping
-	public UserDTO create(@RequestBody UserPostDTO dto) throws IdValueCannotBeReceivedException, ConstraintViolationException, NotFoundException {
+	public UserDTO create(@RequestBody UserPostDTO dto) throws IdValueCannotBeReceivedException, ConstraintViolationException, NotFoundException, ConstraintBreakException {
 		if(dto.getIdUser() != null) 
 			throw new IdValueCannotBeReceivedException("El idUser no se puede recibir en el body");
 		final User user = userMapper.dtoToModel(dto);
+		userService.checkValues(user);
 		final User createUser = userService.create(user);
 		return userMapper.modelToDto(createUser);
 	}
 	
 	@PutMapping("/{idUser}")
-	public void update(@PathVariable("idUser") Integer id, @RequestBody UserPostDTO dto) throws IdValueCannotBeReceivedException, NotFoundException {
+	public void update(@PathVariable("idUser") Integer id, @RequestBody UserPostDTO dto) throws IdValueCannotBeReceivedException, NotFoundException, ConstraintBreakException {
 		if(dto.getIdUser() != null) 
 			throw new IdValueCannotBeReceivedException("El idUser no se puede recibir en el body");
 		final User user = userService.getAndCheck(id);
+		userService.checkValues(user);
 		userService.setValues(user, userMapper.dtoToModel(dto));
 		userService.update(user);
 	}

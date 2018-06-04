@@ -2,6 +2,7 @@ package com.fot.atCurso.service.user;
 
 import java.util.List;
 import java.util.Optional;
+import java.util.regex.Pattern;
 
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.data.domain.PageRequest;
@@ -9,6 +10,7 @@ import org.springframework.data.domain.Pageable;
 import org.springframework.stereotype.Service;
 
 import com.fot.atCurso.dao.UserDAO;
+import com.fot.atCurso.exception.ConstraintBreakException;
 import com.fot.atCurso.exception.NotFoundException;
 import com.fot.atCurso.model.Result;
 import com.fot.atCurso.model.User;
@@ -87,4 +89,12 @@ public class UserServiceImpl extends AbstractServiceImpl<User, UserDAO> implemen
 		user.orElseThrow(() -> new NotFoundException("Este usuario no pertenece a este curso"));
 		return user.get();
 	}
+	
+	@Override
+	public void checkValues(User user) throws ConstraintBreakException {
+		String pattern = "[^@]+@[^@]+\\.[a-zA-Z]{2,}";
+		if(!Pattern.matches(pattern, user.getEmail()))
+			throw new ConstraintBreakException("El correo tiene un formato incorrecto");
+	}
+	
 }

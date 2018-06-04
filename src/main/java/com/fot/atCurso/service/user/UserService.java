@@ -5,6 +5,7 @@ import java.util.Optional;
 
 import org.springframework.data.domain.Pageable;
 
+import com.fot.atCurso.exception.ConstraintBreakException;
 import com.fot.atCurso.exception.NotFoundException;
 import com.fot.atCurso.model.Course;
 import com.fot.atCurso.model.Result;
@@ -27,4 +28,6 @@ public interface UserService extends AbstractService<User, Integer> {
 	
 	User getAndCheck(Integer idUser) throws NotFoundException;
 	User getAndCheckBelongCourse(Course course, Integer idUser) throws NotFoundException;
+	
+	void checkValues(User user) throws ConstraintBreakException;
 }
