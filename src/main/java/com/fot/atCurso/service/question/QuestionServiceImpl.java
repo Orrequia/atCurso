@@ -6,6 +6,7 @@ import java.util.List;
 import java.util.Optional;
 
 import org.apache.commons.collections.CollectionUtils;
+import org.apache.commons.lang3.StringUtils;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.data.domain.Pageable;
 import org.springframework.stereotype.Service;
@@ -65,7 +66,7 @@ public class QuestionServiceImpl extends AbstractServiceImpl<Question, QuestionD
 	
 	@Override
 	public boolean isEqual(Question q1, Question q2) {
-		return q1.getName().equals(q2.getName()) &&
+		return StringUtils.equals(q1.getName(), q2.getName()) &&
 				q1.getTag().equals(q2.getTag()) &&
 				q1.getDifficulty().equals(q2.getDifficulty()) &&
 				CollectionUtils.isEqualCollection(getStringsAnswer(q1.getAnswer()),

@@ -2,6 +2,7 @@ package com.fot.atCurso.service.tag;
 
 import java.util.Optional;
 
+import org.apache.commons.lang3.StringUtils;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
@@ -18,7 +19,7 @@ public class TagServiceImpl extends AbstractServiceImpl<Tag, TagDAO> implements 
 	
 	@Override
 	public boolean isEqual(Tag t1, Tag t2) {
-		return t1.getName().equals(t2.getName());
+		return StringUtils.equals(t1.getName(), t2.getName());
 	}
 	
 	@Override

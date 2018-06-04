@@ -2,6 +2,7 @@ package com.fot.atCurso.service.difficulty;
 
 import java.util.Optional;
 
+import org.apache.commons.lang3.StringUtils;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
@@ -18,7 +19,7 @@ public class DifficultyServiceImpl extends AbstractServiceImpl<Difficulty, Diffi
 	
 	@Override
 	public boolean isEqual(Difficulty u1, Difficulty u2) {
-		return u1.getName().equals( u2.getName());
+		return StringUtils.equals(u1.getName(), u2.getName());
 	}
 	
 	@Override

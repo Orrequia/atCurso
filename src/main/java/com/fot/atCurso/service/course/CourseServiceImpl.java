@@ -3,6 +3,7 @@ package com.fot.atCurso.service.course;
 import java.util.List;
 import java.util.Optional;
 
+import org.apache.commons.lang3.StringUtils;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.data.domain.Pageable;
 import org.springframework.stereotype.Service;
@@ -46,7 +47,7 @@ public class CourseServiceImpl extends AbstractServiceImpl<Course, CourseDAO> im
 	
 	@Override
 	public boolean isEqual(Course c1, Course c2) {
-		return c1.getName().equals( c2.getName()) &&
+		return StringUtils.equals(c1.getName(), c2.getName()) &&
 				operationDates.compare(c1.getStart_date(), c2.getStart_date()) &&
 				operationDates.compare(c1.getEnding_date(), c2.getEnding_date()) &&
 				c1.getUser().equals(c2.getUser()) &&

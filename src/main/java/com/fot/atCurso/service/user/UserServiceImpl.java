@@ -4,6 +4,7 @@ import java.util.List;
 import java.util.Optional;
 import java.util.regex.Pattern;
 
+import org.apache.commons.lang3.StringUtils;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.data.domain.PageRequest;
 import org.springframework.data.domain.Pageable;
@@ -33,8 +34,8 @@ public class UserServiceImpl extends AbstractServiceImpl<User, UserDAO> implemen
 
 	@Override
 	public boolean isEqual(User u1, User u2) {
-		return u1.getName().equals( u2.getName()) &&
-				u1.getEmail().equals(u2.getEmail()) &&
+		return StringUtils.equals(u1.getName(), u2.getName()) &&
+				StringUtils.equals(u1.getEmail(), u2.getEmail()) &&
 				u1.getResult().equals(u2.getResult());
 	}
 	
