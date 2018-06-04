@@ -74,6 +74,7 @@ public class UserController {
 		final User user = userService.getAndCheck(id);
 		if(!userService.isEqual(userMapper.dtoToModel(dto), user)) 
 			throw new UnequalObjectsException("El usuario recibido no coincide con el almacenado");
+		userService.removeAllSelections(user);
 		userService.delete(user);
 	}
 }
