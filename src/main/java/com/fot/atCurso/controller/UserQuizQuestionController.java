@@ -10,7 +10,7 @@ import org.springframework.web.bind.annotation.RestController;
 
 import com.fot.atCurso.component.mapper.question.QuestionMapper;
 import com.fot.atCurso.dto.question.QuestionDTO;
-import com.fot.atCurso.exception.CannotGetNewQuestionWithAnswerBeforeException;
+import com.fot.atCurso.exception.RequirementsNotMetException;
 import com.fot.atCurso.exception.AlreadyDoneException;
 import com.fot.atCurso.exception.NotFoundException;
 import com.fot.atCurso.exception.IncorrectParametersException;
@@ -28,7 +28,7 @@ public class UserQuizQuestionController {
 	
 	@GetMapping
 	public List<QuestionDTO> getQuestions(@PathVariable("idUser") Integer idUser, 
-			@PathVariable("idQuiz") Integer idQuiz) throws IncorrectParametersException, NotFoundException, CannotGetNewQuestionWithAnswerBeforeException, AlreadyDoneException {
+			@PathVariable("idQuiz") Integer idQuiz) throws IncorrectParametersException, NotFoundException, RequirementsNotMetException, AlreadyDoneException {
 		return questionMapper.modelToDto(questionService.getAndCheckQuestions(idUser, idQuiz));
 	}
 }

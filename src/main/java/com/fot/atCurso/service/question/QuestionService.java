@@ -4,7 +4,7 @@ import java.util.List;
 
 import org.springframework.data.domain.Pageable;
 
-import com.fot.atCurso.exception.CannotGetNewQuestionWithAnswerBeforeException;
+import com.fot.atCurso.exception.RequirementsNotMetException;
 import com.fot.atCurso.exception.AlreadyDoneException;
 import com.fot.atCurso.exception.ConstraintBreakException;
 import com.fot.atCurso.exception.NotFoundException;
@@ -29,5 +29,5 @@ public interface QuestionService  extends AbstractService<Question, Integer> {
 	
 	void checkConditionsUserAndQuiz(Integer idUser, Integer idQuiz) throws NotFoundException;
 	
-	List<Question> getAndCheckQuestions(Integer idUser, Integer idQuiz) throws NotFoundException, CannotGetNewQuestionWithAnswerBeforeException, AlreadyDoneException;
+	List<Question> getAndCheckQuestions(Integer idUser, Integer idQuiz) throws NotFoundException, RequirementsNotMetException, AlreadyDoneException;
 }

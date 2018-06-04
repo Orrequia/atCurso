@@ -13,7 +13,7 @@ import com.fot.atCurso.exception.ExceededTimeException;
 import com.fot.atCurso.exception.IdValueCannotBeReceivedException;
 import com.fot.atCurso.exception.NotFoundException;
 import com.fot.atCurso.exception.UnequalObjectsException;
-import com.fot.atCurso.exception.CannotGetNewQuestionWithAnswerBeforeException;
+import com.fot.atCurso.exception.RequirementsNotMetException;
 import com.fot.atCurso.exception.AlreadyDoneException;
 import com.fot.atCurso.exception.IncorrectParametersException;
 
@@ -51,9 +51,9 @@ public class ExceptionController {
 	}
 	
 	@ResponseBody
-	@ExceptionHandler(CannotGetNewQuestionWithAnswerBeforeException.class)
+	@ExceptionHandler(RequirementsNotMetException.class)
 	@ResponseStatus(HttpStatus.PRECONDITION_FAILED)
-	public ApiErrorDTO error(CannotGetNewQuestionWithAnswerBeforeException e) {
+	public ApiErrorDTO error(RequirementsNotMetException e) {
 		return new ApiErrorDTO(412, e.getMessage());
 	}
 	

@@ -12,7 +12,7 @@ import org.springframework.stereotype.Service;
 
 import com.fot.atCurso.dao.QuestionDAO;
 import com.fot.atCurso.enums.ModalityEnum;
-import com.fot.atCurso.exception.CannotGetNewQuestionWithAnswerBeforeException;
+import com.fot.atCurso.exception.RequirementsNotMetException;
 import com.fot.atCurso.exception.AlreadyDoneException;
 import com.fot.atCurso.exception.ConstraintBreakException;
 import com.fot.atCurso.exception.NotFoundException;
@@ -120,7 +120,7 @@ public class QuestionServiceImpl extends AbstractServiceImpl<Question, QuestionD
 	}
 	
 	@Override
-	public List<Question> getAndCheckQuestions(Integer idUser, Integer idQuiz) throws NotFoundException, CannotGetNewQuestionWithAnswerBeforeException, AlreadyDoneException {
+	public List<Question> getAndCheckQuestions(Integer idUser, Integer idQuiz) throws NotFoundException, RequirementsNotMetException, AlreadyDoneException {
 		checkConditionsUserAndQuiz(idUser, idQuiz);
 		Quiz quiz = quizService.getAndCheck(idQuiz);
 		User user = userService.getAndCheck(idUser);
@@ -149,7 +149,7 @@ public class QuestionServiceImpl extends AbstractServiceImpl<Question, QuestionD
 		return questions;
 	}
 
-	private Question getOneQuestion(User user, Quiz quiz) throws CannotGetNewQuestionWithAnswerBeforeException, AlreadyDoneException {
+	private Question getOneQuestion(User user, Quiz quiz) throws RequirementsNotMetException, AlreadyDoneException {
 		List<Question> questions = quiz.getQuestion();
 		Collections.shuffle(questions);
 		if(selectionService.isFirstTime(user, quiz)) {
@@ -159,7 +159,7 @@ public class QuestionServiceImpl extends AbstractServiceImpl<Question, QuestionD
 		else {
 			List<Selection> selections = selectionService.findByUserAndQuiz(user, quiz);
 			if(selections.get(0).getRespondedDate() == null)
-				throw new CannotGetNewQuestionWithAnswerBeforeException("No puedes obtener una nueva pregunta si no has respondido la anterior");
+				throw new RequirementsNotMetException("No puedes obtener una nueva pregunta si no has respondido la anterior");
 			if(selectionService.allQuestionsBeenAnswered(user, quiz)) 
 				throw new AlreadyDoneException("Ya has realizado este cuestionario, revisa tu expediente");
 			return getOtherQuestion(user, quiz, selections);
