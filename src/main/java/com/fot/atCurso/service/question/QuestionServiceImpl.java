@@ -145,7 +145,7 @@ public class QuestionServiceImpl extends AbstractServiceImpl<Question, QuestionD
 		List<Question> questions = quiz.getQuestion();
 		if(selectionService.isFirstTime(user, quiz))
 			selectionService.create(user, quiz, questions);
-		else throw new AlreadyDoneException("Ya has iniciado el cuestionario, respondelas por favor");
+		else throw new AlreadyDoneException("Ya has iniciado el cuestionario, respondelas las preguntas o revisa tu expediente");
 		Collections.shuffle(questions);
 		return questions;
 	}
@@ -173,7 +173,7 @@ public class QuestionServiceImpl extends AbstractServiceImpl<Question, QuestionD
 			int i = 0;
 			boolean found = false;
 			while(!found && i < selections.size()) {
-				if(q.getName() == selections.get(i).getQuestion()) found = true;
+				if(StringUtils.equals(q.getName(), selections.get(i).getQuestion())) found = true;
 				i++;
 			}
 			if(!found) {
