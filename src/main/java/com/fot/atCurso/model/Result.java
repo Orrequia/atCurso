@@ -1,5 +1,6 @@
 package com.fot.atCurso.model;
 
+import javax.persistence.Column;
 import javax.persistence.Entity;
 import javax.persistence.FetchType;
 import javax.persistence.Id;
@@ -30,6 +31,7 @@ public class Result {
 	@Temporal(TemporalType.TIMESTAMP)
 	private Date date;
 	
+	@Column(nullable=false)
 	private Float score;
 	
 	@JoinColumn(name = FIELD_IDQUIZ, nullable=false)
