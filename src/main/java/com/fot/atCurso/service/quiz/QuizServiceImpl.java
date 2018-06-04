@@ -4,6 +4,7 @@ import java.util.Collections;
 import java.util.List;
 import java.util.Optional;
 
+import org.apache.commons.lang3.StringUtils;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.data.domain.PageRequest;
 import org.springframework.data.domain.Pageable;
@@ -38,7 +39,7 @@ public class QuizServiceImpl extends AbstractServiceImpl<Quiz, QuizDAO> implemen
 	
 	@Override
 	public boolean isEqual(Quiz q1, Quiz q2) {
-		return q1.getName().equals(q2.getName()) &&
+		return StringUtils.equals(q1.getName(), q2.getName()) &&
 				q1.getModality() == q2.getModality() &&
 				q1.getQuestion().equals(q2.getQuestion()) &&
 				q1.getTag().equals(q2.getTag());
@@ -92,7 +93,6 @@ public class QuizServiceImpl extends AbstractServiceImpl<Quiz, QuizDAO> implemen
 		if(!isEqual(bodyQuiz, quiz))
 			throw new UnequalObjectsException("El cuestionario recibido no coincide con el almacenado");
 		courseService.removeQuiz(course, quiz);
-		quizDAO.delete(quiz);
 	}
 	
 	@Override
