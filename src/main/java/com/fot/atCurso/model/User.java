@@ -1,17 +1,8 @@
 package com.fot.atCurso.model;
 
-import javax.persistence.Entity;
-import javax.persistence.FetchType;
-import javax.persistence.Id;
-import javax.persistence.JoinColumn;
-import javax.persistence.OneToMany;
-import javax.persistence.GeneratedValue;
-import javax.persistence.GenerationType;
+import javax.persistence.*;
 
 import java.util.List;
-
-import javax.persistence.CascadeType;
-import javax.persistence.Column;
 
 import lombok.Getter;
 import lombok.Setter;
@@ -19,9 +10,11 @@ import lombok.Setter;
 @Getter
 @Setter
 @Entity
+@Table(name = "t_user")
 public class User {
 
 	public static final String FIELD_IDUSER = "idUser";
+	public static final String FIELD_IDROLE = "idRole";
 	
 	@Id
 	@GeneratedValue(strategy=GenerationType.IDENTITY)
@@ -37,6 +30,10 @@ public class User {
 	
 	@OneToMany(fetch = FetchType.LAZY, cascade=CascadeType.REMOVE)
 	@JoinColumn(name=FIELD_IDUSER, referencedColumnName=FIELD_IDUSER)
-	private List<Result> result;	
+	private List<Result> result;
+
+	@JoinColumn(name = FIELD_IDROLE, nullable=false)
+	@ManyToOne(fetch = FetchType.LAZY)
+	private Role role;
 }
 

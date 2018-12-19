@@ -5,6 +5,7 @@ import java.util.List;
 import org.hibernate.exception.ConstraintViolationException;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.data.domain.PageRequest;
+import org.springframework.security.access.prepost.PreAuthorize;
 import org.springframework.web.bind.annotation.DeleteMapping;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PathVariable;
@@ -37,6 +38,7 @@ public class UserController {
 	UserMapper userMapper;
 	
 	@GetMapping
+	@PreAuthorize("hasAuthority('GET_USER')")
 	public List<UserDTO> findAll(@RequestParam(defaultValue = "0", required= false ) Integer page, 
 							 @RequestParam(defaultValue = "10", required= false ) Integer size) throws IncorrectParametersException {
 		final List<User> users = userService.findAll(PageRequest.of(page, size));
@@ -44,12 +46,14 @@ public class UserController {
 	}
 	
 	@GetMapping("/{idUser}")
+	@PreAuthorize("hasAuthority('GET_USER')")
 	public UserDTO findById(@PathVariable("idUser") Integer id) throws NotFoundException {
 		final User user = userService.getAndCheck(id);
 		return userMapper.modelToDto(user);
 	}
 	
 	@PostMapping
+	@PreAuthorize("hasAuthority('POST_USER')")
 	public UserDTO create(@RequestBody UserPostDTO dto) throws IdValueCannotBeReceivedException, ConstraintViolationException, NotFoundException, ConstraintBreakException {
 		if(dto.getIdUser() != null) 
 			throw new IdValueCannotBeReceivedException("El idUser no se puede recibir en el body");
@@ -60,6 +64,7 @@ public class UserController {
 	}
 	
 	@PutMapping("/{idUser}")
+	@PreAuthorize("hasAuthority('PUT_USER')")
 	public void update(@PathVariable("idUser") Integer id, @RequestBody UserPostDTO dto) throws IdValueCannotBeReceivedException, NotFoundException, ConstraintBreakException {
 		if(dto.getIdUser() != null) 
 			throw new IdValueCannotBeReceivedException("El idUser no se puede recibir en el body");
@@ -70,6 +75,7 @@ public class UserController {
 	}
 	
 	@DeleteMapping("/{idUser}")
+	@PreAuthorize("hasAuthority('DELETE_USER')")
 	public void delete(@PathVariable("idUser") Integer id, @RequestBody UserDTO dto) throws NotFoundException, UnequalObjectsException {
 		final User user = userService.getAndCheck(id);
 		if(!userService.isEqual(userMapper.dtoToModel(dto), user)) 

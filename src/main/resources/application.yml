@@ -1,12 +1,31 @@
+server:
+  port: 8082
 spring:
   datasource:
-    url: jdbc:mysql://localhost:3306/atCurso?useSSL=false
-    username: root
-    password: 
+    url: jdbc:postgresql://localhost:5433/atcurso
+    username: postgres
+    password: 0rr3qu14
   jpa:
     show-sql: true
     hibernate:
       ddl-auto: update
+    database-platform: org.hibernate.dialect.PostgreSQL9Dialect
     properties:
       hibernate:
-        dialect: org.hibernate.dialect.MySQL5Dialect
+        temp:
+          use_jdbc_metadata_defaults: false
+
+security:
+  oauth2:
+    resource:
+      jwt:
+        key-value: |
+          -----BEGIN PUBLIC KEY-----
+          MIIBIjANBgkqhkiG9w0BAQEFAAOCAQ8AMIIBCgKCAQEAvMp0+1tSavu02TbPd5xl
+          yHECw1MaWAPxITmm96CK7IVwB1YJ3sufurhqhqMICub5k4ZN2qSHLkmoz2pAUxkx
+          ltjUXJmWXx4Gd8i3SwGOrDBbJYUBvh7qy1XQRecCd37mpfZF2QcVTwVm1WZHr8YB
+          rTS/oyHw4i6k8Png9pvXl+8h9eNSfRrzyp2b+cATd9QlTFCcmU0Cf8wYaWGsnCCr
+          6YdRV2GLiwDL2UogycjEDZKaljsTL6o6ocZEiAWLK3FV8OZ0qllxltVmIggg3rDJ
+          194UOzQ7V4jUS39xvNT9+G6qs8BL7J6FTPM1t6qIqFzNSOTXI2/kKGW0OlMHifY9
+          GwIDAQAB
+          -----END PUBLIC KEY-----
