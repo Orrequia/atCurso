@@ -8,7 +8,7 @@ import javax.persistence.*;
 @Getter
 @Setter
 @Entity
-class Permission {
+public class Permission {
 
     @Id
     @GeneratedValue(strategy= GenerationType.IDENTITY)

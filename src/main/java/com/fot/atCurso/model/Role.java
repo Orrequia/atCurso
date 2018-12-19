@@ -9,7 +9,7 @@ import java.util.List;
 @Getter
 @Setter
 @Entity
-class Role {
+public class Role {
 
     public static final String FIELD_IDPERMISSION = "idPermission";
     public static final String FIELD_IDROLE = "idRole";
