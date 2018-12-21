@@ -1,6 +1,7 @@
 package com.fot.atCurso.component.converter;
 
 import lombok.extern.slf4j.Slf4j;
+import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.autoconfigure.security.oauth2.resource.JwtAccessTokenConverterConfigurer;
 import org.springframework.security.core.Authentication;
 import org.springframework.security.core.GrantedAuthority;
@@ -20,9 +21,12 @@ import java.util.*;
 @Slf4j
 public class CustomAccessTokenConverter implements AccessTokenConverter, JwtAccessTokenConverterConfigurer {
 
-    private boolean includeGrantType;
+    private final UserAuthenticationConverter userAuthenticationConverter;
 
-    private UserAuthenticationConverter userTokenConverter = new CustomUserAuthenticationConverter();
+    @Autowired
+    public CustomAccessTokenConverter(UserAuthenticationConverter userAuthenticationConverter) {
+        this.userAuthenticationConverter = userAuthenticationConverter;
+    }
 
     @Override
     public void configure(JwtAccessTokenConverter converter) {
@@ -59,17 +63,17 @@ public class CustomAccessTokenConverter implements AccessTokenConverter, JwtAcce
     @Override
     public OAuth2Authentication extractAuthentication(Map<String, ?> map) {
         Set<String> scope = extractScope(map);
-        Map<String, String> parameters = new HashMap<String, String>();
-        Authentication user = userTokenConverter.extractAuthentication(map);
+        Map<String, String> parameters = new HashMap<>();
+        Authentication user = userAuthenticationConverter.extractAuthentication(map);
 
         String clientId = (String) map.get(CLIENT_ID);
         parameters.put(CLIENT_ID, clientId);
 
-        if (includeGrantType && map.containsKey(GRANT_TYPE))
+        if (map.containsKey(GRANT_TYPE))
             parameters.put(GRANT_TYPE, (String) map.get(GRANT_TYPE));
 
         Set<String> resourceIds = new LinkedHashSet<>(
-                map.containsKey(AUD) ? getAudience(map) : Collections.<String>emptySet());
+                map.containsKey(AUD) ? getAudience(map) : Collections.emptySet());
 
         Collection<? extends GrantedAuthority> authorities = null;
 
@@ -87,11 +91,11 @@ public class CustomAccessTokenConverter implements AccessTokenConverter, JwtAcce
 
     @Override
     public Map<String, ?> convertAccessToken(OAuth2AccessToken token, OAuth2Authentication authentication) {
-        Map<String, Object> response = new HashMap<String, Object>();
+        Map<String, Object> response = new HashMap<>();
         OAuth2Request clientToken = authentication.getOAuth2Request();
 
         if (!authentication.isClientOnly())
-            response.putAll(userTokenConverter.convertUserAuthentication(authentication.getUserAuthentication()));
+            response.putAll(userAuthenticationConverter.convertUserAuthentication(authentication.getUserAuthentication()));
         else if (clientToken.getAuthorities() != null && !clientToken.getAuthorities().isEmpty())
             response.put(UserAuthenticationConverter.AUTHORITIES,
                     AuthorityUtils.authorityListToSet(clientToken.getAuthorities()));
@@ -105,7 +109,7 @@ public class CustomAccessTokenConverter implements AccessTokenConverter, JwtAcce
         if (token.getExpiration() != null)
             response.put(EXP, token.getExpiration().getTime() / 1000);
 
-        if (includeGrantType && authentication.getOAuth2Request().getGrantType() != null)
+        if (authentication.getOAuth2Request().getGrantType() != null)
             response.put(GRANT_TYPE, authentication.getOAuth2Request().getGrantType());
 
         response.putAll(token.getAdditionalInformation());
@@ -117,15 +121,15 @@ public class CustomAccessTokenConverter implements AccessTokenConverter, JwtAcce
         return response;
     }
     private Collection<String> getAudience(Map<String, ?> map) {
-        Object auds = map.get(AUD);
+        Object audiences = map.get(AUD);
 
-        if (auds instanceof Collection) {
+        if (audiences instanceof Collection) {
             @SuppressWarnings("unchecked")
-            Collection<String> result = (Collection<String>) auds;
+            Collection<String> result = (Collection<String>) audiences;
             return result;
         }
 
-        return Collections.singleton((String) auds);
+        return Collections.singleton((String) audiences);
     }
 
     private Set<String> extractScope(Map<String, ?> map) {
@@ -134,8 +138,8 @@ public class CustomAccessTokenConverter implements AccessTokenConverter, JwtAcce
         if (map.containsKey(SCOPE)) {
             Object scopeObj = map.get(SCOPE);
 
-            if (String.class.isInstance(scopeObj))
-                scope = new LinkedHashSet<>(Arrays.asList(String.class.cast(scopeObj).split(" ")));
+            if (scopeObj instanceof String)
+                scope = new LinkedHashSet<>(Arrays.asList(((String)scopeObj).split(" ")));
             else if (Collection.class.isAssignableFrom(scopeObj.getClass())) {
                 @SuppressWarnings("unchecked")
                 Collection<String> scopeColl = (Collection<String>) scopeObj;
@@ -144,13 +148,4 @@ public class CustomAccessTokenConverter implements AccessTokenConverter, JwtAcce
         }
         return scope;
     }
-
-    public void setUserTokenConverter(UserAuthenticationConverter userTokenConverter) {
-        this.userTokenConverter = userTokenConverter;
-    }
-
-    public void setIncludeGrantType(boolean includeGrantType) {
-        this.includeGrantType = includeGrantType;
-    }
-
 }

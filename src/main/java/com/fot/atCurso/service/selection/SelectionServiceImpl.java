@@ -27,15 +27,21 @@ public class SelectionServiceImpl extends AbstractServiceImpl<Selection, Selecti
 	
 	private static final Long possibleDelay = 1000L; 
 	
+	private final SelectionDAO selectionDAO;
+	private AnswerService answerService;
+	private final OperationDates opDates;
+
 	@Autowired
-	SelectionDAO selectionDAO;
-	
+	public SelectionServiceImpl(SelectionDAO selectionDAO, OperationDates opDates) {
+		this.selectionDAO = selectionDAO;
+		this.opDates = opDates;
+	}
+
 	@Autowired
-	AnswerService answerService;
-	
-	@Autowired
-	OperationDates opDates;
-	
+	public void setService(AnswerService answerService) {
+		this.answerService = answerService;
+	}
+
 	@Override
 	public boolean isFirstTime(User user, Quiz quiz) {
 		return selectionDAO.findByUserAndQuizOrderByAskedDateDesc(user, quiz).size() == 0;
@@ -61,7 +67,7 @@ public class SelectionServiceImpl extends AbstractServiceImpl<Selection, Selecti
 	@Override
 	public List<Selection> create(User user, Quiz quiz, List<Question> questions) {
 		Date askedDate = new Date();
-		List<Selection> selections = new ArrayList<Selection>();
+		List<Selection> selections = new ArrayList<>();
 		for(Question q : questions) {
 			Selection selection = new Selection();
 			selection.setUser(user);
@@ -78,9 +84,9 @@ public class SelectionServiceImpl extends AbstractServiceImpl<Selection, Selecti
 	public void answerTheQuestion(User user, Quiz quiz, Question question, Answer answer) throws ExceededTimeException, AlreadyDoneException, NotFoundException {
 		Selection selection = getAndCheck(user, quiz, question.getName());
 		if(selection.getRespondedDate() == null) {
-			Date resedDate = new Date();
-			selection.setRespondedDate(resedDate);
-			if(opDates.difference(selection.getAskedDate(), resedDate) <= quiz.getDeliveryTime().getTime() + possibleDelay)
+			Date date = new Date();
+			selection.setRespondedDate(date);
+			if(opDates.difference(selection.getAskedDate(), date) <= quiz.getDeliveryTime().getTime() + possibleDelay)
 				completeQuestion(selection, question, answer);
 			else helplessQuestion(selection);
 		}

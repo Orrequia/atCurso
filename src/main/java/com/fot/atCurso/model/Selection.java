@@ -21,18 +21,18 @@ import lombok.Setter;
 @Entity
 public class Selection {
 	
-	public static final String FIELD_IDUSER = "idUser";
-	public static final String FIELD_IDQUIZ = "idQuiz";
+	public static final String FIELD_ID_USER = "idUser";
+	public static final String FIELD_ID_QUIZ = "idQuiz";
 
 	@Id
 	@GeneratedValue(strategy=GenerationType.IDENTITY)
 	private Integer idSelection;
 	
-	@JoinColumn(name = FIELD_IDUSER, nullable=false)
+	@JoinColumn(name = FIELD_ID_USER, nullable=false)
 	@ManyToOne(fetch = FetchType.LAZY)
 	private User user;
 	
-	@JoinColumn(name = FIELD_IDQUIZ, nullable=false)
+	@JoinColumn(name = FIELD_ID_QUIZ, nullable=false)
 	@ManyToOne(fetch = FetchType.LAZY)
 	private Quiz quiz;
 	

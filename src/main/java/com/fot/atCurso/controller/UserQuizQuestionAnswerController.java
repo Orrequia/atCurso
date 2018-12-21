@@ -18,13 +18,16 @@ import com.fot.atCurso.service.answer.AnswerService;
 @RequestMapping(value= "/user/{idUser}/quiz/{idQuiz}/question/{idQuestion}")
 public class UserQuizQuestionAnswerController {
 
-	@Autowired
-	AnswerService answerService;
-	
-	@Autowired
-	AnswerMapper answerMapper;
-	
-	@PostMapping
+	private final AnswerService answerService;
+	private final AnswerMapper answerMapper;
+
+    @Autowired
+    public UserQuizQuestionAnswerController(AnswerService answerService, AnswerMapper answerMapper) {
+        this.answerService = answerService;
+        this.answerMapper = answerMapper;
+    }
+
+    @PostMapping
 	public AnswerDTO respond(@RequestBody AnswerDTO dto,
 			@PathVariable("idUser") Integer idUser,
 			@PathVariable("idQuiz") Integer idQuiz,

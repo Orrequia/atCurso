@@ -21,15 +21,17 @@ import com.fot.atCurso.service.tag.TagService;
 @Component
 public class QuizMapperImpl extends AbstractMapper<Quiz, QuizDTO> implements QuizMapper {
 
+	private final DozerBeanMapper dozer;
+	private final TagService tagService;
+	private final QuestionService questionService;
+
 	@Autowired
-	public DozerBeanMapper dozer;
-	
-	@Autowired
-	TagService tagService;
-	
-	@Autowired
-	QuestionService questionService;
-	
+	public QuizMapperImpl(QuestionService questionService, TagService tagService, DozerBeanMapper dozer) {
+		this.questionService = questionService;
+		this.tagService = tagService;
+		this.dozer = dozer;
+	}
+
 	@Override
 	public Class<? extends QuizDTO> dtoClazz() {
 		return QuizDTO.class;
@@ -56,30 +58,30 @@ public class QuizMapperImpl extends AbstractMapper<Quiz, QuizDTO> implements Qui
 	
 	private List<Tag> integerToTag(List<Integer> tags) throws NotFoundException {
 		if(tags != null) {
-			List<Optional<Tag>> tag = tags.stream().map(iT -> tagService.findById(iT)).collect(Collectors.toList());
+			List<Optional<Tag>> tag = tags.stream().map(tagService::findById).collect(Collectors.toList());
 			for(Optional<Tag> t: tag) 
 				t.orElseThrow(() -> new NotFoundException("Algunos o todos los tags no existen"));
 			return tag.stream().map(Optional::get).collect(Collectors.toList());
 		}
-		return new ArrayList<Tag>();
+		return new ArrayList<>();
 	}
 	
 	private List<Integer> tagToInteger(List<Tag> tag) {
-		return tag.stream().map(m -> m.getIdTag()).collect(Collectors.toList());
+		return tag.stream().map(Tag::getIdTag).collect(Collectors.toList());
 	}
 	
 	private List<Question> integerToQuestion(List<Integer> questions) throws NotFoundException {
 		if(questions != null) {
-			List<Optional<Question>> question = questions.stream().map(iQ -> questionService.findById(iQ)).collect(Collectors.toList());
+			List<Optional<Question>> question = questions.stream().map(questionService::findById).collect(Collectors.toList());
 			for(Optional<Question> q: question)
 				q.orElseThrow(() -> new NotFoundException("Algunas o todas las questions no existen"));
 			return question.stream().map(Optional::get).collect(Collectors.toList());
 		}
-		return new ArrayList<Question>();
+		return new ArrayList<>();
 	}
 	
 	private List<Integer> questionToInteger(List<Question> question) {
-		return question.stream().map(m -> m.getIdQuestion()).collect(Collectors.toList());
+		return question.stream().map(Question::getIdQuestion).collect(Collectors.toList());
 	}
 	
 	private Quiz map(QuizDTO dto, List<Tag> tag, List<Question> question) {

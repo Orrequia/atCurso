@@ -16,7 +16,6 @@ import java.util.List;
 
 @Configuration
 @EnableWebSecurity
-
 public class WebMvcConfiguration implements WebMvcConfigurer {
 
     @Override
@@ -34,7 +33,7 @@ public class WebMvcConfiguration implements WebMvcConfigurer {
 
             @Override
             public Object resolveArgument(MethodParameter parameter, ModelAndViewContainer mavContainer,
-                                          NativeWebRequest webRequest, WebDataBinderFactory binderFactory) throws Exception {
+                                          NativeWebRequest webRequest, WebDataBinderFactory binderFactory) {
                 try {
                     return SecurityContextHolder.getContext().getAuthentication().getPrincipal();
                 } catch (Exception e) {

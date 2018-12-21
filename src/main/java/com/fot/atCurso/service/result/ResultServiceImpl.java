@@ -2,8 +2,10 @@ package com.fot.atCurso.service.result;
 
 import java.util.Date;
 import java.util.List;
+import java.util.Objects;
 import java.util.Optional;
 
+import com.fot.atCurso.service.quiz.QuizService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.data.domain.Pageable;
 import org.springframework.data.domain.PageRequest;
@@ -23,32 +25,40 @@ import com.fot.atCurso.service.user.UserService;
 @Service
 public class ResultServiceImpl extends AbstractServiceImpl<Result, ResultDAO> implements ResultService {
 
+	private final ResultDAO resultDAO;
+	private UserService userService;
+	private CourseService courseService;
+	private OperationDates operationDates;
+
 	@Autowired
-	ResultDAO resultDAO;
-	
+	public ResultServiceImpl(ResultDAO resultDAO, OperationDates operationDates) {
+		this.resultDAO = resultDAO;
+
+		this.operationDates = operationDates;
+	}
+
 	@Autowired
-	UserService userService;
-	
+	public void setService(UserService userService) {
+		this.userService = userService;
+	}
+
 	@Autowired
-	CourseService courseService;
-	
-	@Autowired
-	OperationDates operationDates;
-	
-	@Override 
-	public boolean isEqual(Result r1, Result r2) {
+	public void setService(CourseService courseService) {
+		this.courseService = courseService;
+	}
+
+    private boolean isEqual(Result r1, Result r2) {
 		return operationDates.compare(r1.getDate(), r2.getDate()) &&
 				r1.getScore().equals(r2.getScore()) &&
 				r1.getQuiz().equals(r2.getQuiz());
 	}
-	@Override
-	public void setValues(Result to, Result from) {
+
+    private void setValues(Result to, Result from) {
 		to.setDate(from.getDate());
 		to.setScore(from.getScore());
 		to.setQuiz(from.getQuiz());
 	}
-	
-	@Override
+
 	public Result create(User user, Quiz quiz, Float score) throws NotFoundException {
 		Result result = new Result();
 		result.setQuiz(quiz);
@@ -67,8 +77,7 @@ public class ResultServiceImpl extends AbstractServiceImpl<Result, ResultDAO> im
 	@Override
 	public Result findOneResultByUser(Integer idUser, Integer idResult) throws NotFoundException {
 		final User user = userService.getAndCheck(idUser);
-		final Result result = getAndCheckBelongUser(user, idResult);
-		return result;
+		return getAndCheckBelongUser(user, idResult);
 	}
 	
 	@Override
@@ -108,10 +117,9 @@ public class ResultServiceImpl extends AbstractServiceImpl<Result, ResultDAO> im
 			throw new UnequalObjectsException("El resultado recibido no coincide con el almacenado");
 		userService.removeResult(user, result);
 	}
-	
-	@Override
-	public Result getAndCheckBelongUser(User user, Integer idResult) throws NotFoundException {
-		final Optional<Result> result = user.getResult().stream().filter(r -> r.getIdResult() == idResult).findFirst();
+
+    private Result getAndCheckBelongUser(User user, Integer idResult) throws NotFoundException {
+		final Optional<Result> result = user.getResult().stream().filter(r -> Objects.equals(r.getIdResult(), idResult)).findFirst();
 		result.orElseThrow(() -> new NotFoundException("Este resultado no existe para este usuario"));
 		return result.get();
 	}

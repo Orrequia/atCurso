@@ -22,8 +22,4 @@ public interface ResultService  extends AbstractService<Result, Integer> {
 	Result addToUser(Integer idUser, Result result) throws NotFoundException;
 	void updateToUser(Integer idUser, Integer idResult, Result newResult) throws NotFoundException;
 	void deleteToUser(Integer idUser, Integer idResult, Result bodyResult) throws NotFoundException, UnequalObjectsException;
-	Result getAndCheckBelongUser(User user, Integer idResult) throws NotFoundException;
-	
-	boolean isEqual(Result r1, Result r2);
-	void setValues(Result to, Result from);
 }

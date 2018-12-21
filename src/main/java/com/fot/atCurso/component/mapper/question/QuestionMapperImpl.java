@@ -16,15 +16,17 @@ import com.fot.atCurso.service.tag.TagService;
 @Component
 public class QuestionMapperImpl extends AbstractMapper<Question, QuestionDTO> implements QuestionMapper {
 
+	private final AnswerMapper answerMapper;
+	private final DifficultyService difficultyService;
+	private final TagService tagService;
+
 	@Autowired
-	AnswerMapper answerMapper;
-	
-	@Autowired
-	DifficultyService difficultyService;
-	
-	@Autowired
-	TagService tagService;
-	
+	public QuestionMapperImpl(TagService tagService, DifficultyService difficultyService, AnswerMapper answerMapper) {
+		this.tagService = tagService;
+		this.difficultyService = difficultyService;
+		this.answerMapper = answerMapper;
+	}
+
 	@Override
 	public Class<? extends QuestionDTO> dtoClazz() {
 		return QuestionDTO.class;
@@ -54,13 +56,11 @@ public class QuestionMapperImpl extends AbstractMapper<Question, QuestionDTO> im
 	}
 	
 	@Override
-	public Question dtoToModel(QuestionPostDTO dto) throws NotFoundException {
-		Question question = dozer.map(dto, modelClazz());
-		if(dto.getIdDifficulty() != null) question.setDifficulty(difficultyService.getAndCheck(dto.getIdDifficulty()));
-		if(dto.getIdTag() != null) question.setTag(tagService.getAndCheck(dto.getIdTag()));
-		question.setAnswer(answerMapper.dtoPostToModel(dto.getAnswers()));
+	public Question dtoToModel(QuestionPostDTO dtoPost) throws NotFoundException {
+		Question question = dozer.map(dtoPost, modelClazz());
+		if(dtoPost.getIdDifficulty() != null) question.setDifficulty(difficultyService.getAndCheck(dtoPost.getIdDifficulty()));
+		if(dtoPost.getIdTag() != null) question.setTag(tagService.getAndCheck(dtoPost.getIdTag()));
+		question.setAnswer(answerMapper.dtoPostToModel(dtoPost.getAnswers()));
 		return question;
 	}
-	
-	
 }

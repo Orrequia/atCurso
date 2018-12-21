@@ -13,22 +13,24 @@ import com.fot.atCurso.dto.question.QuestionDTO;
 import com.fot.atCurso.exception.RequirementsNotMetException;
 import com.fot.atCurso.exception.AlreadyDoneException;
 import com.fot.atCurso.exception.NotFoundException;
-import com.fot.atCurso.exception.IncorrectParametersException;
 import com.fot.atCurso.service.question.QuestionService;
 
 @RestController
 @RequestMapping(value= "/user/{idUser}/quiz/{idQuiz}/question")
 public class UserQuizQuestionController {
 
+	private final QuestionService questionService;
+	private final QuestionMapper questionMapper;
+
 	@Autowired
-	QuestionService questionService;
-	
-	@Autowired
-	QuestionMapper questionMapper;
-	
+	public UserQuizQuestionController(QuestionService questionService, QuestionMapper questionMapper) {
+		this.questionService = questionService;
+		this.questionMapper = questionMapper;
+	}
+
 	@GetMapping
 	public List<QuestionDTO> getQuestions(@PathVariable("idUser") Integer idUser, 
-			@PathVariable("idQuiz") Integer idQuiz) throws IncorrectParametersException, NotFoundException, RequirementsNotMetException, AlreadyDoneException {
+			@PathVariable("idQuiz") Integer idQuiz) throws NotFoundException, RequirementsNotMetException, AlreadyDoneException {
 		return questionMapper.modelToDto(questionService.getAndCheckQuestions(idUser, idQuiz));
 	}
 }

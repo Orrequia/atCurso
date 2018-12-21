@@ -15,10 +15,15 @@ import com.fot.atCurso.service.quiz.QuizService;
 @Component
 public class ResultMapperImpl extends AbstractMapper<Result, ResultDTO> implements ResultMapper {
 	
-	@Autowired
-	QuizService quizService;
-	
-	@Override
+	private final
+    QuizService quizService;
+
+    @Autowired
+    public ResultMapperImpl(QuizService quizService) {
+        this.quizService = quizService;
+    }
+
+    @Override
 	public Class<? extends ResultDTO> dtoClazz() {
 		return ResultDTO.class;
 	}

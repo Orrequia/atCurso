@@ -12,7 +12,7 @@ import org.mockito.junit.MockitoJUnitRunner;
 import com.fot.atCurso.dto.user.UserDTO;
 import com.fot.atCurso.exception.NotFoundException;
 import com.fot.atCurso.model.User;
-
+import org.springframework.beans.factory.annotation.Autowired;
 
 
 @RunWith(MockitoJUnitRunner.class)
@@ -21,7 +21,8 @@ public class TestUserMapper {
 	private static final String NAME = "Pepe";
 	
 	@InjectMocks
-	UserMapper mapper = new UserMapperImpl();
+	@Autowired
+    private UserMapper mapper;
 	
 	@Mock
 	DozerBeanMapper dozer;

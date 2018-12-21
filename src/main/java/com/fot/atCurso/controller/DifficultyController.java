@@ -28,17 +28,20 @@ import com.fot.atCurso.service.difficulty.DifficultyService;
 @RequestMapping(value= "/difficulty")
 public class DifficultyController {
 	
-	@Autowired
-	DifficultyService difficultyService;
-	
-	@Autowired
-	DifficultyMapper difficultyMapper;
-	
-	@GetMapping
+	private final DifficultyService difficultyService;
+	private final DifficultyMapper difficultyMapper;
+
+    @Autowired
+    public DifficultyController(DifficultyService difficultyService, DifficultyMapper difficultyMapper) {
+        this.difficultyService = difficultyService;
+		this.difficultyMapper = difficultyMapper;
+    }
+
+    @GetMapping
 	public List<DifficultyDTO> findAll(@RequestParam(defaultValue = "0", required= false ) Integer page, 
 							 @RequestParam(defaultValue = "10", required= false ) Integer size) throws IncorrectParametersException {
-		final List<Difficulty> difficultys = difficultyService.findAll(PageRequest.of(page, size));
-		return difficultyMapper.modelToDto(difficultys);
+		final List<Difficulty> difficulties = difficultyService.findAll(PageRequest.of(page, size));
+		return difficultyMapper.modelToDto(difficulties);
 	}
 	
 	@GetMapping("/{idDifficulty}")

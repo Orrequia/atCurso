@@ -8,7 +8,6 @@ import org.springframework.data.domain.Pageable;
 import com.fot.atCurso.exception.NotFoundException;
 import com.fot.atCurso.model.Course;
 import com.fot.atCurso.model.Quiz;
-import com.fot.atCurso.model.User;
 import com.fot.atCurso.service.AbstractService;
 
 public interface CourseService  extends AbstractService<Course, Integer> {
@@ -20,8 +19,6 @@ public interface CourseService  extends AbstractService<Course, Integer> {
 	void setValues(Course to, Course from);	
 	void addQuiz(Course course, Quiz quiz);
 	void removeQuiz(Course course, Quiz quiz);
-	Optional<User> searchUser(Course course, Integer idUser);
-	Optional<Quiz> searchQuiz(Course course, Integer idQuiz);	
 	
 	Course getAndCheck(Integer idCourse) throws NotFoundException;
 }

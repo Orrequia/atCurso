@@ -11,8 +11,8 @@ import java.util.List;
 @Entity
 public class Role {
 
-    public static final String FIELD_IDPERMISSION = "idPermission";
-    public static final String FIELD_IDROLE = "idRole";
+    public static final String FIELD_ID_PERMISSION = "idPermission";
+    public static final String FIELD_ID_ROLE = "idRole";
 
     @Id
     @GeneratedValue(strategy=GenerationType.IDENTITY)
@@ -24,7 +24,7 @@ public class Role {
     @ManyToMany(fetch = FetchType.LAZY)
     @JoinTable(
             name="role_permission",
-            joinColumns=@JoinColumn(name=FIELD_IDROLE, referencedColumnName=FIELD_IDROLE),
-            inverseJoinColumns=@JoinColumn(name=FIELD_IDPERMISSION, referencedColumnName=FIELD_IDPERMISSION))
+            joinColumns=@JoinColumn(name= FIELD_ID_ROLE, referencedColumnName= FIELD_ID_ROLE),
+            inverseJoinColumns=@JoinColumn(name= FIELD_ID_PERMISSION, referencedColumnName= FIELD_ID_PERMISSION))
     private List<Permission> permission;
 }

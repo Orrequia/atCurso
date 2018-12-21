@@ -25,24 +25,38 @@ import com.fot.atCurso.service.user.UserService;
 @Service
 public class AnswerServiceImpl extends AbstractServiceImpl<Answer, AnswerDAO> implements AnswerService {
 
+	private QuestionService questionService;
+	private ResultService resultService;
+	private UserService userService;
+	private QuizService quizService;
+	private SelectionService selectionService;
+
+
 	@Autowired
-	AnswerDAO answerDAO;
-	
+	public void setService(QuizService quizService) {
+		this.quizService = quizService;
+	}
+
 	@Autowired
-	QuestionService questionService;
-	
+	public void setService(UserService userService) {
+		this.userService = userService;
+	}
+
 	@Autowired
-	ResultService resultService;
-	
+	public void setService(ResultService resultService) {
+		this.resultService = resultService;
+	}
+
 	@Autowired
-	UserService userService;
-	
+	public void setService(QuestionService questionService) {
+		this.questionService = questionService;
+	}
+
 	@Autowired
-	QuizService quizService;
-	
-	@Autowired
-	SelectionService selectionService;
-	
+	public void setService(SelectionService selectionService) {
+		this.selectionService = selectionService;
+	}
+
 	@Override
 	public Answer addAnswerToSelection(Integer idUser, Integer idQuiz, Integer idQuestion, Answer answer) throws NotFoundException, ExceededTimeException, AlreadyDoneException {
 		questionService.checkConditionsUserAndQuiz(idUser, idQuiz);
@@ -67,9 +81,9 @@ public class AnswerServiceImpl extends AbstractServiceImpl<Answer, AnswerDAO> im
 		return question.getAnswer().stream().filter(a -> a.getCorrect() != null && a.getCorrect()).collect(Collectors.toList()).get(0);
 	}
 	
-	private void calculateResult(User user, Quiz quiz, List<Selection> selecs) throws NotFoundException {
-		Integer numQuestion = selecs.size();
-		Integer corQuestion = selecs.stream().filter(s -> s.getWasCorrect() != null && s.getWasCorrect()).collect(Collectors.toList()).size();
+	private void calculateResult(User user, Quiz quiz, List<Selection> selects) throws NotFoundException {
+		int numQuestion = selects.size();
+		int corQuestion = selects.stream().filter(s -> s.getWasCorrect() != null && s.getWasCorrect()).collect(Collectors.toList()).size();
 		resultService.create(user, quiz, ((float)corQuestion/numQuestion)*10);
 	}
 }

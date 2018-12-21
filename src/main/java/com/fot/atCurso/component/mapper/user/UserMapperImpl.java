@@ -14,17 +14,17 @@ import com.fot.atCurso.exception.NotFoundException;
 import com.fot.atCurso.model.Result;
 import com.fot.atCurso.model.User;
 import com.fot.atCurso.service.result.ResultService;
-import com.fot.atCurso.service.user.UserService;
 
 @Component
 public class UserMapperImpl extends AbstractMapper<User, UserDTO> implements UserMapper{
 
+	private final ResultService resultService;
+
 	@Autowired
-	ResultService resultService;
-	
-	@Autowired
-	UserService userService;
-	
+	public UserMapperImpl(ResultService resultService) {
+		this.resultService = resultService;
+	}
+
 	@Override
 	public Class<? extends UserDTO> dtoClazz() {
 		return UserDTO.class;
@@ -49,16 +49,16 @@ public class UserMapperImpl extends AbstractMapper<User, UserDTO> implements Use
 	
 	private List<Result> integerToResult(List<Integer> results) throws NotFoundException {
 		if(results != null) {
-			List<Optional<Result>> result = results.stream().map(iR -> resultService.findById(iR)).collect(Collectors.toList());
+			List<Optional<Result>> result = results.stream().map(resultService::findById).collect(Collectors.toList());
 			for(Optional<Result> r: result) 
 				r.orElseThrow(() -> new NotFoundException("Algunos o todos los tags no existen"));
 			return result.stream().map(Optional::get).collect(Collectors.toList());
 		}
-		return new ArrayList<Result>();
+		return new ArrayList<>();
 	}
 	
 	private List<Integer> resultToInteger(List<Result> result) {
-		return result.stream().map(r -> r.getIdResult()).collect(Collectors.toList());
+		return result.stream().map(Result::getIdResult).collect(Collectors.toList());
 	}
 	
 	private User map(UserDTO dto, List<Result> result) {

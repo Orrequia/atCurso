@@ -14,12 +14,8 @@ public class ApiErrorDTO implements Serializable {
 		this.code = code;
 		this.msg = msg;
 	}
-	
-	public ApiErrorDTO() {
-		super();
-	}
-	
-	public Integer getCode() {
+
+    public Integer getCode() {
 		return code;
 	}
 	

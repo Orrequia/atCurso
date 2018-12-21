@@ -13,9 +13,10 @@ import com.fot.atCurso.exception.NotFoundException;
 @Component
 public abstract class AbstractMapper<M, D> implements Mapper<M, D> {
 
+	@SuppressWarnings("SpringJavaAutowiredFieldsWarningInspection")
 	@Autowired
-	public DozerBeanMapper dozer;
-	
+	protected DozerBeanMapper dozer;
+
 	@Override
 	public M dtoToModel(D dto) throws NotFoundException {
 		return dozer.map(dto, modelClazz());
@@ -28,7 +29,7 @@ public abstract class AbstractMapper<M, D> implements Mapper<M, D> {
 
 	@Override
 	public List<M> dtoToModel(List<D> dtos) throws NotFoundException {
-		List<M> models = new ArrayList<M>();
+		List<M> models = new ArrayList<>();
 		if(dtos != null) 
 			for(D dto : dtos)
 				models.add(dtoToModel(dto));
@@ -37,6 +38,6 @@ public abstract class AbstractMapper<M, D> implements Mapper<M, D> {
 
 	@Override
 	public List<D> modelToDto(List<M> models) {
-		return models.stream().map(m -> modelToDto(m)).collect(Collectors.toList());
+		return models.stream().map(this::modelToDto).collect(Collectors.toList());
 	}
 }

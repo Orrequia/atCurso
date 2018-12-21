@@ -29,12 +29,15 @@ import com.fot.atCurso.service.question.QuestionService;
 @RequestMapping(value= "/question")
 class QuestionController {
 	
+	private final QuestionService questionService;
+	private final QuestionMapper questionMapper;
+
 	@Autowired
-	QuestionService questionService;
-	
-	@Autowired
-	QuestionMapper questionMapper;
-		
+	public QuestionController(QuestionService questionService, QuestionMapper questionMapper) {
+		this.questionService = questionService;
+		this.questionMapper = questionMapper;
+	}
+
 	@GetMapping
 	public List<QuestionDTO> findAll(@RequestParam(defaultValue = "0", required= false ) Integer page, 
 			 	@RequestParam(defaultValue = "10", required= false ) Integer size,
@@ -69,7 +72,7 @@ class QuestionController {
 	}
 	
 	@DeleteMapping("/{idQuestion}")
-	public void delete(@PathVariable("idQuestion") Integer id, @RequestBody QuestionDTO dto) throws NotFoundException, UnequalObjectsException, ConstraintBreakException {
+	public void delete(@PathVariable("idQuestion") Integer id, @RequestBody QuestionDTO dto) throws NotFoundException, UnequalObjectsException {
 		final Question question = questionService.getAndCheck(id);
 		if(!questionService.isEqual(questionMapper.dtoToModel(dto), question)) 
 			throw new UnequalObjectsException("La pregunta recibida no coincide con la almacenada");

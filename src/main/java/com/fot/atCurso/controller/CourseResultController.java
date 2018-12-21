@@ -13,7 +13,6 @@ import org.springframework.web.bind.annotation.RestController;
 import com.fot.atCurso.component.mapper.result.ResultMapper;
 import com.fot.atCurso.dto.result.ResultDTO;
 import com.fot.atCurso.exception.NotFoundException;
-import com.fot.atCurso.exception.IncorrectParametersException;
 import com.fot.atCurso.model.Result;
 import com.fot.atCurso.service.result.ResultService;
 
@@ -21,16 +20,20 @@ import com.fot.atCurso.service.result.ResultService;
 @RequestMapping(value= "/course/{idCourse}/result")
 public class CourseResultController {
 	
-	@Autowired
-	ResultService resultService;
+	private final ResultService resultService;
 	
+	private final ResultMapper resultMapper;
+
 	@Autowired
-	ResultMapper resultMapper;
-	
+	public CourseResultController(ResultService resultService, ResultMapper resultMapper) {
+		this.resultService = resultService;
+		this.resultMapper = resultMapper;
+	}
+
 	@GetMapping
 	public List<ResultDTO> findAll(@RequestParam(defaultValue = "0", required= false ) Integer page, 
 							 @RequestParam(defaultValue = "10", required= false ) Integer size,
-							 @PathVariable("idCourse") Integer idCourse) throws IncorrectParametersException, NotFoundException {
+							 @PathVariable("idCourse") Integer idCourse) throws NotFoundException {
 		final List<Result> results = resultService.findResultByCourse(idCourse, PageRequest.of(page, size));
 		return resultMapper.modelToDto(results);
 	}

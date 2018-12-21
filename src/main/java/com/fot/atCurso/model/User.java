@@ -13,8 +13,8 @@ import lombok.Setter;
 @Table(name = "t_user")
 public class User {
 
-	public static final String FIELD_IDUSER = "idUser";
-	public static final String FIELD_IDROLE = "idRole";
+	public static final String FIELD_ID_USER = "idUser";
+	public static final String FIELD_ID_ROLE = "idRole";
 	
 	@Id
 	@GeneratedValue(strategy=GenerationType.IDENTITY)
@@ -33,10 +33,10 @@ public class User {
 	private String password;
 
 	@OneToMany(fetch = FetchType.LAZY, cascade=CascadeType.REMOVE)
-	@JoinColumn(name=FIELD_IDUSER, referencedColumnName=FIELD_IDUSER)
+	@JoinColumn(name= FIELD_ID_USER, referencedColumnName= FIELD_ID_USER)
 	private List<Result> result;
 
-	@JoinColumn(name = FIELD_IDROLE, nullable=false)
+	@JoinColumn(name = FIELD_ID_ROLE, nullable=false)
 	@ManyToOne(fetch = FetchType.LAZY)
 	private Role role;
 }

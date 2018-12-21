@@ -28,13 +28,16 @@ import com.fot.atCurso.service.tag.TagService;
 @RequestMapping(value= "/tag")
 public class TagController {
 	
-	@Autowired
-	TagService tagService;
-	
-	@Autowired
-	TagMapper tagMapper;
-	
-	@GetMapping
+	private final TagService tagService;
+	private final TagMapper tagMapper;
+
+    @Autowired
+    public TagController(TagService tagService, TagMapper tagMapper) {
+        this.tagService = tagService;
+		this.tagMapper = tagMapper;
+    }
+
+    @GetMapping
 	public List<TagDTO> findAll(@RequestParam(defaultValue = "0", required= false ) Integer page, 
 							 @RequestParam(defaultValue = "10", required= false ) Integer size) throws IncorrectParametersException {
 		final List<Tag> tags = tagService.findAll(PageRequest.of(page, size));

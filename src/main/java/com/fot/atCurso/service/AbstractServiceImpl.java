@@ -15,11 +15,13 @@ import com.fot.atCurso.exception.IncorrectParametersException;
 @Service
 public abstract class AbstractServiceImpl<T, D extends GenericDAO<T>> implements AbstractService<T, Integer> {
 
-	private static final Integer maxSize = new Integer(10);
-	
+	private static final Integer maxSize = 10;
+
+	@SuppressWarnings({"SpringJavaAutowiredFieldsWarningInspection", "SpringJavaInjectionPointsAutowiringInspection"})
 	@Autowired
-	D dao;
-	
+	private D dao;
+
+
 	@Override
 	public T create(T t) {
 		return dao.save(t);
@@ -38,7 +40,7 @@ public abstract class AbstractServiceImpl<T, D extends GenericDAO<T>> implements
 	@Override
 	public List<T> findAll(Pageable p) throws IncorrectParametersException {
 		if(p.getPageNumber() < 0 || p.getPageSize() <= 0 || p.getPageSize() > maxSize)
-			throw new IncorrectParametersException("Los parámetros introducidos contienen valores no permitidos, page mayor o igual a 0 y size entre 1 y " + maxSize + " incluídos");
+			throw new IncorrectParametersException("Los parámetros introducidos contienen valores no permitidos, page mayor o igual a 0 y size entre 1 y " + maxSize + " incluidos");
 		return dao.findAll(PageRequest.of(p.getPageNumber(), p.getPageSize())).stream().collect(Collectors.toList());
 	}
 

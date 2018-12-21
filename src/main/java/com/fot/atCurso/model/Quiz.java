@@ -30,12 +30,12 @@ import lombok.Setter;
 @Entity
 public class Quiz {
 	
-	public static final String FIELD_IDTAG = "idTag";
-	public static final String FIELD_IDQUESTIONARY = "idQuiz";
+	public static final String FIELD_ID_TAG = "idTag";
+	public static final String FIELD_ID_QUIZ = "idQuiz";
 	
 	@Id
 	@GeneratedValue(strategy=GenerationType.IDENTITY)
-	@Column(name=FIELD_IDQUESTIONARY)
+	@Column(name= FIELD_ID_QUIZ)
 	private Integer idQuiz;
 	
 	@Column(nullable = false)
@@ -51,14 +51,14 @@ public class Quiz {
 	@ManyToMany(fetch = FetchType.LAZY)
 	@JoinTable(
       name="quiz_question",
-      joinColumns=@JoinColumn(name=FIELD_IDQUESTIONARY, referencedColumnName=FIELD_IDQUESTIONARY),
-      inverseJoinColumns=@JoinColumn(name=Question.FIELD_IDQUESTION, referencedColumnName=Question.FIELD_IDQUESTION))
+      joinColumns=@JoinColumn(name= FIELD_ID_QUIZ, referencedColumnName= FIELD_ID_QUIZ),
+      inverseJoinColumns=@JoinColumn(name=Question.FIELD_ID_QUESTION, referencedColumnName=Question.FIELD_ID_QUESTION))
 	private List<Question> question;
 	
 	@ManyToMany(fetch = FetchType.LAZY)
 	@JoinTable(
       name="quiz_tag",
-      joinColumns=@JoinColumn(name=FIELD_IDQUESTIONARY, referencedColumnName=FIELD_IDQUESTIONARY, nullable=false),
-      inverseJoinColumns=@JoinColumn(name=FIELD_IDTAG, referencedColumnName=FIELD_IDTAG, nullable=false))
+      joinColumns=@JoinColumn(name= FIELD_ID_QUIZ, referencedColumnName= FIELD_ID_QUIZ, nullable=false),
+      inverseJoinColumns=@JoinColumn(name= FIELD_ID_TAG, referencedColumnName= FIELD_ID_TAG, nullable=false))
 	private List<Tag> tag;
 }

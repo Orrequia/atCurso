@@ -1,9 +1,6 @@
 package com.fot.atCurso.service.question;
 
-import java.util.ArrayList;
-import java.util.Collections;
-import java.util.List;
-import java.util.Optional;
+import java.util.*;
 
 import org.apache.commons.collections.CollectionUtils;
 import org.apache.commons.lang3.StringUtils;
@@ -37,27 +34,49 @@ public class QuestionServiceImpl extends AbstractServiceImpl<Question, QuestionD
 	
 	private static final Integer maxAnswers = 4;
 	
+	private final QuestionDAO questionDAO;
+	private AnswerService answerService;
+	private TagService tagService;
+	private UserService userService;
+	private QuizService quizService;
+	private CourseService courseService;
+	private SelectionService selectionService;
+
 	@Autowired
-	QuestionDAO questionDAO;
-	
+	public QuestionServiceImpl(QuestionDAO questionDAO) {
+		this.questionDAO = questionDAO;
+	}
+
 	@Autowired
-	AnswerService answerService;
-	
+	public void setService(QuizService quizService) {
+		this.quizService = quizService;
+	}
+
 	@Autowired
-	TagService tagService;
-	
+	public void setService(UserService userService) {
+		this.userService = userService;
+	}
+
 	@Autowired
-	UserService userService;
-	
+	public void setService(AnswerService answerService) {
+		this.answerService = answerService;
+	}
+
 	@Autowired
-	QuizService quizService;
-	
+	public void setService(TagService tagService) {
+		this.tagService = tagService;
+	}
+
 	@Autowired
-	CourseService courseService;
-	
+	public void setService(CourseService courseService) {
+		this.courseService = courseService;
+	}
+
 	@Autowired
-	SelectionService selectionService;
-	
+	public void setService(SelectionService selectionService) {
+		this.selectionService = selectionService;
+	}
+
 	@Override
 	public List<Question> findByTag(Integer idTag, Pageable p) throws NotFoundException {
 		Tag tag = tagService.getAndCheck(idTag);
@@ -72,9 +91,8 @@ public class QuestionServiceImpl extends AbstractServiceImpl<Question, QuestionD
 				CollectionUtils.isEqualCollection(getStringsAnswer(q1.getAnswer()),
 												  getStringsAnswer(q2.getAnswer()));
 	}
-	
-	@Override 
-	public void setValues(Question to, Question from) {
+
+	private void setValues(Question to, Question from) {
 		to.setName(from.getName());
 		to.setTag(from.getTag());
 		to.setDifficulty(from.getDifficulty());
@@ -115,7 +133,7 @@ public class QuestionServiceImpl extends AbstractServiceImpl<Question, QuestionD
 	
 	@Override
 	public Question getAndCheckBelongQuiz(Quiz quiz, Integer idQuestion) throws NotFoundException {
-		final Optional<Question> question = quiz.getQuestion().stream().filter(q -> q.getIdQuestion() == idQuestion).findFirst();
+		final Optional<Question> question = quiz.getQuestion().stream().filter(q -> Objects.equals(q.getIdQuestion(), idQuestion)).findFirst();
 		question.orElseThrow(() -> new NotFoundException("Esta pregunta no pertenece a este cuestionario"));
 		return question.get();
 	}
@@ -125,7 +143,7 @@ public class QuestionServiceImpl extends AbstractServiceImpl<Question, QuestionD
 		checkConditionsUserAndQuiz(idUser, idQuiz);
 		Quiz quiz = quizService.getAndCheck(idQuiz);
 		User user = userService.getAndCheck(idUser);
-		if(quiz.getModality() == ModalityEnum.ALLINONE) return getAllQuestions(user, quiz); 
+		if(quiz.getModality() == ModalityEnum.ALL_IN_ONE) return getAllQuestions(user, quiz);
 		else return Collections.singletonList(getOneQuestion(user, quiz));
 	}
 	
@@ -145,7 +163,7 @@ public class QuestionServiceImpl extends AbstractServiceImpl<Question, QuestionD
 		List<Question> questions = quiz.getQuestion();
 		if(selectionService.isFirstTime(user, quiz))
 			selectionService.create(user, quiz, questions);
-		else throw new AlreadyDoneException("Ya has iniciado el cuestionario, respondelas las preguntas o revisa tu expediente");
+		else throw new AlreadyDoneException("Ya has iniciado el cuestionario, responde las las preguntas o revisa tu expediente");
 		Collections.shuffle(questions);
 		return questions;
 	}
@@ -195,14 +213,14 @@ public class QuestionServiceImpl extends AbstractServiceImpl<Question, QuestionD
 			for(Answer a : q.getAnswer()) {
 				answerService.delete(a);
 			}
-			q.setAnswer(new ArrayList<Answer>());
+			q.setAnswer(new ArrayList<>());
 		}
 	}
 	
 	private void addNewsAnswers(Question q) {
 		if(q.getAnswer() != null)
 			for(Answer a : q.getAnswer())
-				a = answerService.create(a);	
+				answerService.create(a);
 	}
 	
 	private void updateAnswers(Question to, Question from) {
@@ -213,7 +231,7 @@ public class QuestionServiceImpl extends AbstractServiceImpl<Question, QuestionD
 	}
 	
 	private List<String> getStringsAnswer(List<Answer> answers) {
-		List<String> sAnswers = new ArrayList<String>();
+		List<String> sAnswers = new ArrayList<>();
 		for(Answer a : answers) 
 			sAnswers.add(a.getName());
 		return sAnswers;

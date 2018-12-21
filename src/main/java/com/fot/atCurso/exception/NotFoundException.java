@@ -4,7 +4,7 @@ public class NotFoundException extends Exception {
 
 	private static final long serialVersionUID = 1L;
 
-	public static final String MSG = "Esta entiedad no existe";
+	private static final String MSG = "Esta entidad no existe";
 	
 	public NotFoundException(String message) {
 		super(message);

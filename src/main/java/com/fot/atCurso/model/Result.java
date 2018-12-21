@@ -22,7 +22,7 @@ import lombok.Setter;
 @Entity
 public class Result {
 
-	public static final String FIELD_IDQUIZ = "idQuiz";
+	public static final String FIELD_ID_QUIZ = "idQuiz";
 	
 	@Id
 	@GeneratedValue(strategy=GenerationType.IDENTITY)
@@ -34,7 +34,7 @@ public class Result {
 	@Column(nullable=false)
 	private Float score;
 	
-	@JoinColumn(name = FIELD_IDQUIZ, nullable=false)
+	@JoinColumn(name = FIELD_ID_QUIZ, nullable=false)
 	@ManyToOne(fetch = FetchType.LAZY)
 	private Quiz quiz;
 }

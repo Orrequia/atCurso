@@ -31,12 +31,15 @@ import com.fot.atCurso.service.user.UserService;
 @RequestMapping(value= "/user")
 public class UserController {
 	
+	private final UserService userService;
+	private final UserMapper userMapper;
+
 	@Autowired
-	UserService userService;
-	
-	@Autowired
-	UserMapper userMapper;
-	
+	public UserController(UserService userService, UserMapper userMapper) {
+		this.userService = userService;
+		this.userMapper = userMapper;
+	}
+
 	@GetMapping
 	@PreAuthorize("hasAuthority('GET_USER')")
 	public List<UserDTO> findAll(@RequestParam(defaultValue = "0", required= false ) Integer page, 

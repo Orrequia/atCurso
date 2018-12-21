@@ -21,18 +21,27 @@ import com.fot.atCurso.service.user.UserService;
 @Service
 public class CourseServiceImpl extends AbstractServiceImpl<Course, CourseDAO> implements CourseService {
 
+	private final CourseDAO courseDAO;
+	private QuizService quizService;
+	private UserService userService;
+	private final OperationDates operationDates;
+
 	@Autowired
-	CourseDAO courseDAO;
-	
+	public CourseServiceImpl(CourseDAO courseDAO, OperationDates operationDates) {
+		this.courseDAO = courseDAO;
+		this.operationDates = operationDates;
+	}
+
 	@Autowired
-	QuizService quizService;
-	
+	public void setService(QuizService quizService) {
+		this.quizService = quizService;
+	}
+
 	@Autowired
-	UserService userService;
-	
-	@Autowired
-	OperationDates operationDates;
-	
+	public void setUserService(UserService userService) {
+		this.userService = userService;
+	}
+
 	@Override
 	public List<Course> findByUser(Integer idUser, Pageable p) throws NotFoundException {
 		User user = userService.getAndCheck(idUser);
@@ -73,16 +82,6 @@ public class CourseServiceImpl extends AbstractServiceImpl<Course, CourseDAO> im
 	public void removeQuiz(Course course, Quiz quiz) {
 		course.getQuiz().remove(quiz);
 		courseDAO.save(course);
-	}
-	
-	@Override
-	public Optional<User> searchUser(Course course, Integer idUser) {
-		return course.getUser().stream().filter(u -> u.getIdUser() == idUser).findFirst();
-	}
-	
-	@Override
-	public Optional<Quiz> searchQuiz(Course course, Integer idQuiz) {
-		return course.getQuiz().stream().filter(q -> q.getIdQuiz() == idQuiz).findFirst();
 	}
 	
 	@Override

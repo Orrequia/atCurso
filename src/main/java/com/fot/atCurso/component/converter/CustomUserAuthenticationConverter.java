@@ -1,24 +1,36 @@
 package com.fot.atCurso.component.converter;
 
+import com.fot.atCurso.model.Role;
+import com.fot.atCurso.service.permission.PermissionService;
+import com.fot.atCurso.service.role.RoleService;
 import lombok.extern.slf4j.Slf4j;
+import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.security.authentication.UsernamePasswordAuthenticationToken;
 import org.springframework.security.core.Authentication;
 import org.springframework.security.core.GrantedAuthority;
 import org.springframework.security.core.authority.AuthorityUtils;
+import org.springframework.security.core.authority.SimpleGrantedAuthority;
 import org.springframework.security.oauth2.provider.token.UserAuthenticationConverter;
-import org.springframework.util.StringUtils;
+import org.springframework.stereotype.Component;
 
-import java.util.Collection;
-import java.util.Collections;
-import java.util.LinkedHashMap;
-import java.util.Map;
+import java.util.*;
 
 @Slf4j
+@Component
 public class CustomUserAuthenticationConverter implements UserAuthenticationConverter {
+
+    private final RoleService roleService;
+    private final PermissionService permissionService;
+
+    @Autowired
+    public CustomUserAuthenticationConverter(PermissionService permissionService, RoleService roleService) {
+        this.permissionService = permissionService;
+        this.roleService = roleService;
+    }
 
     @Override
     public Map<String, ?> convertUserAuthentication(Authentication userAuthentication) {
-        Map<String, Object> response = new LinkedHashMap<String, Object>();
+        Map<String, Object> response = new LinkedHashMap<>();
         response.put(USERNAME, userAuthentication.getName());
 
         if (userAuthentication.getAuthorities() != null && !userAuthentication.getAuthorities().isEmpty())
@@ -39,21 +51,15 @@ public class CustomUserAuthenticationConverter implements UserAuthenticationConv
 
     private Collection<? extends GrantedAuthority> getAuthorities(Map<String, ?> map) {
 
-       log.info(map.get(AUTHORITIES).toString());
+        String username = map.get(USERNAME).toString();
+        Role role = roleService.getRoleByUsernameUser(username);
 
-        if (!map.containsKey(AUTHORITIES))
-            return Collections.EMPTY_LIST;
+        Set<GrantedAuthority> authorities = new HashSet<>();
 
-        Object authorities = map.get(AUTHORITIES);
-
-        if (authorities instanceof String)
-            return AuthorityUtils.commaSeparatedStringToAuthorityList((String) authorities);
-
-        if (authorities instanceof Collection) {
-            return AuthorityUtils.commaSeparatedStringToAuthorityList(
-                    StringUtils.collectionToCommaDelimitedString((Collection<?>) authorities));
-        }
-
-        throw new IllegalArgumentException("Authorities must be either a String or a Collection");
+        authorities.add(new SimpleGrantedAuthority(role.getName()));
+        permissionService.getPermissionsByNameRole(role.getName()).forEach(p ->
+                authorities.add(new SimpleGrantedAuthority(p.getName()))
+        );
+        return authorities;
     }
 }

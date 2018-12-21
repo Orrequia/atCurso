@@ -26,14 +26,17 @@ import com.fot.atCurso.service.course.CourseService;
 @RestController
 @RequestMapping(value= "/course")
 public class CourseController {
-	
-	@Autowired
-	CourseService courseService;
-	
-	@Autowired
-	CourseMapper courseMapper;
-		
-	@GetMapping
+
+	private final CourseService courseService;
+	private final CourseMapper courseMapper;
+
+    @Autowired
+    public CourseController(CourseService courseService, CourseMapper courseMapper) {
+        this.courseMapper = courseMapper;
+        this.courseService = courseService;
+    }
+
+    @GetMapping
 	public List<CourseDTO> findAll(@RequestParam(defaultValue = "0", required= false ) Integer page, 
 			 	@RequestParam(defaultValue = "10", required= false ) Integer size,
 			 	@RequestParam(defaultValue = "0", required=false) Integer user) throws IncorrectParametersException, NotFoundException {

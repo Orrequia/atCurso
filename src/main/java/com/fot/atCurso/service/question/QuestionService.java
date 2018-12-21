@@ -19,7 +19,6 @@ public interface QuestionService  extends AbstractService<Question, Integer> {
 	List<Question> findByTags(List<Tag> tags);
 	
 	boolean isEqual(Question q1, Question q2);
-	void setValues(Question to, Question from);
 	void deleteAll(Question q);
 	
 	Question getAndCheck(Integer idQuestion) throws NotFoundException;

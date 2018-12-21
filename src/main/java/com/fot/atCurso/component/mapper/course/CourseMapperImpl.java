@@ -20,12 +20,15 @@ import com.fot.atCurso.service.user.UserService;
 @Component
 public class CourseMapperImpl extends AbstractMapper<Course, CourseDTO> implements CourseMapper {
 	
+	private final UserService userService;
+	private final QuizService quizService;
+
 	@Autowired
-	UserService userService;
-	
-	@Autowired
-	QuizService quizService;
-	
+	public CourseMapperImpl(UserService userService, QuizService quizService) {
+		this.quizService = quizService;
+		this.userService = userService;
+	}
+
 	@Override
 	public Class<? extends CourseDTO> dtoClazz() {
 		return CourseDTO.class;
@@ -52,30 +55,30 @@ public class CourseMapperImpl extends AbstractMapper<Course, CourseDTO> implemen
 	
 	private List<User> integerToUser(List<Integer> users) throws NotFoundException {
 		if(users != null) {
-			List<Optional<User>> user = users.stream().map(iU -> userService.findById(iU)).collect(Collectors.toList());
+			List<Optional<User>> user = users.stream().map(userService::findById).collect(Collectors.toList());
 			for(Optional<User> u: user) 
 				u.orElseThrow(() -> new NotFoundException("Algunos o todos los usuarios no existen"));
 			return user.stream().map(Optional::get).collect(Collectors.toList());
 		}
-		return new ArrayList<User>();
+		return new ArrayList<>();
 	}
 	
 	private List<Integer> userToInteger(List<User> user) {
-		return user.stream().map(u -> u.getIdUser()).collect(Collectors.toList());
+		return user.stream().map(User::getIdUser).collect(Collectors.toList());
 	}
 	
 	private List<Quiz> integerToQuiz(List<Integer> quizzes) throws NotFoundException {
 		if(quizzes != null) {
-			List<Optional<Quiz>> quiz = quizzes.stream().map(iQ -> quizService.findById(iQ)).collect(Collectors.toList());
+			List<Optional<Quiz>> quiz = quizzes.stream().map(quizService::findById).collect(Collectors.toList());
 			for(Optional<Quiz> q: quiz) 
 				q.orElseThrow(() -> new NotFoundException("Algunos o todos los cuestionarios no existen"));
 			return quiz.stream().map(Optional::get).collect(Collectors.toList());
 		}
-		return new ArrayList<Quiz>();
+		return new ArrayList<>();
 	}
 	
 	private List<Integer> quizToInteger(List<Quiz> quiz) {
-		return quiz.stream().map(q -> q.getIdQuiz()).collect(Collectors.toList());
+		return quiz.stream().map(Quiz::getIdQuiz).collect(Collectors.toList());
 	}
 	
 	private Course map(CourseDTO dto, List<User> user, List<Quiz> quiz) {

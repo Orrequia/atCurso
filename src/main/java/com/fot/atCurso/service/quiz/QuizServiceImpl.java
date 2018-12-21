@@ -2,6 +2,7 @@ package com.fot.atCurso.service.quiz;
 
 import java.util.Collections;
 import java.util.List;
+import java.util.Objects;
 import java.util.Optional;
 
 import org.apache.commons.lang3.StringUtils;
@@ -20,33 +21,37 @@ import com.fot.atCurso.model.Quiz;
 import com.fot.atCurso.service.AbstractServiceImpl;
 import com.fot.atCurso.service.course.CourseService;
 import com.fot.atCurso.service.question.QuestionService;
-import com.fot.atCurso.service.tag.TagService;
 
 @Service
 public class QuizServiceImpl extends AbstractServiceImpl<Quiz, QuizDAO> implements QuizService {
 
+	private final QuizDAO quizDAO;
+	private CourseService courseService;
+	private QuestionService questionService;
+
 	@Autowired
-	QuizDAO quizDAO;
-	
+	public QuizServiceImpl(QuizDAO quizDAO) {
+		this.quizDAO = quizDAO;
+	}
+
 	@Autowired
-	TagService tagService;
-	
+	public void setService(CourseService courseService) {
+		this.courseService = courseService;
+	}
+
 	@Autowired
-	CourseService courseService;
-	
-	@Autowired
-	QuestionService questionService;
-	
-	@Override
-	public boolean isEqual(Quiz q1, Quiz q2) {
+	public void setService(QuestionService questionService) {
+		this.questionService = questionService;
+	}
+
+	private boolean isEqual(Quiz q1, Quiz q2) {
 		return StringUtils.equals(q1.getName(), q2.getName()) &&
 				q1.getModality() == q2.getModality() &&
 				q1.getQuestion().equals(q2.getQuestion()) &&
 				q1.getTag().equals(q2.getTag());
 	}
-	
-	@Override
-	public void setValues(Quiz to, Quiz from) {
+
+	private void setValues(Quiz to, Quiz from) {
 		to.setName(from.getName());
 		to.setModality(from.getModality());
 		to.setQuestion(from.getQuestion());
@@ -55,15 +60,14 @@ public class QuizServiceImpl extends AbstractServiceImpl<Quiz, QuizDAO> implemen
 	
 	@Override
 	public List<Quiz> findQuizByCourse(Integer idCourse, Pageable p) throws NotFoundException {
-		courseService.getAndCheck(idCourse);;
+		courseService.getAndCheck(idCourse);
 		return quizDAO.findByCourse(idCourse, PageRequest.of(p.getPageNumber(), p.getPageSize()));
 	}
 	
 	@Override
 	public Quiz findOneQuizByCourse(Integer idCourse, Integer idQuiz) throws NotFoundException {
 		final Course course = courseService.getAndCheck(idCourse);
-		final Quiz quiz = getAndCheckBelongCourse(course, idQuiz);
-		return quiz;
+		return getAndCheckBelongCourse(course, idQuiz);
 	}
 
 	@Override
@@ -101,10 +105,9 @@ public class QuizServiceImpl extends AbstractServiceImpl<Quiz, QuizDAO> implemen
 		quiz.orElseThrow(() -> new NotFoundException("El cuestionario no existe"));
 		return quiz.get();
 	}
-	
-	@Override
-	public Quiz getAndCheckBelongCourse(Course course, Integer idQuiz) throws NotFoundException {
-		final Optional<Quiz> quiz = course.getQuiz().stream().filter(q -> q.getIdQuiz() == idQuiz).findFirst();
+
+	private Quiz getAndCheckBelongCourse(Course course, Integer idQuiz) throws NotFoundException {
+		final Optional<Quiz> quiz = course.getQuiz().stream().filter(q -> Objects.equals(q.getIdQuiz(), idQuiz)).findFirst();
 		quiz.orElseThrow(() -> new NotFoundException("Este cuestionario no existe para este curso"));
 		return quiz.get();
 	}

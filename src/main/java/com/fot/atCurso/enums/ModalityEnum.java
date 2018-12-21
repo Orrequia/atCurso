@@ -1,7 +1,7 @@
 package com.fot.atCurso.enums;
 
 public enum ModalityEnum {
-	
-	ONEINONE, 
-	ALLINONE
+
+	ONE_IN_ONE,
+	ALL_IN_ONE
 }

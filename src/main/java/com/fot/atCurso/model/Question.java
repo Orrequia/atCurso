@@ -23,27 +23,27 @@ import lombok.Setter;
 @Entity
 public class Question {
 
-	public static final String FIELD_IDTAG = "idTag";
-	public static final String FIELD_IDDIFFICULTY = "idDifficulty";
-	public static final String FIELD_IDQUESTION = "idQuestion";
+	public static final String FIELD_ID_TAG = "idTag";
+	public static final String FIELD_ID_DIFFICULTY = "idDifficulty";
+	public static final String FIELD_ID_QUESTION = "idQuestion";
 	
 	@Id
 	@GeneratedValue(strategy=GenerationType.IDENTITY)
-	@Column(name=FIELD_IDQUESTION)
+	@Column(name= FIELD_ID_QUESTION)
 	private Integer idQuestion;
 	
 	@Column(nullable = false)
 	private String name;
 	
-	@JoinColumn(name = FIELD_IDTAG, nullable=false)
+	@JoinColumn(name = FIELD_ID_TAG, nullable=false)
 	@ManyToOne(fetch = FetchType.LAZY)
 	private Tag tag;
 	
-	@JoinColumn(name = FIELD_IDDIFFICULTY, nullable=false)
+	@JoinColumn(name = FIELD_ID_DIFFICULTY, nullable=false)
 	@ManyToOne(fetch = FetchType.LAZY)
 	private Difficulty difficulty;
 	
 	@OneToMany(fetch = FetchType.LAZY, cascade=CascadeType.REMOVE)
-	@JoinColumn(name=FIELD_IDQUESTION, referencedColumnName=FIELD_IDQUESTION)
+	@JoinColumn(name= FIELD_ID_QUESTION, referencedColumnName= FIELD_ID_QUESTION)
 	private List<Answer> answer;
 }

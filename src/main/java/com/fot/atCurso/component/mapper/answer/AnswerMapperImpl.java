@@ -26,7 +26,7 @@ public class AnswerMapperImpl extends AbstractMapper<Answer, AnswerDTO> implemen
 	
 	@Override
 	public List<Answer> dtoPostToModel(List<AnswerPostDTO> dtos) throws NotFoundException {
-		List<Answer> models = new ArrayList<Answer>();
+		List<Answer> models = new ArrayList<>();
 		if(dtos != null) 
 			for(AnswerPostDTO dto : dtos)
 				models.add(dtoToModel(dto));

@@ -25,7 +25,7 @@ import lombok.Setter;
 @Entity
 public class Course {
 	
-	public static final String FIELD_IDCOURSE = "idCourse";
+	public static final String FIELD_ID_COURSE = "idCourse";
 	public static final String FIELD_USER = "user";
 	
 	@Id
@@ -43,11 +43,11 @@ public class Course {
 	
 	@ManyToMany(fetch=FetchType.LAZY)
 	@JoinTable(name="user_course", 
-	joinColumns=@JoinColumn(name=FIELD_IDCOURSE, referencedColumnName=FIELD_IDCOURSE),
-	inverseJoinColumns=@JoinColumn(name=User.FIELD_IDUSER, referencedColumnName=User.FIELD_IDUSER))
+	joinColumns=@JoinColumn(name= FIELD_ID_COURSE, referencedColumnName= FIELD_ID_COURSE),
+	inverseJoinColumns=@JoinColumn(name=User.FIELD_ID_USER, referencedColumnName=User.FIELD_ID_USER))
 	private List<User> user;
 	
 	@OneToMany(fetch = FetchType.LAZY, cascade=CascadeType.REMOVE)
-	@JoinColumn(name=FIELD_IDCOURSE, referencedColumnName=FIELD_IDCOURSE)
+	@JoinColumn(name= FIELD_ID_COURSE, referencedColumnName= FIELD_ID_COURSE)
 	private List<Quiz> quiz;
 }
